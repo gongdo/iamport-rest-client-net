@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "Iamport.RestApi .NET Client",
   "authors": [ "gongdo" ],
@@ -8,10 +8,14 @@
   "language": "ko-KR",
 
   "dependencies": {
+    "Microsoft.Framework.Configuration": "1.0.0-beta8",
+    "Microsoft.Framework.Configuration.Abstractions": "1.0.0-beta8",
+    "Microsoft.Framework.Configuration.Json": "1.0.0-beta8",
+    "Microsoft.Framework.DependencyInjection": "1.0.0-beta8",
     "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta8",
+    "Microsoft.Framework.OptionsModel": "1.0.0-beta8",
     "Newtonsoft.Json": "7.0.1",
     "System.Net.Http": "4.0.1-beta-23409"
-    
   },
 
   "frameworks": {

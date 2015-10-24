@@ -14,7 +14,7 @@ namespace Iamport.RestApi.Models
         /// 아임포트 결제 고유 ID
         /// </summary>
         [JsonProperty("imp_uid")]
-        public string ImportId { get; set; }
+        public string IamportId { get; set; }
         /// <summary>
         /// 가맹점에서 전달한 거래 고유 ID
         /// </summary>

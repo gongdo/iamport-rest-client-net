@@ -12,7 +12,7 @@ namespace Iamport.RestApi.Models
         /// 아임포트의 거래 고유 번호
         /// </summary>
         [JsonProperty("imp_uid")]
-        public string ImportId { get; set; }
+        public string IamportId { get; set; }
         /// <summary>
         /// 각 상점에서 다루는 거래 고유 번호
         /// </summary>
