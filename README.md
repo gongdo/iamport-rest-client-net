@@ -16,6 +16,14 @@
 ### 이슈 제기
 이 프로젝트에 관한 문제점, 문의, 개선 사항 건의 등은 [Issues](https://github.com/gongdo/iamport-rest-client-net/issues)에 등록해주세요. 단, 이슈를 등록할 때에는 충분히 검색하여 같은 이슈가 없었는지 확인을 바랍니다.
 
+### Development Environment Requirement
+현재 아임포트RESTAPI닷넷은 다음과 같은 환경에서 개발됩니다.
+* ASP.NET 5 (beta8) [OS별 개발환경 소개](https://docs.asp.net/en/latest/getting-started/index.html) 참고. 
+* DNX 4.5.1과 DNX core 5.0
+* [xunit](xunit.github.io) - 단위 테스트 및 기능 테스트.
+ 
+DNX 프로젝트이므로 MAC OSX와 Linux에서도 [Mono](http://www.mono-project.com/)를 설치후 개발 및 테스트가 가능합니다.
+
 ### Pull Request(PR)
 PR은 온전한 단위 테스트 및 기능 테스트셋을 포함해야 하며 해결하려는 목적이 명확해야 합니다. 모든 PR이 받아들여지는 것은 아니며 PR의 리뷰에 걸리는 시간을 보장하지 않습니다.
 
