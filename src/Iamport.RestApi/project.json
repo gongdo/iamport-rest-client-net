@@ -1,0 +1,33 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Iamport.RestApi .NET Client",
+  "authors": [ "gongdo" ],
+  "tags": [ "I'mport", "아임포트", "iamport" ],
+  "projectUrl": "https://github.com/gongdo/iamport-rest-client-net",
+  "licenseUrl": "https://github.com/gongdo/iamport-rest-client-net/blob/master/LICENSE",
+  "language": "ko-KR",
+
+  "dependencies": {
+    "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta8",
+    "Newtonsoft.Json": "7.0.1",
+    "System.Net.Http": "4.0.1-beta-23409"
+    
+  },
+
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.Runtime.Serialization": "",
+        "System.ComponentModel.DataAnnotations": ""
+      }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23409",
+        "System.Runtime": "4.0.21-beta-23409",
+        "System.Runtime.Serialization.Primitives": "4.0.11-beta-23409",
+        "System.ComponentModel.Annotations": "4.0.11-beta-23409"
+      }
+    }
+  }
+}
