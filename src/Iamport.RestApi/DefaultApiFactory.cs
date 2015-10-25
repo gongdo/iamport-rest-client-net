@@ -8,14 +8,19 @@ namespace Iamport.RestApi
     /// <summary>
     /// 아무런 기능 확장없이 빌트인 API만 사용할 수 있는 API Factory.
     /// </summary>
-    internal sealed class DefaultApiFactory : ServiceProviderApiFactory
+    public sealed class DefaultApiFactory : ServiceProviderApiFactory
     {
-        public DefaultApiFactory(IIamportClient client) : base(GetDefaultServiceProvider(client))
+        public DefaultApiFactory(IIamportHttpClient client) : base(GetDefaultServiceProvider(client))
         {
         }
 
-        private static IServiceProvider GetDefaultServiceProvider(IIamportClient client)
+        private static IServiceProvider GetDefaultServiceProvider(IIamportHttpClient client)
         {
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
             var types = typeof(DefaultApiFactory).GetTypeInfo().Assembly.ExportedTypes;
             var apiType = typeof(IIamportApi);
 

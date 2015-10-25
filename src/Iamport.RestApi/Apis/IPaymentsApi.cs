@@ -1,4 +1,5 @@
 ﻿using Iamport.RestApi.Models;
+using System.Threading.Tasks;
 
 namespace Iamport.RestApi.Apis
 {
@@ -14,7 +15,7 @@ namespace Iamport.RestApi.Apis
         /// </summary>
         /// <param name="preparation">결제 준비 정보</param>
         /// <returns></returns>
-        PaymentPreparation Prepare(PaymentPreparation preparation);
+        Task<PaymentPreparation> PrepareAsync(PaymentPreparation preparation);
 
         /// <summary>
         /// 주어진 거래 ID에 해당하는 결제 준비 정보를 반환합니다.
@@ -22,7 +23,7 @@ namespace Iamport.RestApi.Apis
         /// </summary>
         /// <param name="transactionId">거래 ID</param>
         /// <returns></returns>
-        PaymentPreparation GetPreparation(string transactionId);
+        Task<PaymentPreparation> GetPreparationAsync(string transactionId);
 
         /// <summary>
         /// 아임포트 고유 ID에 해당하는 결제 결과를 조회합니다.
@@ -30,7 +31,7 @@ namespace Iamport.RestApi.Apis
         /// </summary>
         /// <param name="iamportId">아임포트 고유 ID</param>
         /// <returns>결제 결과</returns>
-        Payment GetByIamportId(string iamportId);
+        Task<Payment> GetByIamportIdAsync(string iamportId);
 
         /// <summary>
         /// 거래 ID에 해당하는 결제 결과를 조회합니다.
@@ -38,14 +39,14 @@ namespace Iamport.RestApi.Apis
         /// </summary>
         /// <param name="transactionId">거래 ID</param>
         /// <returns>결제 결과</returns>
-        Payment GetByTransactionId(string transactionId);
+        Task<Payment> GetByTransactionIdAsync(string transactionId);
 
         /// <summary>
         /// 주어진 조회 조건에 해당하는 결제 결과를 조회합니다.
         /// </summary>
         /// <param name="query">결제 조회 조건</param>
         /// <returns>결제 결과의 목록</returns>
-        PagedResult<Payment> Get(PaymentPageQuery query);
+        Task<PagedResult<Payment>> GetAsync(PaymentPageQuery query);
 
         /// <summary>
         /// 주어진 입력에 해당하는 결제를 취소하고 결제 결과를 반환합니다.
@@ -53,6 +54,6 @@ namespace Iamport.RestApi.Apis
         /// </summary>
         /// <param name="cancellation">취소 정보</param>
         /// <returns>결제 결과</returns>
-        Payment Cancel(PaymentCancellation cancellation);
+        Task<Payment> CancelAsync(PaymentCancellation cancellation);
     }
 }

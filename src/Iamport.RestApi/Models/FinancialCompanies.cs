@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Iamport.RestApi.Models
 {
     /// <summary>
-    /// 금융사(은행)의 이름과 2자리 코드번호를 매핑하는 클래스입니다.
+    /// 금융사(은행)의 이름과 2자리 코드번호를 매핑하는 읽기전용 사전 클래스입니다.
     /// </summary>
-    public class FinancialCompanies
+    public class FinancialCompanies : IReadOnlyDictionary<string, string>
     {
-        private const string DefaultName = "Unknown";
         private static Dictionary<string, string> CodeToNames = new Dictionary<string, string>
         {
             ["03"] = "기업은행",
@@ -43,42 +42,62 @@ namespace Iamport.RestApi.Models
             ["DE"] = "메리츠증권",
             ["DF"] = "신영증권",
         };
-        private static readonly Dictionary<string, string> NameToCodes;
 
-        static FinancialCompanies()
+        public string this[string key]
         {
-            NameToCodes = CodeToNames.ToDictionary(o => o.Value, o => o.Key);
+            get
+            {
+                string value;
+                if (CodeToNames.TryGetValue(key, out value))
+                {
+                    return value;
+                }
+                return null;
+            }
         }
 
-        /// <summary>
-        /// 금융사 코드로 금융사의 이름을 반환합니다.
-        /// </summary>
-        /// <param name="code">코드</param>
-        /// <param name="defaultName">코드가 발견되지 않았을 때 기본 이름</param>
-        /// <returns>금융사의 이름</returns>
-        public static string CodeToName(string code, string defaultName = DefaultName)
+        public int Count
         {
-            string name;
-            if (CodeToNames.TryGetValue(code, out name))
+            get
             {
-                return name;
+                return CodeToNames.Count;
             }
-            return defaultName;
         }
 
-        /// <summary>
-        /// 금융사의 이름으로 금융사 코드를 반환합니다.
-        /// </summary>
-        /// <param name="name">금융사의 이름</param>
-        /// <returns>발급사 코드, 발견되지 않으면 null</returns>
-        public static string NameToCode(string name)
+        public IEnumerable<string> Keys
         {
-            string code;
-            if (NameToCodes.TryGetValue(name, out code))
+            get
             {
-                return code;
+                return CodeToNames.Keys;
             }
-            return null;
+        }
+
+        public IEnumerable<string> Values
+        {
+            get
+            {
+                return CodeToNames.Values;
+            }
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return CodeToNames.ContainsKey(key);
+        }
+
+        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
+        {
+            return CodeToNames.GetEnumerator();
+        }
+
+        public bool TryGetValue(string key, out string value)
+        {
+            return CodeToNames.TryGetValue(key, out value);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return CodeToNames.GetEnumerator();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Framework.DependencyInjection;
 
 namespace Iamport.RestApi
 {
@@ -19,13 +18,13 @@ namespace Iamport.RestApi
         }
 
         /// <summary>
-        /// 주어진 타입의 API 인스턴스를 반환합니다.
+        /// 주어진 서비스 타입으로 등록된 API 인스턴스를 반환합니다.
         /// </summary>
-        /// <typeparam name="T">API 클래스의 타입</typeparam>
-        /// <returns>API 인스턴스</returns>
-        public virtual T GetApi<T>() where T : class, IIamportApi
+        /// <param name="apiServiceType">API 서비스 타입</param>
+        /// <returns>등록된 API 인스턴스</returns>
+        public object GetApi(Type apiServiceType)
         {
-            return serviceProvider.GetService<T>();
+            return serviceProvider.GetService(apiServiceType);
         }
     }
 }

@@ -1,0 +1,16 @@
+﻿{
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=(localdb)\\MSSQLLocalDB;Database=_CHANGE_ME;Trusted_Connection=True;"
+    }
+  },
+  "AppSettings": {
+    "Iamport": {
+      "IamportHttpClientOptions": {
+        "ImportId": "abcd",
+        "ApiKey": "1234",
+        "ApiSecret": "5678"
+      }
+    }
+  }
+}

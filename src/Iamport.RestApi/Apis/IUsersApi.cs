@@ -1,4 +1,5 @@
 ﻿using Iamport.RestApi.Models;
+using System.Threading.Tasks;
 
 namespace Iamport.RestApi.Apis
 {
@@ -13,6 +14,6 @@ namespace Iamport.RestApi.Apis
         /// </summary>
         /// <param name="request">아임포트 토큰 요청</param>
         /// <returns>인증된 아임포트 토큰</returns>
-        IamportToken GetToken(IamportTokenRequest request);
+        Task<IamportToken> GetTokenAsync(IamportTokenRequest request);
     }
 }
