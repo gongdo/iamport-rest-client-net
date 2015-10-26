@@ -10,6 +10,22 @@
 ## Quick start
 *아직 작성되지 않았습니다.*
 
+## Roadmap
+아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 확실하지 않지만 각 마일스톤 별로 1~2주일 정도걸릴 것입니다.
+
+* [1.0-beta1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-beta1)
+ * DNX 4.5.1과 DNX Core 5.0에서 구동하는 코드 작성
+ * Users API, Payments API 제공
+ * 단위 테스트, 기능 테스트 및 CI build 구성
+* [1.0-rc1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-rc1)
+ * .NET 4.6 지원
+ * Subscribe API 지원
+ * Nuget 패키지 제공
+ * 메이저 버그 수정
+* [1.0](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0)
+ * 마이너 버그 수정
+ * 최초 릴리스!
+
 ## Contribution
 이 프로젝트는 누구나 참여할 수 있는 오픈소스 프로젝트입니다. 참여와 기여는 다음과 같이 할 수 있습니다.
 
