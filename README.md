@@ -17,10 +17,10 @@
  * DNX 4.5.1과 DNX Core 5.0에서 구동하는 코드 작성
  * Users API, Payments API 제공
  * 단위 테스트, 기능 테스트 및 CI build 구성
+ * Nuget 패키지 제공
 * [1.0-rc1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-rc1)
  * .NET 4.6 지원
  * Subscribe API 지원
- * Nuget 패키지 제공
  * 메이저 버그 수정
 * [1.0](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0)
  * 마이너 버그 수정
