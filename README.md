@@ -21,6 +21,7 @@
  * Nuget 패키지 제공
 * [1.0-rc1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-rc1)
  * .NET 4.6 지원
+ * .NET 4.0, 4.5 지원(*미정*)
  * Subscribe API 지원
  * 메이저 버그 수정
 * [1.0](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0)
