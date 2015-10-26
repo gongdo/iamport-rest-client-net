@@ -11,11 +11,12 @@
 *아직 작성되지 않았습니다.*
 
 ## Roadmap
-아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 확실하지 않지만 각 마일스톤 별로 1~2주일 정도걸릴 것입니다.
+아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.
 
 * [1.0-beta1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-beta1) (**현재 진행중**)
  * DNX 4.5.1과 DNX Core 5.0에서 구동하는 코드 작성
  * Users API, Payments API 제공
+ * 샘플 프로젝트 제공
  * 단위 테스트, 기능 테스트 및 CI build 구성
  * Nuget 패키지 제공
 * [1.0-rc1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-rc1)
