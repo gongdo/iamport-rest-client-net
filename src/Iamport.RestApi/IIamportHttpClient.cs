@@ -34,7 +34,7 @@ namespace Iamport.RestApi
         /// <summary>
         /// 현재 설정으로 유효한 토큰을 확보합니다.
         /// </summary>
-        /// <returns>Async Task</returns>
-        Task AuthorizeAsync();
+        /// <returns>토큰 정보</returns>
+        Task<IamportToken> AuthorizeAsync();
     }
 }

@@ -111,8 +111,8 @@ namespace Iamport.RestApi
         /// <summary>
         /// 현재 설정으로 유효한 토큰을 확보합니다.
         /// </summary>
-        /// <returns>Async Task</returns>
-        public virtual async Task AuthorizeAsync()
+        /// <returns>토큰 정보</returns>
+        public virtual async Task<IamportToken> AuthorizeAsync()
         {
             ThrowsIfDisposed();
             var input = new IamportTokenRequest
@@ -139,6 +139,7 @@ namespace Iamport.RestApi
                 httpClient.DefaultRequestHeaders.Add(options.AuthorizationHeaderName, token.AccessToken);
                 CurrentToken = token;
             }
+            return token;
         }
 
         /// <summary>

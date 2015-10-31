@@ -49,7 +49,7 @@ namespace Iamport.RestApi.Tests
 
         private class DummyClient : IIamportHttpClient
         {
-            public Task AuthorizeAsync()
+            public Task<IamportToken> AuthorizeAsync()
             {
                 throw new NotImplementedException();
             }

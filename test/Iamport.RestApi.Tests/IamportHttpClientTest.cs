@@ -13,6 +13,8 @@ namespace Iamport.RestApi.Tests
 {
     public class IamportHttpClientTest
     {
+        private const string DefaultTokenHeaderName = "X-ImpTokenHeader";
+
         [Fact]
         public void GuardClause()
         {
@@ -214,6 +216,30 @@ namespace Iamport.RestApi.Tests
             Assert.Equal(expectedUrl, MockClient.GetMessages(sut).Single().RequestUri.ToString());
         }
 
+        // TODO: HttpClient가 토큰 헤더를 붙여서 호출하는지 테스트할 수 없음.
+        // HttpClient 구성을 변경하는 것이 좋겠음.
+        //[Fact]
+        public async Task RequestIamportRequest_has_token_header()
+        {
+            // arrange
+            var sut = GetMockSut();
+            var defaultOptions = new IamportHttpClientOptions();
+            var request = new IamportRequest<object>
+            {
+                ApiPathAndQueryString = "/self",
+                RequireAuthorization = true
+            };
+            // act
+            var result = await sut.RequestAsync<object, object>(request);
+            // assert
+            var actual = MockClient.GetMessages(sut)
+                .Last()
+                .Headers
+                .GetValues(DefaultTokenHeaderName)
+                .Any();
+            Assert.True(actual);
+        }
+
         [Fact]
         public async Task RequestIamportRequest_throws_HttpRequestException_for_http_exception()
         {
@@ -250,6 +276,52 @@ namespace Iamport.RestApi.Tests
             Assert.Equal(expectedUrl, MockClient.GetMessages(sut).Last().RequestUri.ToString());
         }
 
+        [Fact]
+        public async Task RequestIamportRequest_does_not_call_Authorize_before_expired()
+        {
+            // arrange
+            var sut = GetMockSut();
+            var defaultOptions = new IamportHttpClientOptions();
+            var request = new IamportRequest<object>
+            {
+                ApiPathAndQueryString = "/self",
+                RequireAuthorization = true
+            };
+            var expectedAuthUrl = ApiPathUtility.Build(defaultOptions.BaseUrl, "/users/getToken");
+            // act
+            // call twice
+            await sut.RequestAsync<object, object>(request);
+            var result = await sut.RequestAsync<object, object>(request);
+            // assert
+            Assert.NotNull(result);
+            var actual = MockClient.GetMessages(sut)
+                .Count(m => m.RequestUri.ToString() == expectedAuthUrl);
+            Assert.Equal(1, actual);
+        }
+
+        [Fact]
+        public async Task RequestIamportRequest_calls_Authorize_after_expired()
+        {
+            // arrange
+            var sut = GetMockSut(TimeSpan.FromMilliseconds(1));
+            var defaultOptions = new IamportHttpClientOptions();
+            var request = new IamportRequest<object>
+            {
+                ApiPathAndQueryString = "/self",
+                RequireAuthorization = true
+            };
+            var expectedAuthUrl = ApiPathUtility.Build(defaultOptions.BaseUrl, "/users/getToken");
+            // act
+            // call twice
+            await sut.RequestAsync<object, object>(request);
+            var result = await sut.RequestAsync<object, object>(request);
+            // assert
+            Assert.NotNull(result);
+            var actual = MockClient.GetMessages(sut)
+                .Count(m => m.RequestUri.ToString() == expectedAuthUrl);
+            Assert.Equal(2, actual);
+        }
+
         private IamportHttpClient GetDefaultSut()
         {
             var configuration = new ConfigurationBuilder()
@@ -263,7 +335,7 @@ namespace Iamport.RestApi.Tests
             var accessor = GetAccessor(configuration);
             return new IamportHttpClient(accessor);
         }
-        private IamportHttpClient GetMockSut()
+        private IamportHttpClient GetMockSut(TimeSpan? tokenExpiration = null)
         {
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>
@@ -274,19 +346,33 @@ namespace Iamport.RestApi.Tests
                 })
                 .Build();
             var accessor = GetAccessor(configuration);
-            return new MockClient(accessor);
+            var client = new MockClient(accessor);
+            if (tokenExpiration.HasValue == false
+                || tokenExpiration.Value == TimeSpan.Zero)
+            {
+                tokenExpiration = TimeSpan.FromMinutes(10);
+            }
+            client.TokenExpiration = tokenExpiration.Value;
+            return client;
         }
         private IOptions<IamportHttpClientOptions> GetAccessor(IConfiguration configuration)
         {
             var services = new ServiceCollection();
             services.AddOptions();
             services.Configure<IamportHttpClientOptions>(configuration);
+            services.Configure<IamportHttpClientOptions>(options =>
+            {
+                options.HttpClientConfigure = client =>
+                {
+                };
+            });
             var provider = services.BuildServiceProvider();
             return provider.GetService<IOptions<IamportHttpClientOptions>>();
         }
 
         private class MockClient : IamportHttpClient
         {
+            public TimeSpan TokenExpiration { get; set; }
             public IList<HttpRequestMessage> Messages { get; set; } = new List<HttpRequestMessage>();
             public static IList<HttpRequestMessage> GetMessages(IamportHttpClient client)
             {
@@ -317,25 +403,26 @@ namespace Iamport.RestApi.Tests
                         StatusCode = System.Net.HttpStatusCode.InternalServerError,
                     });
                 }
+                else if (path == "users/getToken")
+                {
+                    object content = new IamportToken
+                    {
+                        AccessToken = Guid.NewGuid().ToString(),
+                        IssuedAt = DateTime.UtcNow,
+                        ExpiredAt = DateTime.UtcNow.Add(TokenExpiration)
+                    };
+                    return new IamportResponse<TResult>
+                    {
+                        Content = (TResult)content
+                    };
+                }
                 return await ParseResponseAsync<TResult>(new HttpResponseMessage
                 {
                     Content = new StringContent(""),
                     StatusCode = System.Net.HttpStatusCode.OK
                 });
             }
-
-            public override async Task AuthorizeAsync()
-            {
-                // ignore authorize for test.
-                try
-                {
-                    await base.AuthorizeAsync();
-                }
-                catch
-                {
-                }
-                await Task.FromResult(0);
-            }
+            
         }
     }
 }
