@@ -10,11 +10,13 @@ namespace Iamport.RestApi.Models
         /// <summary>
         /// API 키
         /// </summary>
+        [JsonRequired]
         [JsonProperty("imp_key")]
         public string ApiKey { get; set; }
         /// <summary>
         /// API 비밀번호
         /// </summary>
+        [JsonRequired]
         [JsonProperty("imp_secret")]
         public string ApiSecret { get; set; }
     }

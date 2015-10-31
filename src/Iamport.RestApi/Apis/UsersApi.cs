@@ -27,6 +27,8 @@ namespace Iamport.RestApi.Apis
         /// <summary>
         /// 주어진 아임포트 토큰 요청을 인증하고 결과 토큰을 반환합니다.
         /// 인증에 실패하거나 입력 정보에 문제가 있을 경우 예외를 발생시킵니다.
+        /// 이 API 호출은 내부 HttpClient의 Authorization 헤더를 설정하지 않습니다.
+        /// 단지 요청한 토큰 정보에 대한 응답을 반환할 뿐입니다.
         /// </summary>
         /// <param name="request">아임포트 토큰 요청</param>
         /// <returns>인증된 아임포트 토큰</returns>

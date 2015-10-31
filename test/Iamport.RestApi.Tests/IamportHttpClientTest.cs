@@ -1,6 +1,5 @@
 ﻿using Iamport.RestApi.Models;
 using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.OptionsModel;
 using System;
 using System.Collections.Generic;
@@ -11,9 +10,15 @@ using Xunit;
 
 namespace Iamport.RestApi.Tests
 {
-    public class IamportHttpClientTest
+    public class IamportHttpClientTest : IClassFixture<IamportHttpClientFixture>
     {
         private const string DefaultTokenHeaderName = "X-ImpTokenHeader";
+
+        private readonly IamportHttpClientFixture fixture;
+        public IamportHttpClientTest(IamportHttpClientFixture fixture)
+        {
+            this.fixture = fixture;
+        }
 
         [Fact]
         public void GuardClause()
@@ -194,7 +199,7 @@ namespace Iamport.RestApi.Tests
             // act
             await sut.AuthorizeAsync();
             // assert
-            Assert.Equal(expectedUrl, MockClient.GetMessages(sut).Single().RequestUri.ToString());
+            Assert.Equal(expectedUrl, IamportHttpClientFixture.MockClient.GetMessages(sut).Single().RequestUri.ToString());
         }
 
         [Fact]
@@ -213,7 +218,7 @@ namespace Iamport.RestApi.Tests
             var result = await sut.RequestAsync<object, object>(request);
             // assert
             Assert.NotNull(result);
-            Assert.Equal(expectedUrl, MockClient.GetMessages(sut).Single().RequestUri.ToString());
+            Assert.Equal(expectedUrl, IamportHttpClientFixture.MockClient.GetMessages(sut).Single().RequestUri.ToString());
         }
 
         // TODO: HttpClient가 토큰 헤더를 붙여서 호출하는지 테스트할 수 없음.
@@ -232,7 +237,7 @@ namespace Iamport.RestApi.Tests
             // act
             var result = await sut.RequestAsync<object, object>(request);
             // assert
-            var actual = MockClient.GetMessages(sut)
+            var actual = IamportHttpClientFixture.MockClient.GetMessages(sut)
                 .Last()
                 .Headers
                 .GetValues(DefaultTokenHeaderName)
@@ -272,8 +277,8 @@ namespace Iamport.RestApi.Tests
             var result = await sut.RequestAsync<object, object>(request);
             // assert
             Assert.NotNull(result);
-            Assert.Equal(expectedAuthUrl, MockClient.GetMessages(sut).First().RequestUri.ToString());
-            Assert.Equal(expectedUrl, MockClient.GetMessages(sut).Last().RequestUri.ToString());
+            Assert.Equal(expectedAuthUrl, IamportHttpClientFixture.MockClient.GetMessages(sut).First().RequestUri.ToString());
+            Assert.Equal(expectedUrl, IamportHttpClientFixture.MockClient.GetMessages(sut).Last().RequestUri.ToString());
         }
 
         [Fact]
@@ -294,7 +299,7 @@ namespace Iamport.RestApi.Tests
             var result = await sut.RequestAsync<object, object>(request);
             // assert
             Assert.NotNull(result);
-            var actual = MockClient.GetMessages(sut)
+            var actual = IamportHttpClientFixture.MockClient.GetMessages(sut)
                 .Count(m => m.RequestUri.ToString() == expectedAuthUrl);
             Assert.Equal(1, actual);
         }
@@ -317,112 +322,22 @@ namespace Iamport.RestApi.Tests
             var result = await sut.RequestAsync<object, object>(request);
             // assert
             Assert.NotNull(result);
-            var actual = MockClient.GetMessages(sut)
+            var actual = IamportHttpClientFixture.MockClient.GetMessages(sut)
                 .Count(m => m.RequestUri.ToString() == expectedAuthUrl);
             Assert.Equal(2, actual);
         }
 
         private IamportHttpClient GetDefaultSut()
         {
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string>
-                {
-                    ["ImportId"] = "abcd",
-                    ["ApiKey"] = "1234",
-                    ["ApiSecret"] = "5678",
-                })
-                .Build();
-            var accessor = GetAccessor(configuration);
-            return new IamportHttpClient(accessor);
+            return fixture.GetDefaultClient();
         }
         private IamportHttpClient GetMockSut(TimeSpan? tokenExpiration = null)
         {
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string>
-                {
-                    ["ImportId"] = "abcd",
-                    ["ApiKey"] = "1234",
-                    ["ApiSecret"] = "5678",
-                })
-                .Build();
-            var accessor = GetAccessor(configuration);
-            var client = new MockClient(accessor);
-            if (tokenExpiration.HasValue == false
-                || tokenExpiration.Value == TimeSpan.Zero)
-            {
-                tokenExpiration = TimeSpan.FromMinutes(10);
-            }
-            client.TokenExpiration = tokenExpiration.Value;
-            return client;
+            return fixture.GetMockClient(tokenExpiration);
         }
         private IOptions<IamportHttpClientOptions> GetAccessor(IConfiguration configuration)
         {
-            var services = new ServiceCollection();
-            services.AddOptions();
-            services.Configure<IamportHttpClientOptions>(configuration);
-            services.Configure<IamportHttpClientOptions>(options =>
-            {
-                options.HttpClientConfigure = client =>
-                {
-                };
-            });
-            var provider = services.BuildServiceProvider();
-            return provider.GetService<IOptions<IamportHttpClientOptions>>();
-        }
-
-        private class MockClient : IamportHttpClient
-        {
-            public TimeSpan TokenExpiration { get; set; }
-            public IList<HttpRequestMessage> Messages { get; set; } = new List<HttpRequestMessage>();
-            public static IList<HttpRequestMessage> GetMessages(IamportHttpClient client)
-            {
-                if (client is MockClient)
-                {
-                    return (client as MockClient).Messages;
-                }
-                return Enumerable.Empty<HttpRequestMessage>().ToList();
-            }
-
-            private readonly IamportHttpClientOptions options;
-            public MockClient(IOptions<IamportHttpClientOptions> optionsAccessor) : base(optionsAccessor)
-            {
-                options = optionsAccessor.Value;
-            }
-
-            public async override Task<IamportResponse<TResult>> RequestAsync<TResult>(HttpRequestMessage request)
-            {
-                Messages.Add(request);
-                var path = request.RequestUri
-                    .GetComponents(UriComponents.Path, UriFormat.Unescaped)
-                    .Trim('/');
-                if (path == "error")
-                {
-                    return await ParseResponseAsync<TResult>(new HttpResponseMessage
-                    {
-                        Content = new StringContent(""),
-                        StatusCode = System.Net.HttpStatusCode.InternalServerError,
-                    });
-                }
-                else if (path == "users/getToken")
-                {
-                    object content = new IamportToken
-                    {
-                        AccessToken = Guid.NewGuid().ToString(),
-                        IssuedAt = DateTime.UtcNow,
-                        ExpiredAt = DateTime.UtcNow.Add(TokenExpiration)
-                    };
-                    return new IamportResponse<TResult>
-                    {
-                        Content = (TResult)content
-                    };
-                }
-                return await ParseResponseAsync<TResult>(new HttpResponseMessage
-                {
-                    Content = new StringContent(""),
-                    StatusCode = System.Net.HttpStatusCode.OK
-                });
-            }
-            
+            return fixture.GetAccessor(configuration);
         }
     }
 }
