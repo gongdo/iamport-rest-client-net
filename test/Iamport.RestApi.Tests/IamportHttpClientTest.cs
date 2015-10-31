@@ -192,7 +192,7 @@ namespace Iamport.RestApi.Tests
             // act
             await sut.AuthorizeAsync();
             // assert
-            Assert.Equal(expectedUrl, sut.Messages.Single().RequestUri.ToString());
+            Assert.Equal(expectedUrl, MockClient.GetMessages(sut).Single().RequestUri.ToString());
         }
 
         [Fact]
@@ -211,7 +211,22 @@ namespace Iamport.RestApi.Tests
             var result = await sut.RequestAsync<object, object>(request);
             // assert
             Assert.NotNull(result);
-            Assert.Equal(expectedUrl, sut.Messages.Single().RequestUri.ToString());
+            Assert.Equal(expectedUrl, MockClient.GetMessages(sut).Single().RequestUri.ToString());
+        }
+
+        [Fact]
+        public async Task RequestIamportRequest_throws_HttpRequestException_for_http_exception()
+        {
+            // arrange
+            var sut = GetMockSut();
+            var defaultOptions = new IamportHttpClientOptions();
+            var request = new IamportRequest<object>
+            {
+                ApiPathAndQueryString = "/error",
+                RequireAuthorization = false
+            };
+            // act/assert
+            await Assert.ThrowsAsync<HttpRequestException>(() => sut.RequestAsync<object, object>(request));
         }
 
         [Fact]
@@ -231,8 +246,8 @@ namespace Iamport.RestApi.Tests
             var result = await sut.RequestAsync<object, object>(request);
             // assert
             Assert.NotNull(result);
-            Assert.Equal(expectedAuthUrl, sut.Messages.First().RequestUri.ToString());
-            Assert.Equal(expectedUrl, sut.Messages.Last().RequestUri.ToString());
+            Assert.Equal(expectedAuthUrl, MockClient.GetMessages(sut).First().RequestUri.ToString());
+            Assert.Equal(expectedUrl, MockClient.GetMessages(sut).Last().RequestUri.ToString());
         }
 
         private IamportHttpClient GetDefaultSut()
@@ -248,7 +263,7 @@ namespace Iamport.RestApi.Tests
             var accessor = GetAccessor(configuration);
             return new IamportHttpClient(accessor);
         }
-        private MockClient GetMockSut()
+        private IamportHttpClient GetMockSut()
         {
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>
@@ -273,15 +288,40 @@ namespace Iamport.RestApi.Tests
         private class MockClient : IamportHttpClient
         {
             public IList<HttpRequestMessage> Messages { get; set; } = new List<HttpRequestMessage>();
+            public static IList<HttpRequestMessage> GetMessages(IamportHttpClient client)
+            {
+                if (client is MockClient)
+                {
+                    return (client as MockClient).Messages;
+                }
+                return Enumerable.Empty<HttpRequestMessage>().ToList();
+            }
 
+            private readonly IamportHttpClientOptions options;
             public MockClient(IOptions<IamportHttpClientOptions> optionsAccessor) : base(optionsAccessor)
             {
+                options = optionsAccessor.Value;
             }
 
             public async override Task<IamportResponse<TResult>> RequestAsync<TResult>(HttpRequestMessage request)
             {
                 Messages.Add(request);
-                return await Task.FromResult(new IamportResponse<TResult>());
+                var path = request.RequestUri
+                    .GetComponents(UriComponents.Path, UriFormat.Unescaped)
+                    .Trim('/');
+                if (path == "error")
+                {
+                    return await ParseResponseAsync<TResult>(new HttpResponseMessage
+                    {
+                        Content = new StringContent(""),
+                        StatusCode = System.Net.HttpStatusCode.InternalServerError,
+                    });
+                }
+                return await ParseResponseAsync<TResult>(new HttpResponseMessage
+                {
+                    Content = new StringContent(""),
+                    StatusCode = System.Net.HttpStatusCode.OK
+                });
             }
 
             public override async Task AuthorizeAsync()

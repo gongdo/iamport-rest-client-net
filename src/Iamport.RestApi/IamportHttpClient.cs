@@ -179,7 +179,10 @@ namespace Iamport.RestApi
             {
                 throw new HttpRequestException($"Request failed with status code of {response.StatusCode}.");
             }
-            var result = JsonConvert.DeserializeObject<IamportResponse<T>>(await response.Content.ReadAsStringAsync());
+            var result = JsonConvert
+                .DeserializeObject<IamportResponse<T>>(
+                    await response.Content.ReadAsStringAsync())
+                    ?? new IamportResponse<T>();
             result.HttpStatusCode = response.StatusCode;
             return result;
         }
