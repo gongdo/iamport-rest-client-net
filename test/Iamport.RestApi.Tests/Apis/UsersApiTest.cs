@@ -86,7 +86,7 @@ namespace Iamport.RestApi.Tests.Apis
 
         private IIamportHttpClient GetMockClient()
         {
-            var client = new MockClient(fixture.GetMockClient());
+            var client = new MockClient();
             client.ExpectedTokenRequest = new IamportTokenRequest
             {
                 ApiKey = "key",
@@ -98,25 +98,21 @@ namespace Iamport.RestApi.Tests.Apis
         private class MockClient : IIamportHttpClient
         {
             public IamportTokenRequest ExpectedTokenRequest { get; set; }
-            public int ResponseCode { get; set; }
-            public IList<HttpRequestMessage> Messages
+
+            private IamportToken GetValidToken()
             {
-                get
+                return new IamportToken
                 {
-                    return (innerClient as IamportHttpClientFixture.MockClient)
-                        .Messages;
-                }
+                    AccessToken = Guid.NewGuid().ToString(),
+                    ExpiredAt = DateTime.UtcNow.AddMinutes(10),
+                    IssuedAt = DateTime.UtcNow,
+                };
             }
 
-            private readonly IIamportHttpClient innerClient;
-            public MockClient(IIamportHttpClient innerClient)
+            public async Task<IamportToken> AuthorizeAsync()
             {
-                this.innerClient = innerClient;
-            }
-
-            public Task<IamportToken> AuthorizeAsync()
-            {
-                return innerClient.AuthorizeAsync();
+                return await Task.FromResult(
+                    GetValidToken());
             }
 
             public async Task<IamportResponse<TResult>> RequestAsync<TResult>(HttpRequestMessage request)
@@ -143,12 +139,20 @@ namespace Iamport.RestApi.Tests.Apis
                             Message = "인증에 실패하였습니다. API키와 secret을 확인하세요.",
                         };
                     }
+
+                    object result = GetValidToken();
+                    return await Task.FromResult(
+                        new IamportResponse<TResult>
+                        {
+                            Content = (TResult)result
+                        });
                 }
 
-                return await innerClient.RequestAsync<TResult>(request);
+                return await Task.FromResult(
+                    new IamportResponse<TResult>());
             }
 
-            public Task<IamportResponse<TResult>> RequestAsync<TRequest, TResult>(IamportRequest<TRequest> request)
+            public async Task<IamportResponse<TResult>> RequestAsync<TRequest, TResult>(IamportRequest<TRequest> request)
             {
                 if (typeof(TRequest).Equals(typeof(IamportTokenRequest))
                     && ExpectedTokenRequest != null)
@@ -158,15 +162,23 @@ namespace Iamport.RestApi.Tests.Apis
                     if (actualRequest.ApiKey != ExpectedTokenRequest.ApiKey
                         || actualRequest.ApiSecret != ExpectedTokenRequest.ApiSecret)
                     {
-                        return Task.FromResult(new IamportResponse<TResult>
+                        return await Task.FromResult(new IamportResponse<TResult>
                         {
                             Code = -1,
                             Message = "인증에 실패하였습니다. API키와 secret을 확인하세요.",
                         });
                     }
+
+                    object result = GetValidToken();
+                    return await Task.FromResult(
+                        new IamportResponse<TResult>
+                        {
+                            Content = (TResult)result
+                        });
                 }
 
-                return innerClient.RequestAsync<TRequest, TResult>(request);
+                return await Task.FromResult(
+                    new IamportResponse<TResult>());
             }
         }
     }
