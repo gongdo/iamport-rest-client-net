@@ -1,7 +1,5 @@
 ﻿using Iamport.RestApi.Apis;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Iamport.RestApi.Models;
@@ -10,14 +8,8 @@ using Newtonsoft.Json;
 
 namespace Iamport.RestApi.Tests.Apis
 {
-    public class UsersApiTest : IClassFixture<IamportHttpClientFixture>
+    public class UsersApiTest
     {
-        private readonly IamportHttpClientFixture fixture;
-        public UsersApiTest(IamportHttpClientFixture fixture)
-        {
-            this.fixture = fixture;
-        }
-
         [Fact]
         public void GuardClause()
         {
