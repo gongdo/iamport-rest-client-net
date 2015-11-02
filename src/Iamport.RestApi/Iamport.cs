@@ -8,6 +8,11 @@ namespace Iamport.RestApi
     /// </summary>
     public class Iamport
     {
+        /// <summary>
+        /// 응답이 성공임을 나타내는 코드
+        /// </summary>
+        public const int ResponseSuccessCode = 0;
+
         private readonly IApiFactory apiFactory;
         public Iamport(IApiFactory apiFactory)
         {

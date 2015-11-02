@@ -28,6 +28,13 @@ namespace Iamport.RestApi.Models
         /// 만약 Get일 경우 querystring 형식으로 전달하며
         /// 그렇지 않을 경우 json 형식으로 전달합니다.
         /// </summary>
-        public T Content { get; set; }
+        public virtual T Content { get; set; }
+    }
+    /// <summary>
+    /// 아임포트에서 API 요청시 콘텐트가 없는 정보를 정의하는 클래스.
+    /// </summary>
+    public class IamportRequest : IamportRequest<object>
+    {
+        public override object Content { get { return null; } set { } }
     }
 }

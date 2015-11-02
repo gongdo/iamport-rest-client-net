@@ -13,6 +13,6 @@ namespace Iamport.RestApi.Models
         /// </summary>
         [DataMember(Name = "payment_status")]
         [JsonProperty(PropertyName = "payment_status")]
-        public PaymentState State { get; set; }
+        public PaymentQueryState State { get; set; }
     }
 }
