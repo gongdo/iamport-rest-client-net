@@ -1,4 +1,5 @@
-이슈 트래킹: [![Stories in Ready](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=ready&title=Ready)](https://waffle.io/gongdo/iamport-rest-client-net)
+이슈 트래킹: [![Stories in Ready](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=ready&title=Ready)](https://waffle.io/gongdo/iamport-rest-client-net) [![Stories in In progress](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=in progress&title=In progress)](https://waffle.io/gongdo/iamport-rest-client-net)
+
 # iamport-rest-client-net
 [아임포트](http://www.iamport.kr/)는 한국 Payment Gateway(PG)사의 복잡한 구현을 간소화주는 서비스로 PG사의 UI를 거치지 않고 처리할 수 있는 몇 가지 기능을 REST API로 제공합니다.
 
