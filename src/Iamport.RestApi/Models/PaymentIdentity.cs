@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace Iamport.RestApi.Models
 {
@@ -12,11 +13,13 @@ namespace Iamport.RestApi.Models
         /// 아임포트의 거래 고유 번호
         /// </summary>
         [JsonProperty("imp_uid")]
+        [DataMember(Name = "imp_uid")]
         public string IamportId { get; set; }
         /// <summary>
         /// 각 상점에서 다루는 거래 고유 번호
         /// </summary>
         [JsonProperty("merchant_uid")]
+        [DataMember(Name = "merchant_uid")]
         public string TransactionId { get; set; }
     }
 }

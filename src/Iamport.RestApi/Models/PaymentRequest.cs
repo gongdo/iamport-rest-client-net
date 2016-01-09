@@ -12,6 +12,11 @@ namespace Iamport.RestApi.Models
     public class PaymentRequest
     {
         /// <summary>
+        /// 지원 PG사
+        /// </summary>
+        [JsonProperty("pg_provider")]
+        public PaymentGateway PaymentGateway { get; set; }
+        /// <summary>
         /// 결제 수단
         /// </summary>
         [JsonProperty("pay_method")]

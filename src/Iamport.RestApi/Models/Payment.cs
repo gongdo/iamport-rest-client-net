@@ -29,7 +29,7 @@ namespace Iamport.RestApi.Models
         /// PG사 명칭. inicis(이니시스) / nice(나이스정보통신)
         /// </summary>
         [JsonProperty("pg_provider")]
-        public string PaymentGatewayProvider { get; set; }
+        public PaymentGateway PaymentGateway { get; set; }
         /// <summary>
         /// PG사 승인정보
         /// </summary>
