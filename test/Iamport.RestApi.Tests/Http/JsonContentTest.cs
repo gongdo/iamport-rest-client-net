@@ -81,8 +81,6 @@ namespace Iamport.RestApi.Tests.Http
                 var dummyJson = JsonConvert.SerializeObject(Dummy.GetDummy());
                 yield return new[] { new JsonContent(json) };
                 yield return new[] { new JsonContent(dummyJson) };
-                yield return new[] { new JsonContent(json, Encoding.UTF32) };
-                yield return new[] { new JsonContent(dummyJson, Encoding.UTF32) };
             }
         }
     }
