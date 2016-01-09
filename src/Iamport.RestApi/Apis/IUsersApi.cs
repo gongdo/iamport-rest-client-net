@@ -13,6 +13,7 @@ namespace Iamport.RestApi.Apis
         /// 인증에 실패하거나 입력 정보에 문제가 있을 경우 예외를 발생시킵니다.
         /// </summary>
         /// <param name="request">아임포트 토큰 요청</param>
+        /// <seealso cref="https://api.iamport.kr/#!/authenticate/getToken"/>
         /// <returns>인증된 아임포트 토큰</returns>
         Task<IamportToken> GetTokenAsync(IamportTokenRequest request);
     }

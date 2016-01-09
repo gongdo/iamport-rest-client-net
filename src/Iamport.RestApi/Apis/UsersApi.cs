@@ -31,6 +31,7 @@ namespace Iamport.RestApi.Apis
         /// 단지 요청한 토큰 정보에 대한 응답을 반환할 뿐입니다.
         /// </summary>
         /// <param name="request">아임포트 토큰 요청</param>
+        /// <seealso cref="https://api.iamport.kr/#!/authenticate/getToken"/>
         /// <returns>인증된 아임포트 토큰</returns>
         public virtual async Task<IamportToken> GetTokenAsync(IamportTokenRequest request)
         {

@@ -23,6 +23,13 @@ namespace Iamport.RestApi.Apis
 
         public string BasePath { get; } = "/payments";
 
+        /// <summary>
+        /// 주어진 입력에 해당하는 결제를 취소하고 결제 결과를 반환합니다.
+        /// 해당하는 결제 결과가 없으면 null을 반환합니다.
+        /// </summary>
+        /// <param name="cancellation">취소 정보</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments/cancelPayment"/>
+        /// <returns>결제 결과</returns>
         public async Task<Payment> CancelAsync(PaymentCancellation cancellation)
         {
             if (cancellation == null)
@@ -38,6 +45,12 @@ namespace Iamport.RestApi.Apis
             return await SendRequestAsync<PaymentCancellation, Payment>(request);
         }
 
+        /// <summary>
+        /// 주어진 조회 조건에 해당하는 결제 결과를 조회합니다.
+        /// </summary>
+        /// <param name="query">결제 조회 조건</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments/getPaymentsByStatus"/>
+        /// <returns>결제 결과의 목록</returns>
         public async Task<PagedResult<Payment>> GetAsync(PaymentPageQuery query)
         {
             if (query == null)
@@ -57,6 +70,13 @@ namespace Iamport.RestApi.Apis
             return await SendRequestAsync<object, PagedResult<Payment>>(request);
         }
 
+        /// <summary>
+        /// 아임포트 고유 ID에 해당하는 결제 결과를 조회합니다.
+        /// 존재하지 않을 경우 null을 반환합니다.
+        /// </summary>
+        /// <param name="iamportId">아임포트 고유 ID</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments/getPaymentByImpUid"/>
+        /// <returns>결제 결과</returns>
         public async Task<Payment> GetByIamportIdAsync(string iamportId)
         {
             if (string.IsNullOrEmpty(iamportId))
@@ -71,6 +91,13 @@ namespace Iamport.RestApi.Apis
             return await SendRequestAsync<object, Payment>(request);
         }
 
+        /// <summary>
+        /// 거래 ID에 해당하는 결제 결과를 조회합니다.
+        /// 존재하지 않을 경우 null을 반환합니다.
+        /// </summary>
+        /// <param name="transactionId">거래 ID</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments/getPaymentByMerchantUid"/>
+        /// <returns>결제 결과</returns>
         public async Task<Payment> GetByTransactionIdAsync(string transactionId)
         {
             if (string.IsNullOrEmpty(transactionId))
@@ -85,6 +112,13 @@ namespace Iamport.RestApi.Apis
             return await SendRequestAsync<object, Payment>(request);
         }
 
+        /// <summary>
+        /// 주어진 거래 ID에 해당하는 결제 준비 정보를 반환합니다.
+        /// 존재하지 않을 경우 null을 반환합니다.
+        /// </summary>
+        /// <param name="transactionId">거래 ID</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments.validation/getPaymentPrepareByMerchantUid"/>
+        /// <returns>결제 준비 정보</returns>
         public async Task<PaymentPreparation> GetPreparationAsync(string transactionId)
         {
             if (string.IsNullOrEmpty(transactionId))
@@ -99,6 +133,14 @@ namespace Iamport.RestApi.Apis
             return await SendRequestAsync<object, PaymentPreparation>(request);
         }
 
+        /// <summary>
+        /// 주어진 정보로 결제를 준비합니다.
+        /// 준비된 결제는 동일한 거래 ID에 대해 단 한번만 결제를 진행할 수 있으며,
+        /// 결제 진행중 등록된 금액과 다를 경우 결제에 실패합니다.
+        /// </summary>
+        /// <param name="preparation">결제 준비 정보</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments.validation/preparePayment"/>
+        /// <returns>결제 준비 정보</returns>
         public async Task<PaymentPreparation> PrepareAsync(PaymentPreparation preparation)
         {
             if (preparation == null)

@@ -14,7 +14,8 @@ namespace Iamport.RestApi.Apis
         /// 결제 진행중 등록된 금액과 다를 경우 결제에 실패합니다.
         /// </summary>
         /// <param name="preparation">결제 준비 정보</param>
-        /// <returns></returns>
+        /// <seealso cref="https://api.iamport.kr/#!/payments.validation/preparePayment"/>
+        /// <returns>결제 준비 정보</returns>
         Task<PaymentPreparation> PrepareAsync(PaymentPreparation preparation);
 
         /// <summary>
@@ -22,7 +23,8 @@ namespace Iamport.RestApi.Apis
         /// 존재하지 않을 경우 null을 반환합니다.
         /// </summary>
         /// <param name="transactionId">거래 ID</param>
-        /// <returns></returns>
+        /// <seealso cref="https://api.iamport.kr/#!/payments.validation/getPaymentPrepareByMerchantUid"/>
+        /// <returns>결제 준비 정보</returns>
         Task<PaymentPreparation> GetPreparationAsync(string transactionId);
 
         /// <summary>
@@ -30,6 +32,7 @@ namespace Iamport.RestApi.Apis
         /// 존재하지 않을 경우 null을 반환합니다.
         /// </summary>
         /// <param name="iamportId">아임포트 고유 ID</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments/getPaymentByImpUid"/>
         /// <returns>결제 결과</returns>
         Task<Payment> GetByIamportIdAsync(string iamportId);
 
@@ -38,6 +41,7 @@ namespace Iamport.RestApi.Apis
         /// 존재하지 않을 경우 null을 반환합니다.
         /// </summary>
         /// <param name="transactionId">거래 ID</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments/getPaymentByMerchantUid"/>
         /// <returns>결제 결과</returns>
         Task<Payment> GetByTransactionIdAsync(string transactionId);
 
@@ -45,6 +49,7 @@ namespace Iamport.RestApi.Apis
         /// 주어진 조회 조건에 해당하는 결제 결과를 조회합니다.
         /// </summary>
         /// <param name="query">결제 조회 조건</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments/getPaymentsByStatus"/>
         /// <returns>결제 결과의 목록</returns>
         Task<PagedResult<Payment>> GetAsync(PaymentPageQuery query);
 
@@ -53,6 +58,7 @@ namespace Iamport.RestApi.Apis
         /// 해당하는 결제 결과가 없으면 null을 반환합니다.
         /// </summary>
         /// <param name="cancellation">취소 정보</param>
+        /// <seealso cref="https://api.iamport.kr/#!/payments/cancelPayment"/>
         /// <returns>결제 결과</returns>
         Task<Payment> CancelAsync(PaymentCancellation cancellation);
     }
