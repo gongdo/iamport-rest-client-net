@@ -8,14 +8,12 @@
   "language": "ko-KR",
 
   "dependencies": {
-    "Microsoft.Framework.Configuration": "1.0.0-beta8",
-    "Microsoft.Framework.Configuration.Abstractions": "1.0.0-beta8",
-    "Microsoft.Framework.Configuration.Json": "1.0.0-beta8",
-    "Microsoft.Framework.DependencyInjection": "1.0.0-beta8",
-    "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta8",
-    "Microsoft.Framework.OptionsModel": "1.0.0-beta8",
-    "Newtonsoft.Json": "7.0.1",
-    "System.Net.Http": "4.0.1-beta-23409"
+    "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
+    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+    "Newtonsoft.Json": "8.0.2",
+    "System.Net.Http": "4.0.1-beta-23516"
   },
 
   "frameworks": {
@@ -27,10 +25,10 @@
     },
     "dnxcore50": {
       "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23409",
-        "System.Runtime": "4.0.21-beta-23409",
-        "System.Runtime.Serialization.Primitives": "4.0.11-beta-23409",
-        "System.ComponentModel.Annotations": "4.0.11-beta-23409"
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Runtime.Serialization.Primitives": "4.0.11-beta-23516",
+        "System.ComponentModel.Annotations": "4.0.11-beta-23516"
       }
     }
   }
