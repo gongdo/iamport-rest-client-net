@@ -1,0 +1,7 @@
+version: 1.0.{build}
+before_build:
+- cmd: dnu restore
+test_script:
+- cmd: dnx -p test/Iamport.RestApi.Tests test
+build:
+  verbosity: normal

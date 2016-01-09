@@ -1,5 +1,3 @@
-이슈 트래킹: [![Stories in Ready](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=ready&title=Ready)](https://waffle.io/gongdo/iamport-rest-client-net) [![Stories in In progress](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=in progress&title=In progress)](https://waffle.io/gongdo/iamport-rest-client-net)
-
 # iamport-rest-client-net
 [아임포트](http://www.iamport.kr/)는 한국 Payment Gateway(PG)사의 복잡한 구현을 간소화주는 서비스로 PG사의 UI를 거치지 않고 처리할 수 있는 몇 가지 기능을 REST API로 제공합니다.
 
@@ -10,6 +8,11 @@
 
 ## Quick start
 *아직 작성되지 않았습니다.*
+
+## Status
+[![Stories in Ready](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=ready&title=Ready)](https://waffle.io/gongdo/iamport-rest-client-net) [![Stories in In progress](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=in progress&title=In progress)](https://waffle.io/gongdo/iamport-rest-client-net)
+
+[![Build status](https://ci.appveyor.com/api/projects/status/icygwugodo4jalcs?svg=true)](https://ci.appveyor.com/project/gongdo/iamport-rest-client-net)
 
 ## Roadmap
 아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.
