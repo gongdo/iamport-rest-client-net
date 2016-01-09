@@ -11,6 +11,9 @@
 ## Quick start
 *아직 작성되지 않았습니다.*
 
+## Status
+[![Build status](https://ci.appveyor.com/api/projects/status/icygwugodo4jalcs?svg=true)](https://ci.appveyor.com/project/gongdo/iamport-rest-client-net)
+
 ## Roadmap
 아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.
 아임포트RESTAPI닷넷의 버전 규칙은 [Semantic Versioning](http://semver.org/)을 따릅니다. 마일스톤에는 revision이나 build버전을 붙이지 않습니다.
