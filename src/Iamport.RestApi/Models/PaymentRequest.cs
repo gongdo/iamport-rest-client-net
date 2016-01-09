@@ -103,5 +103,10 @@ namespace Iamport.RestApi.Models
         /// </summary>
         [JsonProperty("app_scheme", DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
         public string AppScheme { get; set; }
+        /// <summary>
+        /// 결제 요청에 대해 콜백 알림을 받을 URL
+        /// </summary>
+        [JsonProperty("notice_url", DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore)]
+        public string NotificationUrl { get; set; }
     }
 }
