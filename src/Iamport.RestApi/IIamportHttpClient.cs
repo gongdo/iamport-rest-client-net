@@ -10,6 +10,10 @@ namespace Iamport.RestApi
     public interface IIamportHttpClient
     {
         /// <summary>
+        /// 현재 클라이언트가 인증된 토큰을 확보하고 있는지 여부를 반환합니다.
+        /// </summary>
+        bool IsAuthorized { get; }
+        /// <summary>
         /// 주어진 정보로 아임포트 서버에 요청을 전송하고 결과를 반환합니다.
         /// 만약 요청 정보에 RequireAuthorization이 true일 경우
         /// 자동으로 Authorize 메서드를 호출합니다.

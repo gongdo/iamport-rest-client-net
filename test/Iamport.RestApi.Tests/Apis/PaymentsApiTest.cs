@@ -290,6 +290,14 @@ namespace Iamport.RestApi.Tests.Apis
             public HttpStatusCode ExpectedHttpStatusCode { get; set; } = HttpStatusCode.OK;
             public IList<string> RequestedPathAndQuerystrings { get; set; } = new List<string>();
 
+            public bool IsAuthorized
+            {
+                get
+                {
+                    return CurrentToken != null;
+                }
+            }
+
             private IamportToken GetValidToken()
             {
                 return new IamportToken

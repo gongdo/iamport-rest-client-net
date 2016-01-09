@@ -91,6 +91,14 @@ namespace Iamport.RestApi.Tests.Apis
         {
             public IamportTokenRequest ExpectedTokenRequest { get; set; }
 
+            public bool IsAuthorized
+            {
+                get
+                {
+                    return true;
+                }
+            }
+
             private IamportToken GetValidToken()
             {
                 return new IamportToken

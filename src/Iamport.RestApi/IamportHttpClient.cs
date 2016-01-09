@@ -55,6 +55,22 @@ namespace Iamport.RestApi
         private readonly object tokenLock = new object();
 
         /// <summary>
+        /// 현재 클라이언트가 인증된 토큰을 확보하고 있는지 여부를 반환합니다.
+        /// </summary>
+        public bool IsAuthorized
+        {
+            get
+            {
+                lock (tokenLock)
+                {
+                    return CurrentToken != null
+                        && CurrentToken.ExpiredAt.AddMinutes(-1) >= DateTime.UtcNow
+                        && httpClient.DefaultRequestHeaders.Contains(options.AuthorizationHeaderName);
+                }
+            }
+        }
+
+        /// <summary>
         /// 주어진 정보로 아임포트 서버에 요청을 전송하고 결과를 반환합니다.
         /// 만약 요청 정보에 RequireAuthorization이 true일 경우
         /// 자동으로 Authorize 메서드를 호출합니다.
@@ -223,9 +239,7 @@ namespace Iamport.RestApi
         private async Task EnsureAuthorizedAsync()
         {
             ThrowsIfDisposed();
-            if (CurrentToken == null
-                || CurrentToken.ExpiredAt.AddMinutes(-1) < DateTime.UtcNow
-                || httpClient.DefaultRequestHeaders.Contains(options.AuthorizationHeaderName) == false)
+            if (IsAuthorized == false)
             {
                 await AuthorizeAsync();
             }

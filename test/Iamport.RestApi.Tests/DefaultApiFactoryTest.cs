@@ -49,6 +49,14 @@ namespace Iamport.RestApi.Tests
 
         private class DummyClient : IIamportHttpClient
         {
+            public bool IsAuthorized
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
             public Task<IamportToken> AuthorizeAsync()
             {
                 throw new NotImplementedException();

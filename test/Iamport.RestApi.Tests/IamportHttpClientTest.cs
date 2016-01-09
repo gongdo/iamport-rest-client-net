@@ -203,6 +203,29 @@ namespace Iamport.RestApi.Tests
         }
 
         [Fact]
+        public async Task Authorize_makes_IsAuthorized_true()
+        {
+            // arrange
+            var sut = GetMockSut();
+            // act
+            await sut.AuthorizeAsync();
+            // assert
+            Assert.True(sut.IsAuthorized);
+        }
+
+        [Fact]
+        public async Task IsAuthorized_is_false_after_expiration()
+        {
+            // arrange
+            var sut = GetMockSut(TimeSpan.FromMilliseconds(15));
+            // act
+            await sut.AuthorizeAsync();
+            await Task.Delay(15);
+            // assert
+            Assert.False(sut.IsAuthorized);
+        }
+
+        [Fact]
         public async Task RequestIamportRequest_calls_self_url()
         {
             // arrange
