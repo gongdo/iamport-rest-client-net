@@ -1,4 +1,5 @@
-이슈 트래킹: [![Stories in Ready](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=ready&title=Ready)](https://waffle.io/gongdo/iamport-rest-client-net)
+이슈 트래킹: [![Stories in Ready](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=ready&title=Ready)](https://waffle.io/gongdo/iamport-rest-client-net) [![Stories in In progress](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=in progress&title=In progress)](https://waffle.io/gongdo/iamport-rest-client-net)
+
 # iamport-rest-client-net
 [아임포트](http://www.iamport.kr/)는 한국 Payment Gateway(PG)사의 복잡한 구현을 간소화주는 서비스로 PG사의 UI를 거치지 않고 처리할 수 있는 몇 가지 기능을 REST API로 제공합니다.
 
@@ -14,17 +15,18 @@
 아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.
 아임포트RESTAPI닷넷의 버전 규칙은 [Semantic Versioning](http://semver.org/)을 따릅니다. 마일스톤에는 revision이나 build버전을 붙이지 않습니다.
 
-* [1.0-beta1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-beta1) (**현재 진행중**)
+* [1.0-beta1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-beta1) 
  * DNX 4.5.1과 DNX Core 5.0에서 구동하는 코드 작성
+* [1.0-rc1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-rc1) (**현재 진행중**)
  * Users API, Payments API 제공
- * 샘플 프로젝트 제공
  * 단위 테스트, 기능 테스트 및 CI build 구성
  * Nuget 패키지 제공
-* [1.0-rc1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-rc1)
+ * 메이저 버그 수정
+* [1.0-rc2]
+ * 샘플 프로젝트 제공
  * .NET 4.6 지원
  * .NET 4.0, 4.5 지원(*미정*)
  * Subscribe API 지원
- * 메이저 버그 수정
 * [1.0](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0)
  * 마이너 버그 수정
  * 최초 릴리스!
