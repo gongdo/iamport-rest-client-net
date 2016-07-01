@@ -40,7 +40,7 @@ namespace Iamport.RestApi
             .ToDictionary(m => m.Interface, m => m.Implementation);
 
             var services = new ServiceCollection();
-            services.AddInstance(client);
+            services.AddSingleton(client);
             foreach (var map in apiTypeMap)
             {
                 services.AddSingleton(map.Key, map.Value);

@@ -1,7 +1,7 @@
 version: 1.0.{build}
 before_build:
-- cmd: dnu restore
+- cmd: dotnet restore
 test_script:
-- cmd: dnx -p test/Iamport.RestApi.Tests test
+- cmd: dotnet test/Iamport.RestApi.Tests
 build:
   verbosity: normal

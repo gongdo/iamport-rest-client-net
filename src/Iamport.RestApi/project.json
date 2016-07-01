@@ -1,35 +1,29 @@
 {
   "version": "1.0.0-*",
   "description": "Iamport.RestApi .NET Client",
-  "authors": [ "gongdo" ],
-  "tags": [ "I'mport", "아임포트", "iamport" ],
-  "projectUrl": "https://github.com/gongdo/iamport-rest-client-net",
-  "licenseUrl": "https://github.com/gongdo/iamport-rest-client-net/blob/master/LICENSE",
-  "language": "ko-KR",
-
   "dependencies": {
-    "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
-    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
-    "Newtonsoft.Json": "8.0.2",
-    "System.Net.Http": "4.0.1-beta-23516"
+    "Microsoft.Extensions.Options": "1.0.0",
+    "System.ComponentModel.Annotations": "4.1.0",
+    "System.Runtime.InteropServices": "4.1.0",
+    "Newtonsoft.Json": "9.0.1",
+    "System.Net.Http": "4.1.0",
+    "System.Reflection.TypeExtensions": "4.1.0",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0"
   },
-
   "frameworks": {
-    "dnx451": {
-      "frameworkAssemblies": {
-        "System.Runtime.Serialization": "",
-        "System.ComponentModel.DataAnnotations": ""
-      }
-    },
-    "dnxcore50": {
-      "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Runtime.Serialization.Primitives": "4.1.0-beta-23516",
-        "System.ComponentModel.Annotations": "4.0.11-beta-23516"
-      }
+    "netstandard1.3": {
     }
+  },
+  "packOptions": {
+    "tags": [ "I'mport", "아임포트", "iamport" ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/gongdo/iamport-rest-client-net"
+    },
+    "licenseUrl": "https://github.com/gongdo/iamport-rest-client-net/blob/master/LICENSE",
+    "owners": [ "gongdo" ]
+  },
+  "buildOptions": {
+    "xmlDoc": true
   }
 }
