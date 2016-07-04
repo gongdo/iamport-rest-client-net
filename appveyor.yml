@@ -1,7 +1,0 @@
-version: 1.0.{build}
-before_build:
-- cmd: dotnet restore
-test_script:
-- cmd: dotnet test/Iamport.RestApi.Tests
-build:
-  verbosity: normal
