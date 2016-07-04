@@ -28,6 +28,7 @@ namespace Iamport.RestApi
         /// 인증용 HTTP 헤더 이름
         /// </summary>
         public string AuthorizationHeaderName { get; set; } = "X-ImpTokenHeader";
+        
 
         /// <summary>
         /// HttpClient 추가 설정 액션입니다.
@@ -35,6 +36,36 @@ namespace Iamport.RestApi
         /// null일 경우 무시하며 그렇지 않을 경우 
         /// 기본 설정이 완료된 HttpClient의 인스턴스를 파라미터로 전달합니다.
         /// </summary>
+        [Obsolete("HttpClient자체를 외부에서 생성할 수 있도록 변경합니다.")]
         public Action<HttpClient> HttpClientConfigure { get; set; }
+
+
+        /// <summary>
+        /// 현재 옵션이 유효한지 확인합니다.
+        /// </summary>
+        public void Validate()
+        {
+            if (string.IsNullOrEmpty(ImportId))
+            {
+                throw new ArgumentNullException(nameof(ImportId));
+            }
+            if (string.IsNullOrEmpty(ApiKey))
+            {
+                throw new ArgumentNullException(nameof(ApiKey));
+            }
+            if (string.IsNullOrEmpty(ApiSecret))
+            {
+                throw new ArgumentNullException(nameof(ApiSecret));
+            }
+            if (string.IsNullOrEmpty(AuthorizationHeaderName))
+            {
+                throw new ArgumentNullException(nameof(AuthorizationHeaderName));
+            }
+            if (string.IsNullOrEmpty(BaseUrl))
+            {
+                throw new ArgumentNullException(nameof(BaseUrl));
+            }
+        }
+
     }
 }

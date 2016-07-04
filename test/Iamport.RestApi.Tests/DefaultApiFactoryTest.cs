@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Xunit;
-using Iamport.RestApi.Models;
-using System.Net.Http;
-using System.Threading.Tasks;
+using Moq;
 
 namespace Iamport.RestApi.Tests
 {
@@ -23,7 +21,7 @@ namespace Iamport.RestApi.Tests
         public void GetApi_returns_an_instance_of_api(Type interfaceType, Type implementationType)
         {
             // arrange
-            var client = new DummyClient();
+            var client = Mock.Of<IIamportClient>();
             var sut = new DefaultApiFactory(client);
 
             // act
@@ -33,46 +31,22 @@ namespace Iamport.RestApi.Tests
             Assert.Equal(implementationType, api.GetType());
         }
 
-        [Fact]
-        public void GetApi_returns_null_for_unknown_type()
+        [Theory]
+        [InlineData(typeof(IFakeApi))]
+        [InlineData(typeof(UsersApi))]
+        public void GetApi_returns_null_for_unknown_type(Type type)
         {
             // arrange
-            var client = new DummyClient();
+            var client = Mock.Of<IIamportClient>();
             var sut = new DefaultApiFactory(client);
 
             // act
-            var api = sut.GetApi(typeof(IFakeApi));
+            var api = sut.GetApi(type);
 
             // assert
             Assert.Null(api);
         }
-
-        private class DummyClient : IIamportHttpClient
-        {
-            public bool IsAuthorized
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
-            public Task<IamportToken> AuthorizeAsync()
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task<IamportResponse<TResult>> RequestAsync<TResult>(HttpRequestMessage request)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task<IamportResponse<TResult>> RequestAsync<TRequest, TResult>(IamportRequest<TRequest> request)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        
         private interface IFakeApi : IIamportApi
         {
         }

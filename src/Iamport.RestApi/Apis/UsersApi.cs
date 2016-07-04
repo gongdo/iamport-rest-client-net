@@ -12,8 +12,8 @@ namespace Iamport.RestApi.Apis
     {
         private const string UsersGetTokenPath = "getToken";
 
-        private readonly IIamportHttpClient client;
-        public UsersApi(IIamportHttpClient client)
+        private readonly IIamportClient client;
+        public UsersApi(IIamportClient client)
         {
             if (client == null)
             {
@@ -35,9 +35,14 @@ namespace Iamport.RestApi.Apis
         /// <returns>인증된 아임포트 토큰</returns>
         public virtual async Task<IamportToken> GetTokenAsync(IamportTokenRequest request)
         {
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, this.BuildPath(UsersGetTokenPath));
-            httpRequest.Content = new JsonContent(request);
-            var response = await client.RequestAsync<IamportToken>(httpRequest);
+            var iamportRequest = new IamportRequest<IamportTokenRequest>
+            {
+                RequireAuthorization = false,
+                ApiPathAndQueryString = $"{BasePath}/{UsersGetTokenPath}",
+                Content = request,
+                Method = HttpMethod.Post,
+            };
+            var response = await client.RequestAsync<IamportTokenRequest, IamportToken>(iamportRequest);
             if (response.Code != 0)
             {
                 throw new IamportResponseException(response.Code, response.Message);

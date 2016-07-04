@@ -2,13 +2,11 @@
   "version": "1.0.0-*",
   "description": "Iamport.RestApi .NET Client",
   "dependencies": {
-    "Microsoft.Extensions.Options": "1.0.0",
     "System.ComponentModel.Annotations": "4.1.0",
     "System.Runtime.InteropServices": "4.1.0",
     "Newtonsoft.Json": "9.0.1",
     "System.Net.Http": "4.1.0",
-    "System.Reflection.TypeExtensions": "4.1.0",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0"
+    "System.Reflection.TypeExtensions": "4.1.0"
   },
   "frameworks": {
     "netstandard1.3": {

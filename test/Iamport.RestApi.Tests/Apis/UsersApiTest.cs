@@ -5,6 +5,8 @@ using Xunit;
 using Iamport.RestApi.Models;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Moq;
+using System.Threading;
 
 namespace Iamport.RestApi.Tests.Apis
 {
@@ -23,7 +25,7 @@ namespace Iamport.RestApi.Tests.Apis
         [InlineData("", null)]
         [InlineData(null, "secret")]
         [InlineData("key", null)]
-        public async Task GetTokenAsync_throws_JsonSerializationException_with_empty_or_null(string key, string secret)
+        public async Task GetTokenAsync_throws_UnauthorizedAccessException_with_empty_or_null(string key, string secret)
         {
             // arrange
             var client = GetMockClient();
@@ -35,12 +37,12 @@ namespace Iamport.RestApi.Tests.Apis
             };
 
             // act/assert
-            await Assert.ThrowsAsync<JsonSerializationException>(
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(
                 () => sut.GetTokenAsync(request));
         }
 
         [Fact]
-        public async Task GetTokenAsync_throws_IamportResponseException_with_invalid_key_and_secret()
+        public async Task GetTokenAsync_throws_UnauthorizedAccessException_with_invalid_key_and_secret()
         {
             // arrange
             var client = GetMockClient();
@@ -52,7 +54,7 @@ namespace Iamport.RestApi.Tests.Apis
             };
 
             // act/assert
-            await Assert.ThrowsAsync<IamportResponseException>(
+            await Assert.ThrowsAsync<UnauthorizedAccessException>(
                 () => sut.GetTokenAsync(request));
         }
 
@@ -76,110 +78,34 @@ namespace Iamport.RestApi.Tests.Apis
             Assert.True(result.ExpiredAt >= DateTime.UtcNow);
         }
 
-        private IIamportHttpClient GetMockClient()
+        private IIamportClient GetMockClient()
         {
-            var client = new MockClient();
-            client.ExpectedTokenRequest = new IamportTokenRequest
+            var mock = new Mock<IIamportClient>();
+            mock.Setup(client =>
+                client.RequestAsync<IamportTokenRequest, IamportToken>(
+                    It.Is<IamportRequest<IamportTokenRequest>>(
+                        request => request.Content.ApiKey == "key"
+                        && request.Content.ApiSecret == "secret")))
+            .ReturnsAsync(new IamportResponse<IamportToken>
             {
-                ApiKey = "key",
-                ApiSecret = "secret"
-            };
-            return client;
-        }
-
-        private class MockClient : IIamportHttpClient
-        {
-            public IamportTokenRequest ExpectedTokenRequest { get; set; }
-
-            public bool IsAuthorized
-            {
-                get
-                {
-                    return true;
-                }
-            }
-
-            private IamportToken GetValidToken()
-            {
-                return new IamportToken
+                Code = 0,
+                HttpStatusCode = System.Net.HttpStatusCode.OK,
+                Content = new IamportToken
                 {
                     AccessToken = Guid.NewGuid().ToString(),
-                    ExpiredAt = DateTime.UtcNow.AddMinutes(10),
                     IssuedAt = DateTime.UtcNow,
-                };
-            }
+                    ExpiredAt = DateTime.UtcNow.AddMinutes(10),
+                },
+                Message = null,
+            });
+            mock.Setup(client =>
+                client.RequestAsync<IamportTokenRequest, IamportToken>(
+                    It.Is<IamportRequest<IamportTokenRequest>>(
+                        request => request.Content.ApiKey != "key"
+                        || request.Content.ApiSecret != "secret")))
+            .Throws<UnauthorizedAccessException>();
 
-            public async Task<IamportToken> AuthorizeAsync()
-            {
-                return await Task.FromResult(
-                    GetValidToken());
-            }
-
-            public async Task<IamportResponse<TResult>> RequestAsync<TResult>(HttpRequestMessage request)
-            {
-                var path = request.RequestUri.ToString().Trim('/');
-                if (request.RequestUri.IsAbsoluteUri)
-                {
-                    path = request.RequestUri
-                    .GetComponents(UriComponents.Path, UriFormat.Unescaped)
-                    .Trim('/');
-                }
-                if (path.Equals("users/getToken", StringComparison.OrdinalIgnoreCase))
-                {
-                    var actualRequest = JsonConvert
-                        .DeserializeObject<IamportTokenRequest>(
-                        await request.Content.ReadAsStringAsync());
-                    // simulate validation
-                    if (actualRequest.ApiKey != ExpectedTokenRequest.ApiKey
-                        || actualRequest.ApiSecret != ExpectedTokenRequest.ApiSecret)
-                    {
-                        return new IamportResponse<TResult>
-                        {
-                            Code = -1,
-                            Message = "인증에 실패하였습니다. API키와 secret을 확인하세요.",
-                        };
-                    }
-
-                    object result = GetValidToken();
-                    return await Task.FromResult(
-                        new IamportResponse<TResult>
-                        {
-                            Content = (TResult)result
-                        });
-                }
-
-                return await Task.FromResult(
-                    new IamportResponse<TResult>());
-            }
-
-            public async Task<IamportResponse<TResult>> RequestAsync<TRequest, TResult>(IamportRequest<TRequest> request)
-            {
-                if (typeof(TRequest).Equals(typeof(IamportTokenRequest))
-                    && ExpectedTokenRequest != null)
-                {
-                    var actualRequest = request.Content as IamportTokenRequest;
-                    // simulate validation
-                    if (actualRequest.ApiKey != ExpectedTokenRequest.ApiKey
-                        || actualRequest.ApiSecret != ExpectedTokenRequest.ApiSecret)
-                    {
-                        return await Task.FromResult(new IamportResponse<TResult>
-                        {
-                            Code = -1,
-                            Message = "인증에 실패하였습니다. API키와 secret을 확인하세요.",
-                        });
-                    }
-
-                    object result = GetValidToken();
-                    return await Task.FromResult(
-                        new IamportResponse<TResult>
-                        {
-                            Content = (TResult)result
-                        });
-                }
-
-                return await Task.FromResult(
-                    new IamportResponse<TResult>());
-            }
+            return mock.Object;
         }
     }
 }

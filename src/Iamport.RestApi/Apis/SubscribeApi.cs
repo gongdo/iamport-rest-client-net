@@ -5,7 +5,14 @@
     /// </summary>
     public class SubscribeApi : ISubscribeApi
     {
+        private readonly IIamportClient client;
+
         public string BasePath { get; } = "/subscribe/payments";
+
+        public SubscribeApi(IIamportClient client)
+        {
+            this.client = client;
+        }
 
         // TODO: 실제 API는 아직 구현 안됨.
     }

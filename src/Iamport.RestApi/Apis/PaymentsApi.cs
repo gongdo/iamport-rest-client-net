@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Iamport.RestApi.Models;
 using System.Net.Http;
 using Iamport.RestApi.Extensions;
+using System.ComponentModel.DataAnnotations;
 
 namespace Iamport.RestApi.Apis
 {
@@ -11,8 +12,8 @@ namespace Iamport.RestApi.Apis
     /// </summary>
     public class PaymentsApi : IPaymentsApi
     {
-        private readonly IIamportHttpClient client;
-        public PaymentsApi(IIamportHttpClient client)
+        private readonly IIamportClient client;
+        public PaymentsApi(IIamportClient client)
         {
             if (client == null)
             {
@@ -36,6 +37,7 @@ namespace Iamport.RestApi.Apis
             {
                 throw new ArgumentNullException(nameof(cancellation));
             }
+            ValidateObject(cancellation);
             var request = new IamportRequest<PaymentCancellation>
             {
                 ApiPathAndQueryString = GetPathAndQuerystring("cancel"),
@@ -169,6 +171,12 @@ namespace Iamport.RestApi.Apis
                 throw new IamportResponseException(response.Code, response.Message);
             }
             return response.Content;
+        }
+
+        private void ValidateObject(object value)
+        {
+            var context = new ValidationContext(value);
+            Validator.ValidateObject(value, context, true);
         }
     }
 }

@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Collections.Generic;
 using System.Linq;
+using Moq;
 
 namespace Iamport.RestApi.Tests.Apis
 {
@@ -23,48 +24,48 @@ namespace Iamport.RestApi.Tests.Apis
         [Fact]
         public async Task CancelAsync_GuardClause()
         {
-            var sut = new PaymentsApi(GetClient());
+            var sut = new PaymentsApi(GetEmptyMockClient());
             await Assert.ThrowsAsync<ArgumentNullException>(
                 () => sut.CancelAsync(null));
         }
         [Fact]
         public async Task GetAsync_GuardClause()
         {
-            var sut = new PaymentsApi(GetClient());
+            var sut = new PaymentsApi(GetEmptyMockClient());
             await Assert.ThrowsAsync<ArgumentNullException>(
                 () => sut.GetAsync(null));
         }
-        [Fact]
-        public async Task GetByIamportIdAsync_GuardClause()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public async Task GetByIamportIdAsync_GuardClause(string id)
         {
-            var sut = new PaymentsApi(GetClient());
+            var sut = new PaymentsApi(GetEmptyMockClient());
             await Assert.ThrowsAsync<ArgumentNullException>(
-                () => sut.GetByIamportIdAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(
-                () => sut.GetByIamportIdAsync(""));
+                () => sut.GetByIamportIdAsync(id));
         }
-        [Fact]
-        public async Task GetByTransactionIdAsync_GuardClause()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public async Task GetByTransactionIdAsync_GuardClause(string id)
         {
-            var sut = new PaymentsApi(GetClient());
+            var sut = new PaymentsApi(GetEmptyMockClient());
             await Assert.ThrowsAsync<ArgumentNullException>(
-                () => sut.GetByTransactionIdAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(
-                () => sut.GetByTransactionIdAsync(""));
+                () => sut.GetByTransactionIdAsync(id));
         }
-        [Fact]
-        public async Task GetPreparationAsync_GuardClause()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public async Task GetPreparationAsync_GuardClause(string id)
         {
-            var sut = new PaymentsApi(GetClient());
+            var sut = new PaymentsApi(GetEmptyMockClient());
             await Assert.ThrowsAsync<ArgumentNullException>(
-                () => sut.GetPreparationAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(
-                () => sut.GetPreparationAsync(""));
+                () => sut.GetPreparationAsync(id));
         }
         [Fact]
         public async Task PrepareAsync_GuardClause()
         {
-            var sut = new PaymentsApi(GetClient());
+            var sut = new PaymentsApi(GetEmptyMockClient());
             await Assert.ThrowsAsync<ArgumentNullException>(
                 () => sut.PrepareAsync(null));
         }
@@ -73,37 +74,51 @@ namespace Iamport.RestApi.Tests.Apis
         public async Task CancelAsync_requests_proper_uri()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedResult = new Payment();
-            var sut = new PaymentsApi(client);
-            var cancellation = new PaymentCancellation
+            var expectedRequest = new PaymentCancellation
             {
-                IamportId = Guid.NewGuid().ToString()
+                IamportId = Guid.NewGuid().ToString(),
             };
+            var expectedResult = new IamportResponse<Payment>
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                Content = new Payment
+                {
+                    IamportId = expectedRequest.IamportId,
+                }
+            };
+            var client = GetMockClient(expectedRequest, expectedResult);
+            var sut = new PaymentsApi(client);
 
             // act
-            var result = await sut.CancelAsync(cancellation);
+            var result = await sut.CancelAsync(expectedRequest);
 
             // assert
-            Assert.NotNull(result);
-            Assert.Equal("payments/cancel", client.RequestedPathAndQuerystrings.Single());
+            Mock.Get(client)
+                .Verify(mocked =>
+                    mocked.RequestAsync<PaymentCancellation, Payment>(
+                        It.Is<IamportRequest<PaymentCancellation>>(req =>
+                            req.ApiPathAndQueryString.EndsWith("payments/cancel"))));
         }
 
         [Fact]
         public async Task CancelAsync_throws_IamportResponseException_when_response_code_is_not_success()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedCode = -1;
-            var sut = new PaymentsApi(client);
-            var cancellation = new PaymentCancellation
+            var expectedRequest = new PaymentCancellation
             {
-                IamportId = Guid.NewGuid().ToString()
+                IamportId = Guid.NewGuid().ToString(),
             };
-
+            var expectedResult = new IamportResponse<Payment>
+            {
+                Code = -1,
+                HttpStatusCode = HttpStatusCode.InternalServerError,
+            };
+            var client = GetMockClient(expectedRequest, expectedResult);
+            var sut = new PaymentsApi(client);
+            
             // act/assert
             await Assert.ThrowsAsync<IamportResponseException>(
-                () => sut.CancelAsync(cancellation));
+                () => sut.CancelAsync(expectedRequest));
         }
 
         [Theory]
@@ -114,224 +129,256 @@ namespace Iamport.RestApi.Tests.Apis
         public async Task GetAsync_requests_proper_uri(PaymentQueryState state, int page, string expectedPath)
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedResult = new PagedResult<Payment>();
-            var sut = new PaymentsApi(client);
-            var input = new PaymentPageQuery
+            var expectedRequest = new PaymentPageQuery
             {
-                Page = page,
                 State = state,
+                Page = page,
             };
+            var expectedResult = new IamportResponse<PagedResult<Payment>>
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+            };
+            var client = GetMockClient(expectedResult);
+            var sut = new PaymentsApi(client);
 
             // act
-            var result = await sut.GetAsync(input);
+            var result = await sut.GetAsync(expectedRequest);
 
             // assert
-            Assert.NotNull(result);
-            Assert.Equal(expectedPath, client.RequestedPathAndQuerystrings.Single());
+            Mock.Get(client)
+                .Verify(mocked =>
+                    mocked.RequestAsync<object, PagedResult<Payment>>(
+                        It.Is<IamportRequest>(req =>
+                            req.ApiPathAndQueryString.EndsWith(expectedPath))));
         }
 
         [Fact]
         public async Task GetAsync_throws_IamportResponseException_when_response_code_is_not_success()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedCode = -1;
+            var expectedRequest = new PaymentPageQuery
+            {
+            };
+            var expectedResult = new IamportResponse<PagedResult<Payment>>
+            {
+                Code = -1,
+                HttpStatusCode = HttpStatusCode.InternalServerError,
+            };
+            var client = GetMockClient(expectedResult);
             var sut = new PaymentsApi(client);
 
             // act/assert
             await Assert.ThrowsAsync<IamportResponseException>(
-                () => sut.GetAsync(new PaymentPageQuery()));
+                () => sut.GetAsync(expectedRequest));
         }
 
         [Fact]
         public async Task GetByIamportIdAsync_requests_proper_uri()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedResult = new Payment();
+            var expectedRequest = Guid.NewGuid().ToString();
+            var expectedResult = new IamportResponse<Payment>
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+            };
+            var expectedPath = $"payments/{expectedRequest}";
+            var client = GetMockClient(expectedResult);
             var sut = new PaymentsApi(client);
-            var input = Guid.NewGuid().ToString();
 
             // act
-            var result = await sut.GetByIamportIdAsync(input);
+            var result = await sut.GetByIamportIdAsync(expectedRequest);
 
             // assert
-            Assert.NotNull(result);
-            Assert.Equal($"payments/{input}", client.RequestedPathAndQuerystrings.Single());
+            Mock.Get(client)
+                .Verify(mocked =>
+                    mocked.RequestAsync<object, Payment>(
+                        It.Is<IamportRequest>(req =>
+                            req.ApiPathAndQueryString.EndsWith(expectedPath))));
         }
 
         [Fact]
         public async Task GetByIamportIdAsync_throws_IamportResponseException_when_response_code_is_not_success()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedCode = -1;
+            var expectedRequest = Guid.NewGuid().ToString();
+            var expectedResult = new IamportResponse<Payment>
+            {
+                Code = -1,
+                HttpStatusCode = HttpStatusCode.InternalServerError,
+            };
+            var client = GetMockClient(expectedResult);
             var sut = new PaymentsApi(client);
-            var input = Guid.NewGuid().ToString();
 
             // act/assert
             await Assert.ThrowsAsync<IamportResponseException>(
-                () => sut.GetByIamportIdAsync(input));
+                () => sut.GetByIamportIdAsync(expectedRequest));
         }
 
         [Fact]
         public async Task GetByTransactionIdAsync_requests_proper_uri()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedResult = new Payment();
+            var expectedRequest = Guid.NewGuid().ToString();
+            var expectedResult = new IamportResponse<Payment>
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+            };
+            var expectedPath = $"payments/find/{expectedRequest}";
+            var client = GetMockClient(expectedResult);
             var sut = new PaymentsApi(client);
-            var input = Guid.NewGuid().ToString();
 
             // act
-            var result = await sut.GetByTransactionIdAsync(input);
+            var result = await sut.GetByTransactionIdAsync(expectedRequest);
 
             // assert
-            Assert.NotNull(result);
-            Assert.Equal($"payments/find/{input}", client.RequestedPathAndQuerystrings.Single());
+            Mock.Get(client)
+                .Verify(mocked =>
+                    mocked.RequestAsync<object, Payment>(
+                        It.Is<IamportRequest>(req =>
+                            req.ApiPathAndQueryString.EndsWith(expectedPath))));
         }
 
         [Fact]
         public async Task GetByTransactionIdAsync_throws_IamportResponseException_when_response_code_is_not_success()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedCode = -1;
+            var expectedRequest = Guid.NewGuid().ToString();
+            var expectedResult = new IamportResponse<Payment>
+            {
+                Code = -1,
+                HttpStatusCode = HttpStatusCode.InternalServerError,
+            };
+            var client = GetMockClient(expectedResult);
             var sut = new PaymentsApi(client);
-            var input = Guid.NewGuid().ToString();
 
             // act/assert
             await Assert.ThrowsAsync<IamportResponseException>(
-                () => sut.GetByTransactionIdAsync(input));
+                () => sut.GetByTransactionIdAsync(expectedRequest));
         }
 
         [Fact]
         public async Task GetPreparationAsync_requests_proper_uri()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedResult = new PaymentPreparation();
+            var expectedRequest = Guid.NewGuid().ToString();
+            var expectedResult = new IamportResponse<PaymentPreparation>
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+            };
+            var expectedPath = $"payments/prepare/{expectedRequest}";
+            var client = GetMockClient(expectedResult);
             var sut = new PaymentsApi(client);
-            var input = Guid.NewGuid().ToString();
 
             // act
-            var result = await sut.GetPreparationAsync(input);
+            var result = await sut.GetPreparationAsync(expectedRequest);
 
             // assert
-            Assert.NotNull(result);
-            Assert.Equal($"payments/prepare/{input}", client.RequestedPathAndQuerystrings.Single());
+            Mock.Get(client)
+                .Verify(mocked =>
+                    mocked.RequestAsync<object, PaymentPreparation>(
+                        It.Is<IamportRequest>(req =>
+                            req.ApiPathAndQueryString.EndsWith(expectedPath))));
         }
 
         [Fact]
         public async Task GetPreparationAsync_throws_IamportResponseException_when_response_code_is_not_success()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedCode = -1;
+            var expectedRequest = Guid.NewGuid().ToString();
+            var expectedResult = new IamportResponse<PaymentPreparation>
+            {
+                Code = -1,
+                HttpStatusCode = HttpStatusCode.InternalServerError,
+            };
+            var client = GetMockClient(expectedResult);
             var sut = new PaymentsApi(client);
-            var input = Guid.NewGuid().ToString();
 
             // act/assert
             await Assert.ThrowsAsync<IamportResponseException>(
-                () => sut.GetPreparationAsync(input));
+                () => sut.GetPreparationAsync(expectedRequest));
         }
 
         [Fact]
         public async Task PreparationAsync_requests_proper_uri()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedResult = new PaymentPreparation();
-            var sut = new PaymentsApi(client);
-            var input = new PaymentPreparation
+            var expectedRequest = new PaymentPreparation
             {
-                Amount = 100,
+                Amount = 1000,
                 TransactionId = Guid.NewGuid().ToString(),
             };
+            var expectedResult = new IamportResponse<PaymentPreparation>
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                Content = new PaymentPreparation
+                {
+                    TransactionId = expectedRequest.TransactionId,
+                    Amount = expectedRequest.Amount,
+                }
+            };
+            var expectedPath = $"payments/prepare";
+            var client = GetMockClient(expectedRequest, expectedResult);
+            var sut = new PaymentsApi(client);
 
             // act
-            var result = await sut.PrepareAsync(input);
+            var result = await sut.PrepareAsync(expectedRequest);
 
             // assert
-            Assert.NotNull(result);
-            Assert.Equal($"payments/prepare", client.RequestedPathAndQuerystrings.Single());
+            Mock.Get(client)
+                .Verify(mocked =>
+                    mocked.RequestAsync<PaymentPreparation, PaymentPreparation>(
+                        It.Is<IamportRequest<PaymentPreparation>>(req =>
+                            req.ApiPathAndQueryString.EndsWith(expectedPath))));
         }
 
         [Fact]
         public async Task PreparationAsync_throws_IamportResponseException_when_response_code_is_not_success()
         {
             // arrange
-            var client = GetClient() as MockClient;
-            client.ExpectedCode = -1;
-            var sut = new PaymentsApi(client);
-            var input = new PaymentPreparation
+            var expectedRequest = new PaymentPreparation
             {
-                Amount = 100,
-                TransactionId = Guid.NewGuid().ToString(),
             };
+            var expectedResult = new IamportResponse<PaymentPreparation>
+            {
+                Code = -1,
+                HttpStatusCode = HttpStatusCode.InternalServerError,
+            };
+            var client = GetMockClient(expectedRequest, expectedResult);
+            var sut = new PaymentsApi(client);
 
             // act/assert
             await Assert.ThrowsAsync<IamportResponseException>(
-                () => sut.PrepareAsync(input));
+                () => sut.PrepareAsync(expectedRequest));
         }
 
-        protected IIamportHttpClient GetClient()
+        private IIamportClient GetEmptyMockClient()
         {
-            var client = new MockClient();
-            return client;
+            var mock = new Mock<IIamportClient>();
+            return mock.Object;
         }
 
-        private class MockClient : IIamportHttpClient
+        private IIamportClient GetMockClient<TRequestContent, TResult>(
+            TRequestContent expectedContent,
+            IamportResponse<TResult> expectedResponse)
         {
-            public IamportToken CurrentToken { get; set; }
-            public object ExpectedResult { get; set; }
-            public int ExpectedCode { get; set; }
-            public HttpStatusCode ExpectedHttpStatusCode { get; set; } = HttpStatusCode.OK;
-            public IList<string> RequestedPathAndQuerystrings { get; set; } = new List<string>();
+            var mock = new Mock<IIamportClient>();
+            mock.Setup(client =>
+                client.RequestAsync<TRequestContent, TResult>(
+                    It.Is<IamportRequest<TRequestContent>>(
+                        request => request.Content.Equals(expectedContent))))
+            .ReturnsAsync(expectedResponse);
+            return mock.Object;
+        }
 
-            public bool IsAuthorized
-            {
-                get
-                {
-                    return CurrentToken != null;
-                }
-            }
-
-            private IamportToken GetValidToken()
-            {
-                return new IamportToken
-                {
-                    AccessToken = Guid.NewGuid().ToString(),
-                    ExpiredAt = DateTime.UtcNow.AddMinutes(10),
-                    IssuedAt = DateTime.UtcNow,
-                };
-            }
-
-            public async Task<IamportToken> AuthorizeAsync()
-            {
-                if (CurrentToken == null)
-                {
-                    throw new HttpRequestException($"Request failed with status code of 400.");
-                }
-                return await Task.FromResult(CurrentToken);
-            }
-
-            public async Task<IamportResponse<TResult>> RequestAsync<TResult>(HttpRequestMessage request)
-            {
-                return await Task.FromResult(new IamportResponse<TResult>());
-            }
-
-            public async Task<IamportResponse<TResult>> RequestAsync<TRequest, TResult>(IamportRequest<TRequest> request)
-            {
-                RequestedPathAndQuerystrings.Add(request.ApiPathAndQueryString);
-                return await Task.FromResult(new IamportResponse<TResult>
-                {
-                    Code = ExpectedCode,
-                    Content = (TResult)ExpectedResult,
-                    HttpStatusCode = ExpectedHttpStatusCode,
-                });
-            }
+        private IIamportClient GetMockClient<TResult>(
+            IamportResponse<TResult> expectedResponse)
+        {
+            var mock = new Mock<IIamportClient>();
+            mock.Setup(client =>
+                client.RequestAsync<object, TResult>(
+                    It.IsNotNull<IamportRequest>()))
+            .ReturnsAsync(expectedResponse);
+            return mock.Object;
         }
     }
 }

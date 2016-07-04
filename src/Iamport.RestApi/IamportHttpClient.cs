@@ -5,14 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Iamport.RestApi.Models;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Options;
 
 namespace Iamport.RestApi
 {
     /// <summary>
     /// 아임포트 서버와의 통신을 담당하는 HTTP 클라이언트 클래스.
     /// </summary>
-    public class IamportHttpClient : IIamportHttpClient, IDisposable
+    public class IamportHttpClient : IIamportClient, IDisposable
     {
         private const string UsersGetTokenPath = "/users/getToken";
         private readonly IamportHttpClientOptions options;
@@ -24,28 +23,47 @@ namespace Iamport.RestApi
         /// </summary>
         public const int ResponseSuccessCode = 0;
 
-        /// <summary>
-        /// 주어진 파라미터로 Iamport.RestApi.IamportHttpClient의 인스턴스를 초기화합니다.
-        /// </summary>
-        /// <param name="optionsAccessor">아임포트 클라이언트의 옵션 정보 제공자.</param>
-        public IamportHttpClient(IOptions<IamportHttpClientOptions> optionsAccessor)
+        private static HttpClient GetDefaultHttpClient()
         {
-            if (optionsAccessor == null)
-            {
-                throw new ArgumentNullException(nameof(optionsAccessor));
-            }
-            options = optionsAccessor.Value;
-            ValidateOptions();
-
-            httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(options.BaseUrl, UriKind.Absolute);
+            var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
             httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
             httpClient.DefaultRequestHeaders.ExpectContinue = false;
-            options.HttpClientConfigure?.Invoke(httpClient);
+            return httpClient;
+        }
+
+        /// <summary>
+        /// 주어진 옵션으로 인스턴스를 초기화합니다.
+        /// </summary>
+        /// <param name="options">아임포트 클라이언트의 옵션.</param>
+        public IamportHttpClient(IamportHttpClientOptions options)
+            : this(options, GetDefaultHttpClient())
+        {
+        }
+
+        /// <summary>
+        /// 주어진 옵션과 HttpClient로 인스턴스를 초기화합니다.
+        /// </summary>
+        /// <param name="options">아임포트 클라이언트의 옵션</param>
+        /// <param name="httpClient">HTTP 클라이언트의 인스턴스</param>
+        public IamportHttpClient(IamportHttpClientOptions options, HttpClient httpClient)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+            if (httpClient == null)
+            {
+                throw new ArgumentNullException(nameof(httpClient));
+            }
+            options.Validate();
+            this.options = options;
+
+            httpClient.BaseAddress = new Uri(options.BaseUrl, UriKind.Absolute);
+            this.httpClient = httpClient;
         }
 
         /// <summary>
@@ -107,7 +125,7 @@ namespace Iamport.RestApi
         /// <typeparam name="TResult">응답받을 콘텐트의 타입</typeparam>
         /// <param name="request">요청 정보</param>
         /// <returns>응답 정보</returns>
-        public virtual async Task<IamportResponse<TResult>> RequestAsync<TResult>(HttpRequestMessage request)
+        protected virtual async Task<IamportResponse<TResult>> RequestAsync<TResult>(HttpRequestMessage request)
         {
             ThrowsIfDisposed();
             if (request == null)
@@ -115,7 +133,7 @@ namespace Iamport.RestApi
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var response = await httpClient.SendAsync(request);
+            var response = await httpClient.SendAsync(request, CancellationToken.None);
             var iamportResponse = await ParseResponseAsync<TResult>(response);
             if (iamportResponse.Code != 0)
             {
@@ -128,7 +146,7 @@ namespace Iamport.RestApi
         /// 현재 설정으로 유효한 토큰을 확보합니다.
         /// </summary>
         /// <returns>토큰 정보</returns>
-        public virtual async Task<IamportToken> AuthorizeAsync()
+        public async Task<IamportToken> AuthorizeAsync()
         {
             ThrowsIfDisposed();
             var input = new IamportTokenRequest
@@ -164,7 +182,7 @@ namespace Iamport.RestApi
         /// <typeparam name="TRequest">요청 정보의 타입</typeparam>
         /// <param name="request">요청 정보</param>
         /// <returns>HttpRequestMessage</returns>
-        protected virtual HttpRequestMessage GetHttpRequest<TRequest>(IamportRequest<TRequest> request)
+        protected HttpRequestMessage GetHttpRequest<TRequest>(IamportRequest<TRequest> request)
         {
             var url = ApiPathUtility.Build(options.BaseUrl, request.ApiPathAndQueryString);
             var httpRequest = new HttpRequestMessage(request.Method, url);
@@ -202,33 +220,6 @@ namespace Iamport.RestApi
                     ?? new IamportResponse<T>();
             result.HttpStatusCode = response.StatusCode;
             return result;
-        }
-
-        /// <summary>
-        /// 현재 옵션이 유효한지 확인합니다.
-        /// </summary>
-        private void ValidateOptions()
-        {
-            if (string.IsNullOrEmpty(options.ImportId))
-            {
-                throw new ArgumentNullException(nameof(options.ImportId));
-            }
-            if (string.IsNullOrEmpty(options.ApiKey))
-            {
-                throw new ArgumentNullException(nameof(options.ApiKey));
-            }
-            if (string.IsNullOrEmpty(options.ApiSecret))
-            {
-                throw new ArgumentNullException(nameof(options.ApiSecret));
-            }
-            if (string.IsNullOrEmpty(options.AuthorizationHeaderName))
-            {
-                throw new ArgumentNullException(nameof(options.AuthorizationHeaderName));
-            }
-            if (string.IsNullOrEmpty(options.BaseUrl))
-            {
-                throw new ArgumentNullException(nameof(options.BaseUrl));
-            }
         }
 
         /// <summary>

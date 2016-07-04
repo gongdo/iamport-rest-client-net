@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using Xunit;
 using System.Reflection;
-using System.Text;
 
 namespace Iamport.RestApi.Tests.Http
 {

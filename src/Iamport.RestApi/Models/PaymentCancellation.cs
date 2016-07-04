@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Iamport.RestApi.Models
 {
     /// <summary>
     /// 결제를 취소할 때 입력할 정보를 정의하는 클래스입니다.
     /// </summary>
-    public class PaymentCancellation
+    public class PaymentCancellation : IValidatableObject
     {
         /// <summary>
         /// 아임포트 결제 고유 ID
@@ -15,7 +16,7 @@ namespace Iamport.RestApi.Models
         public string IamportId { get; set; }
         /// <summary>
         /// 가맹점에서 전달한 거래 고유 ID.
-        /// mp_uid, merchant_uid 중 하나는 필수이어야 합니다.
+        /// imp_uid, merchant_uid 중 하나는 필수이어야 합니다.
         /// 두 값이 모두 넘어오면 imp_uid를 우선 적용합니다.
         /// </summary>
         [JsonProperty("merchant_uid")]
@@ -47,5 +48,22 @@ namespace Iamport.RestApi.Models
         /// </summary>
         [JsonProperty("refund_account")]
         public string RefundAccount { get; set; }
+
+        /// <summary>
+        /// Determines whether the specified object is valid.
+        /// </summary>
+        /// <param name="validationContext">The validation context.</param>
+        /// <returns>A collection that holds failed-validation information.</returns>
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            // IamportId와 TransactionId 둘중 하나는 필수
+            if (string.IsNullOrWhiteSpace(IamportId)
+                && string.IsNullOrWhiteSpace(TransactionId))
+            {
+                yield return new ValidationResult(
+                    "imp_uid or merchant_uid is required.",
+                    new[] { "imp_uid", "merchant_uid" });
+            }
+        }
     }
 }
