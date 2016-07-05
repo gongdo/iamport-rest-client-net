@@ -157,6 +157,7 @@ namespace Iamport.RestApi.Apis
             {
                 throw new ArgumentNullException(nameof(preparation));
             }
+            ValidateObject(preparation);
             var request = new IamportRequest<PaymentPreparation>
             {
                 ApiPathAndQueryString = GetPathAndQuerystring($"prepare"),

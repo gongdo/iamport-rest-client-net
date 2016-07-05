@@ -9,6 +9,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
+using System.ComponentModel.DataAnnotations;
 
 namespace Iamport.RestApi.Tests.Apis
 {
@@ -98,6 +99,27 @@ namespace Iamport.RestApi.Tests.Apis
                     mocked.RequestAsync<PaymentCancellation, Payment>(
                         It.Is<IamportRequest<PaymentCancellation>>(req =>
                             req.ApiPathAndQueryString.EndsWith("payments/cancel"))));
+        }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("", null)]
+        [InlineData(null, "")]
+        public async Task CancelAsync_throws_ValidationException(string iamportId, string transactionId)
+        {
+            // arrange
+            var expectedRequest = new PaymentCancellation
+            {
+                IamportId = iamportId,
+                TransactionId = transactionId,
+            };
+            var expectedResult = new IamportResponse<Payment>();
+            var client = GetMockClient(expectedRequest, expectedResult);
+            var sut = new PaymentsApi(client);
+
+            // act/assert
+            await Assert.ThrowsAsync<ValidationException>(
+                () => sut.CancelAsync(expectedRequest));
         }
 
         [Fact]
@@ -331,12 +353,35 @@ namespace Iamport.RestApi.Tests.Apis
                             req.ApiPathAndQueryString.EndsWith(expectedPath))));
         }
 
+        [Theory]
+        [InlineData(999, null)]
+        [InlineData(1000, null)]
+        [InlineData(1000, "123456789012345678901234567890123456789012345678901234567890123456789012345678901")]
+        public async Task PreparationAsync_throws_ValidationException(int amount, string transactionId)
+        {
+            // arrange
+            var expectedRequest = new PaymentPreparation
+            {
+                Amount = amount,
+                TransactionId = transactionId,
+            };
+            var expectedResult = new IamportResponse<PaymentPreparation>();
+            var client = GetMockClient(expectedRequest, expectedResult);
+            var sut = new PaymentsApi(client);
+
+            // act/assert
+            await Assert.ThrowsAsync<ValidationException>(
+                () => sut.PrepareAsync(expectedRequest));
+        }
+
         [Fact]
         public async Task PreparationAsync_throws_IamportResponseException_when_response_code_is_not_success()
         {
             // arrange
             var expectedRequest = new PaymentPreparation
             {
+                Amount = 1000,
+                TransactionId = Guid.NewGuid().ToString(),
             };
             var expectedResult = new IamportResponse<PaymentPreparation>
             {
