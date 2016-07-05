@@ -14,7 +14,7 @@ namespace Iamport.RestApi.Models
         /// <summary>
         /// 지원 PG사
         /// </summary>
-        [JsonProperty("pg_provider")]
+        [JsonProperty("pg")]
         public PaymentGateway PaymentGateway { get; set; }
         /// <summary>
         /// 결제 수단
