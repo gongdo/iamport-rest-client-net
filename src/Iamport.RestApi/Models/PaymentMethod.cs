@@ -35,5 +35,23 @@ namespace Iamport.RestApi.Models
         [EnumMember(Value = "phone")]
         [Display(Name = "모바일")]
         Mobile,
+        /// <summary>
+        /// 컬처랜드 문화상품권
+        /// </summary>
+        [EnumMember(Value = "cultureland")]
+        [Display(Name = "문화상품권")]
+        CultureLand,
+        /// <summary>
+        /// 스마트문상
+        /// </summary>
+        [EnumMember(Value = "smartculture")]
+        [Display(Name = "스마트문상")]
+        SmartCulture,
+        /// <summary>
+        /// 해피머니
+        /// </summary>
+        [EnumMember(Value = "happymoney")]
+        [Display(Name = "해피머니")]
+        HappyMoney,
     }
 }

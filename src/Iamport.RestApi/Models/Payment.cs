@@ -26,8 +26,9 @@ namespace Iamport.RestApi.Models
         [JsonProperty("pay_method")]
         public PaymentMethod Method { get; set; }
         /// <summary>
-        /// PG사 명칭. inicis(이니시스) / nice(나이스정보통신)
+        /// 알려진 PG사 명칭. Enum타입으로 알려진 PG사의 명칭입니다.
         /// </summary>
+        /// <seealso></seealso>
         [JsonProperty("pg_provider")]
         public PaymentGateway PaymentGateway { get; set; }
         /// <summary>

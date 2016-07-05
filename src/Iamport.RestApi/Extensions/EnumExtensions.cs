@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -41,6 +42,21 @@ namespace Iamport.RestApi.Extensions
                 ?.GetCustomAttribute<DisplayAttribute>()
                 ?.Name
                 ?? enumeration.ToString();
+        }
+
+        /// <summary>
+        /// 주어진 타입의 Enum에 설정된 EnumMemberAttribute의 Value에 대한 Enum값의 맵을 반환합니다.
+        /// EnumMemberAttribute가 없을 경우 해당 Enum을 ToString()한 값으로 매핑합니다.
+        /// </summary>
+        /// <typeparam name="TEnum">Enum 타입</typeparam>
+        /// <returns>MemberValue에 대한 Enum값의 맵</returns>
+        public static IReadOnlyDictionary<string, TEnum> GetMemberValueEnumMap<TEnum>()
+        {
+            var type = typeof(TEnum);
+            return type.GetFields()
+                .Where(m => m.IsLiteral && !m.IsSpecialName)
+                .Select(m => new { MemberValue = m.GetCustomAttribute<EnumMemberAttribute>()?.Value ?? m.Name, Member = m })
+                .ToDictionary(m => m.MemberValue, m => (TEnum)Enum.Parse(type, m.Member.Name));
         }
     }
 }
