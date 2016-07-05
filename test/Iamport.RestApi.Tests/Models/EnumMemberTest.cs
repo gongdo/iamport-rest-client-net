@@ -13,7 +13,7 @@ namespace Iamport.RestApi.Tests.Models
     {
         [Theory]
         [EnumMemberValueData(typeof(PaymentMethod))]
-        [EnumMemberValueData(typeof(PaymentState))]
+        [EnumMemberValueData(typeof(PaymentStatus))]
         public void JsonConvert_serializes_enum_to_EnumMember_value(Type enumType, string enumFieldName, string enumValue)
         {
             var enumObject = Enum.Parse(enumType, enumFieldName);
@@ -23,7 +23,7 @@ namespace Iamport.RestApi.Tests.Models
 
         [Theory]
         [EnumMemberValueData(typeof(PaymentMethod))]
-        [EnumMemberValueData(typeof(PaymentState))]
+        [EnumMemberValueData(typeof(PaymentStatus))]
         public void JsonConvert_deserializes_EnumMemver_value_to_enum(Type enumType, string enumFieldName, string enumValue)
         {
             var deserialized = JsonConvert.DeserializeObject($"\"{enumValue}\"", enumType);

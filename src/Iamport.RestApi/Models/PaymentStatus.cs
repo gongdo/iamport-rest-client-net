@@ -8,7 +8,7 @@ namespace Iamport.RestApi.Models
     /// 결제 상태
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum PaymentState
+    public enum PaymentStatus
     {
         /// <summary>
         /// 미결제
