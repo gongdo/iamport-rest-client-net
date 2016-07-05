@@ -42,4 +42,4 @@ exec { & dotnet test -c Release }
 Set-Location $buildDirectory
 
 Write-Host "pack nuget"
-exec { & dotnet pack ./src/Iamport.RestApi -c Release -o ./artifacts --version-suffix=$revision }
+exec { & dotnet pack ./src/Iamport.RestApi -c Release -o ./artifacts --version-suffix preview1-$revision }
