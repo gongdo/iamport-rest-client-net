@@ -1,3 +1,5 @@
+
+
 # iamport-rest-client-net
 [아임포트](http://www.iamport.kr/)는 한국 Payment Gateway(PG)사의 복잡한 구현을 간소화주는 서비스로 PG사의 UI를 거치지 않고 처리할 수 있는 몇 가지 기능을 REST API로 제공합니다.
 
@@ -11,6 +13,8 @@
 
 ## Status
 [![Build status](https://ci.appveyor.com/api/projects/status/icygwugodo4jalcs?svg=true)](https://ci.appveyor.com/project/gongdo/iamport-rest-client-net)
+[![MyGet](https://img.shields.io/myget/bapul/v/Iamport.RestApi.svg)](https://www.myget.org/gallery/bapul)
+[![NuGet](https://img.shields.io/nuget/v/Iamport.RestApi.svg)](https://www.nuget.org/packages/Iamport.RestApi/)
 
 ## Roadmap
 아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.

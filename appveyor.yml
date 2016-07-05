@@ -4,7 +4,9 @@ pull_requests:
 branches:  
   only:
   - master
-nuget:  
+skip_commits:
+  message: /(Created.*\.(png|jpg|jpeg|bmp|gif))|(README.md)/
+nuget:
   disable_publish_on_pr: true
 build_script:  
 - ps: .\Build.ps1
@@ -14,7 +16,7 @@ artifacts:
   name: NuGet
 deploy:  
 - provider: NuGet
-  server: https://www.myget.org/F/iamport-rest-client-net/api/v2/package
+  server: https://www.myget.org/F/bapul/api/v2/package
   api_key:
     secure: X8/Cm8f2M7FVtOuQftWgMlQv8XNMXJ8RbtVkeQkTgoaLb5Bv6Vf5KWcYZSEJ/wIc
   skip_symbols: true
