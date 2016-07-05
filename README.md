@@ -3,33 +3,23 @@
 
 이 프로젝트는 [아임포트(I'mport) REST API](https://api.iamport.kr/) 클라이언트의 닷넷 구현입니다. 프로젝트 이름을 표기할 때에는 `아임포트RESTAPI닷넷`이라고 합니다.
 
-아임포트RESTAPI닷넷은 모던한 닷넷 플랫폼을 지향하며 최초 개발은 [DNX(a .NET Execution Environment)](https://github.com/aspnet/dnx) 4.5.1 및 DNX Core 5.0을 목표로 합니다. DNX에서의 구현이 안정화되면 다음으로 .NET 4.6을 목표로 합니다. 이는 모던 닷넷 플랫폼을 우선적으로 지원하는 것이 목표이기 때문이며 레거시 플랫폼(.NET 1.1, 2.0, 3.0 등)도 기여자가 있다면 진행할 수 있을 것입니다.
+아임포트RESTAPI닷넷은 모던한 닷넷 플랫폼을 지향하며 최소 닷넷 4.5 이상을 대상으로 합니다.
 
 
 ## Quick start
 *아직 작성되지 않았습니다.*
 
 ## Status
-[![Stories in Ready](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=ready&title=Ready)](https://waffle.io/gongdo/iamport-rest-client-net) [![Stories in In progress](https://badge.waffle.io/gongdo/iamport-rest-client-net.png?label=in progress&title=In progress)](https://waffle.io/gongdo/iamport-rest-client-net)
-
 [![Build status](https://ci.appveyor.com/api/projects/status/icygwugodo4jalcs?svg=true)](https://ci.appveyor.com/project/gongdo/iamport-rest-client-net)
 
 ## Roadmap
 아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.
 아임포트RESTAPI닷넷의 버전 규칙은 [Semantic Versioning](http://semver.org/)을 따릅니다. 마일스톤에는 revision이나 build버전을 붙이지 않습니다.
 
-* [1.0-beta1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-beta1) 
- * DNX 4.5.1과 DNX Core 5.0에서 구동하는 코드 작성
-* [1.0-rc1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0-rc1) (**현재 진행중**)
- * Users API, Payments API 제공
- * 단위 테스트, 기능 테스트 및 CI build 구성
- * Nuget 패키지 제공
- * 메이저 버그 수정
-* [1.0-rc2]
+* [1.0-preview1]
  * 샘플 프로젝트 제공
- * .NET 4.6 지원
- * .NET 4.0, 4.5 지원(*미정*)
- * Subscribe API 지원
+ * .NET 4.5 지원
+ * .NET Core 1.0 지원
 * [1.0](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0)
  * 마이너 버그 수정
  * 최초 릴리스!
@@ -42,11 +32,10 @@
 
 ### Development Environment Requirement
 현재 아임포트RESTAPI닷넷은 다음과 같은 환경에서 개발됩니다.
-* ASP.NET 5 (beta8) [OS별 개발환경 소개](https://docs.asp.net/en/latest/getting-started/index.html) 참고. 
-* DNX 4.5.1과 DNX core 5.0
+* .NET Core 기반 프로젝트
 * [xunit](xunit.github.io) - 단위 테스트 및 기능 테스트.
  
-DNX 프로젝트이므로 MAC OSX와 Linux에서도 [Mono](http://www.mono-project.com/)를 설치후 개발 및 테스트가 가능합니다.
+.NET Core 프로젝트이므로 MAC OSX와 Linux에서도 개발 및 테스트가 가능합니다.
 
 ### Pull Request(PR)
 PR은 온전한 단위 테스트 및 기능 테스트셋을 포함해야 하며 해결하려는 목적이 명확해야 합니다. 모든 PR이 받아들여지는 것은 아니며 PR의 리뷰에 걸리는 시간을 보장하지 않습니다.
