@@ -3,10 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 using Iamport.RestApi.Models;
-using System.Net.Http;
-using Newtonsoft.Json;
 using Moq;
-using System.Threading;
 
 namespace Iamport.RestApi.Tests.Apis
 {

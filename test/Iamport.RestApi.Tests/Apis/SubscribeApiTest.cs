@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Iamport.RestApi.Tests.Apis
 {
-    public class PaymentsApiTest
+    public class SubscribeApiTest
     {
         [Fact]
         public void GuardClause()
