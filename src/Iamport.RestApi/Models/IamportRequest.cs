@@ -35,6 +35,7 @@ namespace Iamport.RestApi.Models
     /// </summary>
     public class IamportRequest : IamportRequest<object>
     {
+        /// <inheritedoc />
         public override object Content { get { return null; } set { } }
     }
 }

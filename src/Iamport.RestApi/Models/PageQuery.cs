@@ -14,11 +14,5 @@ namespace Iamport.RestApi.Models
         [DataMember(Name = "page")]
         [JsonProperty(PropertyName = "page")]
         public int Page { get; set; }
-        /// <summary>
-        /// 조회할 페이지의 크기
-        /// *현재 API에는 구현되어 있지 않습니다.
-        /// </summary>
-        //[DataMember(Name = "pageSize")]
-        //public int PageSize { get; set; }
     }
 }

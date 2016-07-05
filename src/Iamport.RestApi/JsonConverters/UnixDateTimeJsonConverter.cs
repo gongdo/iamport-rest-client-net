@@ -8,12 +8,14 @@ namespace Iamport.RestApi.JsonConverters
     /// </summary>
     public class UnixDateTimeJsonConverter : JsonConverter
     {
+        /// <inheritedoc />
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(DateTime)
                 || objectType == typeof(DateTime?);
         }
 
+        /// <inheritedoc />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             long unixTime = 0;
@@ -41,6 +43,7 @@ namespace Iamport.RestApi.JsonConverters
             return unixTime.FromUnixTime(includeMilliseconds: false, kind: DateTimeKind.Utc);
         }
 
+        /// <inheritedoc />
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var nullableDateTime = (DateTime?)value;

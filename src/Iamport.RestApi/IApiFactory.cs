@@ -15,6 +15,9 @@ namespace Iamport.RestApi
         object GetApi(Type apiServiceType);
     }
 
+    /// <summary>
+    /// API 팩토리 확장 메서드 집합
+    /// </summary>
     public static class IApiFactoryExteions
     {
         /// <summary>

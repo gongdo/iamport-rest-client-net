@@ -7,6 +7,11 @@ namespace Iamport.RestApi
     /// </summary>
     public class IamportResponseException : Exception
     {
+        /// <summary>
+        /// 주어진 오류 코드와 메시지로 예외를 초기화합니다.
+        /// </summary>
+        /// <param name="code">오류 코드</param>
+        /// <param name="message">오류 메시지</param>
         public IamportResponseException(int code, string message) : base(message)
         {
             Code = code;

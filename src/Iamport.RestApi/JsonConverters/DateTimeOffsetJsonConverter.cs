@@ -14,12 +14,14 @@ namespace Iamport.RestApi.JsonConverters
         /// </summary>
         public const string ImportDateFormat = "yyyyMMdd";
 
+        /// <inheritedoc />
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(DateTimeOffset)
                 || objectType == typeof(DateTimeOffset?);
         }
 
+        /// <inheritedoc />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
@@ -36,6 +38,7 @@ namespace Iamport.RestApi.JsonConverters
             throw new NotSupportedException("Invalid datetime format.");
         }
 
+        /// <inheritedoc />
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (value == null)

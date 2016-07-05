@@ -14,6 +14,11 @@ namespace Iamport.RestApi
         public const int ResponseSuccessCode = 0;
 
         private readonly IApiFactory apiFactory;
+
+        /// <summary>
+        /// 주어진 API 팩토리로 초기화합니다.
+        /// </summary>
+        /// <param name="apiFactory"></param>
         public Iamport(IApiFactory apiFactory)
         {
             if (apiFactory == null)

@@ -43,6 +43,7 @@ namespace Iamport.RestApi.Models
             ["DF"] = "신영증권",
         };
 
+        /// <inheritedoc />
         public string this[string key]
         {
             get
@@ -56,6 +57,7 @@ namespace Iamport.RestApi.Models
             }
         }
 
+        /// <inheritedoc />
         public int Count
         {
             get
@@ -64,6 +66,7 @@ namespace Iamport.RestApi.Models
             }
         }
 
+        /// <inheritedoc />
         public IEnumerable<string> Keys
         {
             get
@@ -72,6 +75,7 @@ namespace Iamport.RestApi.Models
             }
         }
 
+        /// <inheritedoc />
         public IEnumerable<string> Values
         {
             get
@@ -80,21 +84,25 @@ namespace Iamport.RestApi.Models
             }
         }
 
+        /// <inheritedoc />
         public bool ContainsKey(string key)
         {
             return CodeToNames.ContainsKey(key);
         }
 
+        /// <inheritedoc />
         public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
         {
             return CodeToNames.GetEnumerator();
         }
 
+        /// <inheritedoc />
         public bool TryGetValue(string key, out string value)
         {
             return CodeToNames.TryGetValue(key, out value);
         }
 
+        /// <inheritedoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return CodeToNames.GetEnumerator();

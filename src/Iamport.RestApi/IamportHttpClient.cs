@@ -249,6 +249,7 @@ namespace Iamport.RestApi
             }
         }
 
+        /// <inheritedoc />
         public void Dispose()
         {
             if (Interlocked.CompareExchange(ref disposalCounter, 1, 0) == 0)

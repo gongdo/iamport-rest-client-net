@@ -13,6 +13,11 @@ namespace Iamport.RestApi.Apis
         private const string UsersGetTokenPath = "getToken";
 
         private readonly IIamportClient client;
+
+        /// <summary>
+        /// 주어진 클라이언트로 API를 초기화합니다.
+        /// </summary>
+        /// <param name="client">아임포트 클라이언트</param>
         public UsersApi(IIamportClient client)
         {
             if (client == null)
@@ -22,6 +27,9 @@ namespace Iamport.RestApi.Apis
             this.client = client;
         }
 
+        /// <summary>
+        /// Users API의 기본 경로
+        /// </summary>
         public string BasePath { get; } = "/users";
 
         /// <summary>
@@ -31,7 +39,7 @@ namespace Iamport.RestApi.Apis
         /// 단지 요청한 토큰 정보에 대한 응답을 반환할 뿐입니다.
         /// </summary>
         /// <param name="request">아임포트 토큰 요청</param>
-        /// <seealso cref="https://api.iamport.kr/#!/authenticate/getToken"/>
+        /// <seealso>https://api.iamport.kr/#!/authenticate/getToken</seealso>
         /// <returns>인증된 아임포트 토큰</returns>
         public virtual async Task<IamportToken> GetTokenAsync(IamportTokenRequest request)
         {

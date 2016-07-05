@@ -5,7 +5,13 @@
     /// </summary>
     public class DuplicatePaymentReservationException: IamportResponseException
     {
-        public DuplicatePaymentReservationException(int code, string message) : base(code, message)
+        /// <summary>
+        /// 주어진 코드와 메시지로 예외를 초기화합니다.
+        /// </summary>
+        /// <param name="code">오류 코드</param>
+        /// <param name="message">오류 메시지</param>
+        public DuplicatePaymentReservationException(int code, string message)
+            : base(code, message)
         {
         }
     }
