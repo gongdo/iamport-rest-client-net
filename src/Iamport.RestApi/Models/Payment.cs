@@ -133,12 +133,12 @@ namespace Iamport.RestApi.Models
         /// 결제실패 사유
         /// </summary>
         [JsonProperty("fail_reason")]
-        public string FailReason { get; set; }
+        public string FailedReason { get; set; }
         /// <summary>
         /// 결제취소 사유
         /// </summary>
         [JsonProperty("cancel_reason")]
-        public string CancellationReason { get; set; }
+        public string CancelledReason { get; set; }
 
         /// <summary>
         /// 카드사 승인정보(계좌이체 / 가상계좌는 값 없음)
@@ -180,7 +180,7 @@ namespace Iamport.RestApi.Models
         /// 결제취소금액
         /// </summary>
         [JsonProperty("cancel_amount")]
-        public int CancellationAmount { get; set; }
+        public int CancelledAmount { get; set; }
         /// <summary>
         /// 구매자가 결제를 시작한 단말기의 UserAgent 문자열
         /// </summary>

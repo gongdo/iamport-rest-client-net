@@ -149,14 +149,14 @@ namespace Sample.AspNetCore.Controllers
                     payment.SetCancelled(
                         iamportPayment.IamportId,
                         iamportPayment.CancelledAtUtc,
-                        iamportPayment.CancellationReason,
-                        iamportPayment.CancellationAmount);
+                        iamportPayment.CancelledReason,
+                        iamportPayment.CancelledAmount);
                     break;
                 case PaymentStatus.Failed:
                     payment.SetFailed(
                         iamportPayment.IamportId,
                         iamportPayment.FailedAtUtc,
-                        iamportPayment.FailReason);
+                        iamportPayment.FailedReason);
                     break;
                 default:
                     break;
