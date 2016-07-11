@@ -54,7 +54,7 @@ namespace Iamport.RestApi.Models
         /// 실제 결제승인된 금액이나 가상계좌 입금예정 금액
         /// </remarks>
         [JsonProperty("paid_amount")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         /// <summary>
         /// 결제상태. ready:미결제, paid: 결제완료, cancelled: 결제취소, failed: 결제실패
         /// </summary>

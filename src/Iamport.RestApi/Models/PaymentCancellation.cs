@@ -25,7 +25,7 @@ namespace Iamport.RestApi.Models
         /// 부분취소요청금액(누락이면 전액취소)
         /// </summary>
         [JsonProperty("amount")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         /// <summary>
         /// 취소 사유.
         /// </summary>

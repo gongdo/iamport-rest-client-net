@@ -353,7 +353,7 @@ namespace Iamport.RestApi.Tests.Apis
         [InlineData(999, null)]
         [InlineData(1000, null)]
         [InlineData(1000, "123456789012345678901234567890123456789012345678901234567890123456789012345678901")]
-        public async Task PreparationAsync_throws_ValidationException(int amount, string transactionId)
+        public async Task PreparationAsync_throws_ValidationException(decimal amount, string transactionId)
         {
             // arrange
             var expectedRequest = new PaymentPreparation

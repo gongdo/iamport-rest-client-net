@@ -98,7 +98,7 @@ namespace Sample.AspNetCore.Controllers
         {
             var preparation = await paymentsApi.PrepareAsync(new PaymentPreparation
             {
-                Amount = (int)amount,
+                Amount = amount,
                 TransactionId = transactionId,
             });
             if (preparation == null)

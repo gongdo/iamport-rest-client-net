@@ -23,6 +23,6 @@ namespace Iamport.RestApi.Models
         [Required]
         [Range(1000, 10000000)]
         [JsonProperty("amount")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
     }
 }
