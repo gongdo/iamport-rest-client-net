@@ -423,7 +423,7 @@ namespace Iamport.RestApi.Tests
             {
                 ApiKey = "asdf",
                 ApiSecret = "asdf",
-                ImportId = "asdf",
+                IamportId = "asdf",
                 BaseUrl = "http://fake.fake",
             };
         }

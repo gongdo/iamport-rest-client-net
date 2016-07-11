@@ -1,0 +1,60 @@
+﻿@model Sample.AspNetCore.ViewModels.PaymentViewModel
+@using Sample.AspNetCore.Models
+@{
+    ViewData["Title"] = "구매-결제 데모: 결제 진행상태";
+}
+<div class="row">
+    <h1>@ViewData["Title"]</h1>
+
+    <div>
+        <p>이 페이지는 현재 결제 진행 상태를 표시합니다.</p>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">결제 내용</div>
+        <div class="panel-body">
+            <ul>
+                <li>상품: @Model.Name</li>
+                <li>금액: @Model.Amount.ToString("#,##0") 원</li>
+                <li>결제 방법: @Html.DisplayFor(model => model.PaymentMethod)</li>
+                <li>진행 상태: @Html.DisplayFor(model => model.State)</li>
+            </ul>
+            <a id="refresh" class="btn btn-primary">결과 새로고침</a>
+            <a href="@Url.Action("Index", "Checkout")" class="btn btn-default">다시 결제하기</a>
+            <div id="result" class="alert"></div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script type="text/javascript">
+    (function () {
+        var refresh = function () {
+            $.ajax({
+                url: '@Url.Action("Refresh")',
+                type: 'POST'
+            }).fail(function () {
+                $('#result')
+                    .addClass('alert-danger')
+                    .text('오류!');
+            }).done(function () {
+                location.reload();
+            });
+        };
+
+        $('#refresh').click(function (event) {
+            event.preventDefault();
+            refresh();
+        });
+
+        // 준비중이면 즉시 새로고침
+        // 이 페이지는 별도의 인증없이 URL만으로 접근되므로
+        // 아직 결제를 시도하지 않았거나 결제를 취소한 직후 이 페이지로 이동했을 가능성이 있습니다.
+        // 또는 모바일 웹의 경우 결제 처리 결과와 상관없이 웹 브라우저에 결제 페이지가 그대로 남아있는 경우가 있는데
+        // 이런 경우에도 안전하게 결제 처리 상태를 표시할 수 있습니다.
+        if ('@Model.State' == '@nameof(PaymentState.Prepared)') {
+            refresh();
+        }
+    })();
+</script>
+}

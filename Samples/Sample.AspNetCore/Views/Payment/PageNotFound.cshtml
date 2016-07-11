@@ -1,0 +1,12 @@
+﻿@model Sample.AspNetCore.ViewModels.PaymentViewModel
+@using Sample.AspNetCore.Models
+@{
+    ViewData["Title"] = "구매-결제 데모: 해당 결제 ID 존재하지 않음";
+}
+<div class="row">
+    <h1>@ViewData["Title"]</h1>
+
+    <h3>거래 ID @ViewData["TransactionId"] 은 존재하지 않습니다.</h3>
+
+    @Html.ActionLink("구매-결제 데모", "Index", "Checkout")
+</div>

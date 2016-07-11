@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace Iamport.RestApi.Models
@@ -6,6 +8,7 @@ namespace Iamport.RestApi.Models
     /// <summary>
     /// 지원하는 PG사
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum PaymentGateway
     {
         /// <summary>
