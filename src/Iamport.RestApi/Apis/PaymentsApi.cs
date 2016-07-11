@@ -175,7 +175,7 @@ namespace Iamport.RestApi.Apis
         private async Task<TResult> SendRequestAsync<TRequest, TResult>(IamportRequest<TRequest> request)
         {
             var response = await client.RequestAsync<TRequest, TResult>(request);
-            if (response.Code != Iamport.ResponseSuccessCode)
+            if (response.Code != Constants.ResponseSuccessCode)
             {
                 throw new IamportResponseException(response.Code, response.Message);
             }

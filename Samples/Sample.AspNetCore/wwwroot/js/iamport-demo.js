@@ -55,9 +55,10 @@
 
         if (in_app) param.app_scheme = 'iamporttest';
 
+        var msg = '';
         IMP.request_pay(param, function (rsp) {
             if (rsp.success) {
-                var msg = '결제가 완료되었습니다.<br>';
+                msg = '결제가 완료되었습니다.<br>';
                 msg += '고유ID : ' + rsp.imp_uid + '<br>';
                 msg += '상점 거래ID : ' + rsp.merchant_uid + '<br>';
                 msg += '결제 금액 : ' + rsp.paid_amount + '<br>';
@@ -72,7 +73,7 @@
                 }
                 $('#responser').addClass('alert-success');
             } else {
-                var msg = '결제에 실패하였습니다.' + '<br>';
+                msg = '결제에 실패하였습니다.' + '<br>';
                 msg += '에러내용 : ' + rsp.error_msg + '<br>';
                 $('#responser').addClass('alert-danger');
             }
@@ -134,7 +135,7 @@
                     break;
                 case 'trans':
                     $('#pay_method').append('<option value="trans">실시간계좌이체</option>');
-                    break
+                    break;
                 case 'vbank':
                     $('#pay_method').append('<option value="vbank">가상계좌</option>');
                     break;
