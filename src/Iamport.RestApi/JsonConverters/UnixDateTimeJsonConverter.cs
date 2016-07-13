@@ -31,6 +31,10 @@ namespace Iamport.RestApi.JsonConverters
             {
                 return ((DateTime)reader.Value);
             }
+            else if (reader.TokenType == JsonToken.Null)
+            {
+                unixTime = 0;
+            }
             else
             {
                 throw new NotSupportedException("DateTime should be string, integer or date.");
