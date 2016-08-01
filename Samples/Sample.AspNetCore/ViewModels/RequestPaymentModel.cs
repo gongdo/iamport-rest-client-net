@@ -5,10 +5,10 @@ using System.ComponentModel.DataAnnotations;
 namespace Sample.AspNetCore.ViewModels
 {
     /// <summary>
-    /// 체크아웃 요청 뷰모델.
+    /// 결제 요청 뷰모델.
     /// 편의상 샘플 데이터로 초기화 합니다.
     /// </summary>
-    public class RequestCheckoutViewModel
+    public class RequestPaymentModel
     {
         [Required]
         [MaxLength(60)]
@@ -32,9 +32,11 @@ namespace Sample.AspNetCore.ViewModels
         public string CustomerEmail { get; set; } = "test@test.fake";
         public DateTimeOffset VirtualBankExpirationTime { get; set; }
             = DateTimeOffset.UtcNow.AddDays(2).Date;
+        [MaxLength(1024)]
+        public string ReturnUrl { get; set; }
 
         /// <summary>
-        /// 구매 내용을 바탕으로 새 결제 엔터티를 반환합니다.
+        /// 새 결제 엔터티를 반환합니다.
         /// </summary>
         /// <returns>새 결제 엔터티의 인스턴스</returns>
         public Models.Payment ToPayment()
@@ -49,7 +51,8 @@ namespace Sample.AspNetCore.ViewModels
                 CustomerPhoneNumber,
                 CustomerEmail,
                 VirtualBankExpirationTime,
-                IsDigital);
+                IsDigital,
+                ReturnUrl);
         }
     }
 }

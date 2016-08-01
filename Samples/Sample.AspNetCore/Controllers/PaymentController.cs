@@ -5,6 +5,8 @@ using Sample.AspNetCore.ViewModels;
 using System;
 using System.Threading.Tasks;
 using Iamport.RestApi.Models;
+using Sample.AspNetCore.Models;
+using Iamport.RestApi;
 
 namespace Sample.AspNetCore.Controllers
 {
@@ -17,9 +19,11 @@ namespace Sample.AspNetCore.Controllers
 
         private readonly IPaymentsApi paymentsApi;
         private readonly PaymentRepository paymentRepository;
+        private readonly string iamportId;
         public PaymentController(
             IPaymentsApi paymentsApi,
-            PaymentRepository paymentRepository)
+            PaymentRepository paymentRepository,
+            IamportHttpClientOptions clientOptions)
         {
             if (paymentsApi == null)
             {
@@ -29,8 +33,93 @@ namespace Sample.AspNetCore.Controllers
             {
                 throw new ArgumentNullException(nameof(paymentRepository));
             }
+            if (clientOptions == null)
+            {
+                throw new ArgumentNullException(nameof(clientOptions));
+            }
             this.paymentsApi = paymentsApi;
             this.paymentRepository = paymentRepository;
+            iamportId = clientOptions.IamportId;
+        }
+
+        /// <summary>
+        /// 주어진 정보로 새 결제를 요청하고 결제 페이지로 이동합니다.
+        /// </summary>
+        /// <param name="model">결제 요청 정보</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(RequestPaymentModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // 새 결제 저장
+            var payment = model.ToPayment();
+            paymentRepository.Add(payment);
+
+            // 새 결제 내용을 아임포트에 등록
+            await paymentsApi.PrepareAsync(new PaymentPreparation
+            {
+                Amount = payment.Amount,
+                TransactionId = payment.TransactionId,
+            });
+
+            // 결제 페이지로 이동
+            return RedirectToAction(
+                nameof(Gateway), 
+                new { transactionId = payment.TransactionId });
+        }
+
+        /// <summary>
+        /// 실제 결제 처리를 수행하는 페이지를 반환합니다.
+        /// 만약 해당 거래 ID가 이미 처리되었다면 결과 페이지로 자동으로 이동합니다.
+        /// </summary>
+        /// <param name="transactionId">거래 ID</param>
+        /// <returns></returns>
+        [HttpGet("{transactionId}/gateway")]
+        public IActionResult Gateway(string transactionId)
+        {
+            // 결제 내용 조회
+            var payment = paymentRepository.GetByTransactionId(transactionId);
+            if (payment == null)
+            {
+                return PageNotFound(transactionId);
+            }
+
+            // 이미 결제가 진행중이면 결과 페이지로 이동
+            if (payment.State != PaymentState.Prepared
+                && payment.State != PaymentState.InProgress)
+            {
+                return RedirectToAction(
+                    nameof(Index), 
+                    new { transactionId = transactionId });
+            }
+
+            // 아임포트로부터 결제 내용을 알림 받을 주소:
+            var notificationUrl = Url.Link(
+                null,
+                new
+                {
+                    controller = "Payment",
+                    action = nameof(RefreshResult),
+                    transactionId = transactionId,
+                });
+            // 결제 완료시 돌아올 URL.
+            // PC와 모바일 웹 브라우저 동작 차이를 줄이기 위해
+            // 항상 내부 사이트로 돌아오는 것이 좋습니다.
+            var returnUrl = Url.Action(nameof(Refresh), new { transactionId = transactionId });
+
+            // 결제 내용을 아임포트 결제 요청으로 변환
+            var viewModel = RequestPaymentViewModel.Create(
+                payment: payment,
+                iamportId: iamportId,
+                notificationUrl: notificationUrl,
+                returnUrl: returnUrl,
+                appScheme: AppScheme);
+            return View(viewModel);
         }
 
         /// <summary>
@@ -63,13 +152,34 @@ namespace Sample.AspNetCore.Controllers
         }
 
         /// <summary>
+        /// 지정한 거래 ID의 결제 상태를 아임포트 서비스에 조회하여 업데이트하고
+        /// 결과를 보여줄 페이지로 이동합니다.
+        /// GET 메서드에서 상태 변경을 처리하는 것은 좋지 않은 방법이지만
+        /// 결제 흐름상 반드시 거쳐야 오류가 적어지므로 이렇게 구현합니다.
+        /// </summary>
+        /// <param name="transactionId">거래 ID</param>
+        /// <returns></returns>
+        [HttpGet("{transactionId}/refresh")]
+        public async Task<IActionResult> Refresh(string transactionId)
+        {
+            var payment = paymentRepository.GetByTransactionId(transactionId);
+            if (payment == null)
+            {
+                return PageNotFound(transactionId);
+            }
+            await RefreshPaymentAsync(payment);
+
+            return Redirect(GetReturnUrl(payment));
+        }
+
+        /// <summary>
         /// 지정한 거래 ID의 결제 상태를 아임포트 서비스에 조회하여 업데이트합니다.
         /// 이 엔드포인트는 또한 아임포트의 결제 알림 URL(notification url)입니다.
         /// </summary>
         /// <param name="transactionId">거래 ID</param>
         /// <returns></returns>
         [HttpPost("{transactionId}/refresh")]
-        public async Task<IActionResult> Refresh(string transactionId)
+        public async Task<IActionResult> RefreshResult(string transactionId)
         {
             var payment = paymentRepository.GetByTransactionId(transactionId);
             if (payment == null)
@@ -79,6 +189,28 @@ namespace Sample.AspNetCore.Controllers
             await RefreshPaymentAsync(payment);
 
             return NoContent();
+        }
+
+        /// <summary>
+        /// 주어진 결제 정보에 대한 ReturnUrl을 반환합니다.
+        /// </summary>
+        /// <param name="payment">결제 정보</param>
+        /// <returns>ReturnUrl</returns>
+        private string GetReturnUrl(Models.Payment payment)
+        {
+            var returnUrl = payment.ReturnUrl;
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                returnUrl = Url.Link(
+                    null,
+                    new
+                    {
+                        controller = "Payment",
+                        action = nameof(Index),
+                        transactionId = payment.TransactionId,
+                    });
+            }
+            return returnUrl;
         }
 
         // TODO:

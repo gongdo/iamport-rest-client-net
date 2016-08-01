@@ -49,7 +49,8 @@ namespace Sample.AspNetCore.Models
             string customerPhoneNumber,
             string customerEmail,
             DateTimeOffset virtualBankExpirationTime,
-            bool isDigital
+            bool isDigital,
+            string returnUrl
             )
         {
             // TODO:
@@ -70,6 +71,7 @@ namespace Sample.AspNetCore.Models
                 CustomerEmail = customerEmail,
                 VirtualBankExpirationTime = virtualBankExpirationTime,
                 IsDigital = isDigital,
+                ReturnUrl = returnUrl,
             };
         }
 
@@ -137,6 +139,14 @@ namespace Sample.AspNetCore.Models
         /// 디지털 상품인지 여부. 휴대폰 결제일 때 반드시 확인 필요.
         /// </summary>
         public bool IsDigital { get; private set; }
+        /// <summary>
+        /// 결제 완료후 돌아갈 URL.
+        /// PC 웹 브라우저에서는 결제 완료후 스크립트에서 결과를 처리할 기회가 있지만
+        /// 모바일 웹 브라우저 및 WebView에서는 결제 결과를 처리할 수 없고
+        /// 곧바로 지정한 ReturnUrl로 돌아갑니다.
+        /// 만약 이 URL을 지정하지 않을 경우 자체 샘플 결과 페이지를 보여줍니다.
+        /// </summary>
+        public string ReturnUrl { get; private set; }
 
         /*
          * 다음은 결제 진행과정에 따라 결제사로부터 얻을 수 있는 정보입니다.

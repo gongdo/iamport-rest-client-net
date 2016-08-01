@@ -6,7 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.WebEncoders;
 using Sample.AspNetCore.Repositories;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace Sample.AspNetCore
 {
@@ -46,6 +49,11 @@ namespace Sample.AspNetCore
 
             // Add framework services.
             services.AddMvc();
+            // 다음 설정을 하지 않으면 View 렌더링시 Unicode 문자열이 &#1234; 형식으로 출력됩니다.
+            services.Configure<WebEncoderOptions>(options =>
+            {
+                options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

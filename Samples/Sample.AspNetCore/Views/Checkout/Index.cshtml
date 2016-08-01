@@ -1,4 +1,4 @@
-﻿@model Sample.AspNetCore.ViewModels.RequestCheckoutViewModel
+﻿@model Sample.AspNetCore.ViewModels.RequestPaymentModel
 @using Iamport.RestApi.Models
 @{
     ViewData["Title"] = "구매-결제 데모: 구매하기";
@@ -14,7 +14,7 @@
         <p>이 샘플 애플리케이션에서 이루어지는 모든 내용은 애플리케이션의 로컬 메모리에만 유지되므로 애플리케이션이 호스팅된 서버를 종료하면 진행했던 모든 상태가 유실됩니다.</p>
     </div>
     <hr />
-    <form id="checkout" class="form-horizontal" asp-antiforgery="true">
+    <form id="checkout" class="form-horizontal" asp-antiforgery="true" asp-controller="Payment" asp-action="Create">
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label">구매 상품 이름</label>
             <div class="col-md-10">
@@ -89,6 +89,13 @@
             </div>
         </div>
         <div class="form-group">
+            <label asp-for="ReturnUrl" class="col-md-2 control-label">결제후 돌아올 URL</label>
+            <div class="col-md-10">
+                <input asp-for="ReturnUrl" class="form-control" />
+                <span asp-validation-for="ReturnUrl" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-2">
                 <button type="submit" class="btn btn-primary form-control">구매하기</button>
             </div>
@@ -100,50 +107,3 @@
         </div>
     </form>
 </div>
-
-@section scripts {
-<script type="text/javascript">
-    (function () {
-        var checkout = function (param) {
-            IMP.init(param.iamportId);
-
-            IMP.request_pay(param.request, function (rsp) {
-                // 페이지 내에서 결제 결과를 표시하는 것 보다
-                // 해당 결제에 대한 진행 결과 페이지로 이동시키는 것이 더 유리합니다.
-                // 이렇게 함에 따라 동일한 거래 ID에 대한 중복 결제 요청을 막을 수 있으며
-                // 모바일 웹의 경우 웹페이지에서 곧바로 앱으로 이동해버렸을 때 남아있는 웹페이지가 안전한 상태가 됩니다.
-                location.href = param.returnUrl;
-            });
-
-            return false;
-        };
-
-        $('#checkout').submit(function (event) {
-            event.preventDefault();
-
-            // Anti-forgery
-            var token = $('input[name="__RequestVerificationToken"]').val();
-            $.ajaxPrefilter(function (options, originalOptions) {
-                if (options.type.toUpperCase() === "POST") {
-                    options.data = $.param($.extend(originalOptions.data, { __RequestVerificationToken: token }));
-                }
-            });
-
-            $.ajax({
-                url: '@Url.Action("Index")',
-                type: 'POST',
-                data: $(this).serialize(),
-                dataType: 'json'
-            }).done(function (data) {
-                checkout(data);
-            }).fail(function () {
-                $('#checkoutResult')
-                    .addClass('alert-danger')
-                    .text('오류!');
-            });
-
-            return false;
-        });
-    })();
-</script>
-}

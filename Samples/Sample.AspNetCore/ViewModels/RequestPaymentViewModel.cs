@@ -1,4 +1,5 @@
 ﻿using Iamport.RestApi.Models;
+using Newtonsoft.Json;
 
 namespace Sample.AspNetCore.ViewModels
 {
@@ -59,5 +60,12 @@ namespace Sample.AspNetCore.ViewModels
         /// 아임포트에 전송할 요청 정보
         /// </summary>
         public PaymentRequest Request { get; set; }
+
+        /// <summary>
+        /// 아임포트에 전송할 요청 정보를 Json으로 직렬화한 문자열을 반환합니다.
+        /// </summary>
+        /// <returns></returns>
+        public string GetRequestJson()
+            => JsonConvert.SerializeObject(Request);
     }
 }
