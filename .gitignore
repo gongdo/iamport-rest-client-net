@@ -23,6 +23,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Aa]pp_[Dd]ata/
+[Oo]utput[Dd]irectory/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -245,4 +246,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+# ignore files for security
 /Samples/Sample.AspNetCore/appsettings.development.json
+/Samples/Sample.AspNet/Web.Debug.config

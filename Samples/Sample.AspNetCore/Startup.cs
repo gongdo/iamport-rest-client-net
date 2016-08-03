@@ -32,6 +32,7 @@ namespace Sample.AspNetCore
         {
             // 리포지터리 등록
             // 샘플이라 단순한 in-memory static 저장소를 사용합니다.
+            services.AddSingleton<CheckoutRepository>();
             services.AddSingleton<PaymentRepository>();
 
             // 아임포트 서비스 등록

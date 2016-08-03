@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <h1>I'mport; 결제 모듈 DEMO</h1>
+
+    <div>
+        <p><a href="http://iamport.kr/demo" target="_blank">아임포트 결제 모듈 DEMO</a>와 거의 같은 구성입니다. 일부 css와 javascript가 수정되었으며 파일을 로드하는 방법이 ASP.NET에 맞춰 수정되었습니다.</p>
+        <p>이 페이지의 데모 자체는 아임포트RESTAPI닷넷을 전혀 사용하지 않습니다.</p>
+        <p>아임포트RESTAPI닷넷 데모는 <a href="@Url.Action("Index", "Checkout")">구매-결제 시나리오</a>를 참고하세요.</p>
+    </div>
+    <hr />
+    <div id="demo" class="col-md-8 col-xs-12">
+        <form name="frm_payment" id="frm_payment" class="form-horizontal">
+            <div class="form-group" style="margin-bottom: 0px;">
+                <label for="pg_provider" class="col-md-4 col-xs-4">지원 PG사</label>
+                <select name="pg_provider" id="pg_provider" class="col-md-8 col-xs-8">
+                    <option value="kakao" data-option="card" selected>카카오페이</option>
+                    <option value="html5_inicis" data-option="card,trans,vbank,phone,cultureland,smartculture,happymoney">KG이니시스(웹표준결제)</option>
+                    <option value="inicis" data-option="card,trans,vbank,phone,cultureland,smartculture,happymoney">KG이니시스(기존모듈)</option>
+                    <option value="uplus" data-option="card,trans,vbank,phone">LG유플러스</option>
+                    <option value="nice" data-option="card,trans,vbank,phone">나이스정보통신</option>
+                    <option value="jtnet" data-option="card,trans,vbank,phone">JTNet</option>
+                    <option value="danal" data-option="phone">다날-휴대폰소액결제전용</option>
+                    <option value="paypal" data-option="card">페이팔-ExpressCheckout</option>
+                </select>
+                <p id="pay_method_help" class="help-block col-md-offset-4">
+                    실제 승인이 이루어진 테스트 결제건은 30분이내로 카카오페이에서 자동 취소처리 합니다.
+                </p>
+            </div>
+            <div class="form-group" style="margin-bottom: 0px;">
+                <label for="pay_method" class="col-md-4 col-xs-4">결제수단</label>
+
+                <select name="pay_method" id="pay_method" class="col-md-8 col-xs-8">
+                    <option value="card">신용카드</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="checkbox col-md-4 col-md-offset-4 col-xs-offset-4" style="padding: 0px;">
+                    <label>
+                        <input type="checkbox" name="use_escrow" value="escrow" id="use_escrow">
+                        <span id="escrow-label"> 에스크로결제적용</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="merchant_uid" class="col-md-4 col-xs-4">주문번호</label>
+                <input type="text" name="merchant_uid" id="merchant_uid" value="" class="col-md-8 col-xs-8" />
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-md-4 col-xs-4">결제명</label>
+                <input type="text" name="name" id="name" value="결제테스트" class="col-md-8 col-xs-8" />
+            </div>
+            <div class="form-group">
+                <label for="amount" class="col-md-4 col-xs-4">금액</label>
+                <input type="tel" name="amount" id="amount" value="1004" class="col-md-8 col-xs-8" />
+            </div>
+            <div class="form-group">
+                <label for="buyer_email" class="col-md-4 col-xs-4">이메일주소</label>
+                <input type="text" name="buyer_email" id="buyer_email" value="iamport@siot.do" class="col-md-8 col-xs-8" />
+            </div>
+            <div class="form-group">
+                <label for="buyer_name" class="col-md-4 col-xs-4">성함</label>
+                <input type="text" name="buyer_name" id="buyer_name" value="구매자" class="col-md-8 col-xs-8" />
+            </div>
+            <div class="form-group">
+                <label for="buyer_tel" class="col-md-4 col-xs-4">전화번호</label>
+                <input type="tel" name="buyer_tel" id="buyer_tel" value="010-1234-5678" class="col-md-8 col-xs-8" />
+            </div>
+            <div class="form-group">
+                <label for="buyer_addr" class="col-md-4 col-xs-4">주소</label>
+                <input type="text" name="buyer_addr" id="buyer_addr" value="서울특별시 강남구 삼성동" class="col-md-8 col-xs-8" />
+            </div>
+            <div class="form-group">
+                <label for="buyer_postcode" class="col-md-4 col-xs-4">우편번호</label>
+                <input type="text" name="buyer_postcode" id="buyer_postcode" value="123-456" class="col-md-8 col-xs-8" />
+            </div>
+            <div class="form-group">
+                <label for="vbank_due" class="col-md-4 col-xs-4">가상계좌 입금일자<br>(YYYYMMDD)</label>
+                <input type="text" name="vbank_due" id="vbank_due" value="" class="col-md-8 col-xs-8" />
+            </div>
+
+            <div class="form-group">
+                <label for="in_app" class="col-md-4 col-xs-4"></label>
+                <label for="in_app" class="col-md-8 col-xs-8" style="text-align:left">
+                    <input type="checkbox" name="in_app" value="in_app" id="in_app">
+                    <span> 앱내 webView를 통한 결제인 경우만 체크</span>
+                </label>
+            </div>
+            <div id="responser" class="alert" role="alert"></div>
+            <button id="requester" type="submit" class="btn btn-primary">결제하기</button>
+        </form>
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/iamport-demo.js"></script>
+}

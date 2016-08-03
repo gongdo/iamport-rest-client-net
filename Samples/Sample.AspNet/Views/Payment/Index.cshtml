@@ -19,7 +19,7 @@
                 <li>결제 방법: @Html.DisplayFor(model => model.PaymentMethod)</li>
                 <li>진행 상태: @Html.DisplayFor(model => model.State)</li>
                 @if (Model.PaymentMethod == Iamport.RestApi.Models.PaymentMethod.VirtualBank
-                && Model.State == PaymentState.Awating)
+                    && Model.State == PaymentState.Awating)
                 {
                     <li>입금계좌: @Html.DisplayFor(model => model.VirtualBankAccount)</li>
                     <li>입금은행: @Html.DisplayFor(model => model.VirtualBankName)</li>
@@ -34,11 +34,11 @@
 </div>
 
 @section scripts {
-<script type="text/javascript">
+    <script type="text/javascript">
     (function () {
         $('#refresh').click(function () {
             location.reload();
         });
     })();
-</script>
+    </script>
 }

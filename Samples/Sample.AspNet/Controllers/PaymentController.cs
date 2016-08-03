@@ -1,15 +1,19 @@
-﻿using Iamport.RestApi.Apis;
-using Microsoft.AspNetCore.Mvc;
+﻿using Iamport.RestApi;
+using Iamport.RestApi.Apis;
+using Iamport.RestApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Sample.AspNetCore.Repositories;
 using Sample.AspNetCore.ViewModels;
 using System;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
-using Iamport.RestApi.Models;
-using Iamport.RestApi;
+using System.Web.Mvc;
 
-namespace Sample.AspNetCore.Controllers
+namespace Sample.AspNet.Controllers
 {
-    [Route("[Controller]")]
     public class PaymentController : Controller
     {
         // 모바일 결제시 결제 후 돌아갈 앱의 스키마
@@ -20,6 +24,18 @@ namespace Sample.AspNetCore.Controllers
         private readonly CheckoutRepository checkoutRepository;
         private readonly PaymentRepository paymentRepository;
         private readonly string iamportId;
+        private static readonly JsonSerializerSettings serializerSettings = GetSerializerSettings();
+
+        private static JsonSerializerSettings GetSerializerSettings()
+        {
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            };
+            settings.Converters.Add(new StringEnumConverter(false));
+            return settings;
+        }
+
         public PaymentController(
             IPaymentsApi paymentsApi,
             CheckoutRepository checkoutRepository,
@@ -55,11 +71,11 @@ namespace Sample.AspNetCore.Controllers
         /// <returns>아임포트 결제 요청 정보</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAjax([FromBody] RegisterPaymentModel model)
+        public async Task<ActionResult> CreateAjax(RegisterPaymentModel model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             // 구매 정보 확인
@@ -67,11 +83,11 @@ namespace Sample.AspNetCore.Controllers
             if (checkout == null)
             {
                 ModelState.AddModelError(nameof(model.CheckoutId), "Checkout Id가 존재하지 않습니다.");
-                return BadRequest(ModelState);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             // 새 결제 저장
-            var payment = Models.Payment.Create(model.CheckoutId);
+            var payment = AspNetCore.Models.Payment.Create(model.CheckoutId);
             paymentRepository.Add(payment);
 
             // 새 결제 내용을 아임포트에 등록
@@ -82,12 +98,12 @@ namespace Sample.AspNetCore.Controllers
             });
 
             // 아임포트로부터 결제 내용을 알림 받을 주소:
-            var notificationUrl = Url.Link(
+            var notificationUrl = Url.HttpRouteUrl(
                 null,
                 new
                 {
                     controller = "Payment",
-                    action = nameof(OnNotification),
+                    action = nameof(Notification),
                     transactionId = payment.TransactionId,
                 });
             // 결제 완료시 돌아올 URL.
@@ -95,7 +111,8 @@ namespace Sample.AspNetCore.Controllers
             // 항상 내부 사이트로 돌아오는 것이 좋습니다.
             var returnUrl = Url.Action(nameof(Refresh), "Payment", new { transactionId = payment.TransactionId });
 
-            return Json(new PaymentRequest
+            var result = new ContentResult();
+            result.Content = JsonConvert.SerializeObject(new PaymentRequest
             {
                 Amount = checkout.Amount,
                 AppScheme = AppScheme,
@@ -117,7 +134,10 @@ namespace Sample.AspNetCore.Controllers
                 //CustomData = null,
                 //CustomerAddress = null,
                 //CustomerPostCode = null,
-            });
+            }, serializerSettings);
+            result.ContentEncoding = Encoding.UTF8;
+            result.ContentType = "application/json";
+            return result;
         }
 
         /// <summary>
@@ -125,8 +145,8 @@ namespace Sample.AspNetCore.Controllers
         /// </summary>
         /// <param name="transactionId">거래 ID</param>
         /// <returns></returns>
-        [HttpGet("{transactionId}")]
-        public IActionResult Index(string transactionId)
+        //[HttpGet("{transactionId}")]
+        public ActionResult Index(string transactionId)
         {
             var payment = paymentRepository.GetByTransactionId(transactionId);
             if (payment == null)
@@ -148,8 +168,8 @@ namespace Sample.AspNetCore.Controllers
         /// </summary>
         /// <param name="transactionId">거래 ID</param>
         /// <returns></returns>
-        [HttpGet("{transactionId}/pagenotfound")]
-        public IActionResult PageNotFound(string transactionId)
+        //[HttpGet("{transactionId}/pagenotfound")]
+        public ActionResult PageNotFound(string transactionId)
         {
             ViewData["TransactionId"] = transactionId;
             return View(nameof(PageNotFound));
@@ -163,8 +183,8 @@ namespace Sample.AspNetCore.Controllers
         /// </summary>
         /// <param name="transactionId">거래 ID</param>
         /// <returns></returns>
-        [HttpGet("{transactionId}/refresh")]
-        public async Task<IActionResult> Refresh(string transactionId)
+        //[HttpGet("{transactionId}/refresh")]
+        public async Task<ActionResult> Refresh(string transactionId)
         {
             var payment = paymentRepository.GetByTransactionId(transactionId);
             if (payment == null)
@@ -184,7 +204,7 @@ namespace Sample.AspNetCore.Controllers
             var returnUrl = checkout.ReturnUrl;
             if (string.IsNullOrWhiteSpace(returnUrl))
             {
-                returnUrl = Url.Link(
+                returnUrl = Url.HttpRouteUrl(
                     null,
                     new
                     {
@@ -202,23 +222,23 @@ namespace Sample.AspNetCore.Controllers
         /// </summary>
         /// <param name="transactionId">거래 ID</param>
         /// <returns></returns>
-        [HttpPost("{transactionId}/notification")]
-        public async Task<IActionResult> OnNotification(string transactionId)
+        //[HttpPost("{transactionId}/notification")]
+        public async Task<ActionResult> Notification(string transactionId)
         {
             var payment = paymentRepository.GetByTransactionId(transactionId);
             if (payment == null)
             {
-                return NotFound();
+                return HttpNotFound();
             }
             await RefreshPaymentAsync(payment);
 
-            return NoContent();
+            return new HttpStatusCodeResult(HttpStatusCode.NoContent);
         }
-        
+
         // TODO:
         // 이 로직은 비지니스 로직을 담고 있습니다.
         // 비즈니스 레이어로 옮기는 것이 좋습니다.
-        private async Task RefreshPaymentAsync(Models.Payment payment)
+        private async Task RefreshPaymentAsync(AspNetCore.Models.Payment payment)
         {
             var iamportPayment = await paymentsApi.GetByTransactionIdAsync(payment.TransactionId);
             if (iamportPayment == null)

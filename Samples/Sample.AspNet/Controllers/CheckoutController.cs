@@ -1,15 +1,15 @@
 ﻿using Iamport.RestApi;
-using Microsoft.AspNetCore.Mvc;
 using Sample.AspNetCore.Repositories;
 using Sample.AspNetCore.ViewModels;
 using System;
+using System.Net;
+using System.Web.Mvc;
 
-namespace Sample.AspNetCore.Controllers
+namespace Sample.AspNet.Controllers
 {
     /// <summary>
     /// 구매 정보 관련 컨트롤러
     /// </summary>
-    [Route("[Controller]")]
     public class CheckoutController : Controller
     {
         private readonly CheckoutRepository checkoutRepository;
@@ -35,7 +35,7 @@ namespace Sample.AspNetCore.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View(new RegisterCheckoutModel());
         }
@@ -46,11 +46,11 @@ namespace Sample.AspNetCore.Controllers
         /// <param name="model">구매 정보</param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Create(RegisterCheckoutModel model)
+        public ActionResult Index(RegisterCheckoutModel model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             // 새 구매 정보 저장
@@ -66,13 +66,13 @@ namespace Sample.AspNetCore.Controllers
         /// </summary>
         /// <param name="id">구매 정보 Id</param>
         /// <returns></returns>
-        [HttpGet("{id}/gateway")]
-        public IActionResult Gateway(Guid id)
+        //[HttpGet("{id}/gateway")]
+        public ActionResult Gateway(Guid id)
         {
             var checkout = checkoutRepository.GetById(id);
             if (checkout == null)
             {
-                return NotFound();
+                return PageNotFound(id);
             }
 
             var viewModel = RequestPaymentViewModel.Create(
@@ -82,8 +82,8 @@ namespace Sample.AspNetCore.Controllers
             return View(viewModel);
         }
 
-        [HttpGet("{id}/PageNotFound")]
-        public IActionResult PageNotFound(Guid id)
+        //[HttpGet("{id}/PageNotFound")]
+        public ActionResult PageNotFound(Guid id)
         {
             ViewData["Id"] = id;
             return View();

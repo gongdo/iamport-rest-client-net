@@ -1,22 +1,21 @@
 ﻿using System;
-using Sample.AspNetCore.Models;
 using Iamport.RestApi.Models;
 
 namespace Sample.AspNetCore.ViewModels
 {
     public class PaymentViewModel
     {
-        internal static PaymentViewModel Create(Models.Payment payment)
+        internal static PaymentViewModel Create(Models.Payment payment, Models.Checkout checkout)
         {
             return new PaymentViewModel
             {
-                Name = payment.Name,
-                Amount = payment.Amount,
-                PaymentMethod = payment.PaymentMethod,
+                Name = checkout.Name,
+                Amount = checkout.Amount,
+                PaymentMethod = checkout.PaymentMethod,
                 State = payment.State,
                 VirtualBankAccount = payment.VirtualBankAccount,
                 VirtualBankAccountHolder = payment.VirtualBankAccountHolder,
-                VirtualBankExpirationTime = payment.VirtualBankExpirationTime,
+                VirtualBankExpirationTime = checkout.VirtualBankExpirationTime,
                 VirtualBankName = payment.VirtualBankName,
             };
         }
@@ -28,6 +27,6 @@ namespace Sample.AspNetCore.ViewModels
         public string VirtualBankName { get; private set; }
         public string VirtualBankAccount { get; private set; }
         public string VirtualBankAccountHolder { get; private set; }
-        public PaymentState State { get; private set; }
+        public Models.PaymentState State { get; private set; }
     }
 }
