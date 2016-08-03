@@ -4,6 +4,7 @@ pull_requests:
 branches:  
   only:
   - master
+  - dev
 skip_commits:
   message: /(Created.*\.(png|jpg|jpeg|bmp|gif))|(README.md)/
 nuget:
@@ -21,7 +22,7 @@ deploy:
     secure: X8/Cm8f2M7FVtOuQftWgMlQv8XNMXJ8RbtVkeQkTgoaLb5Bv6Vf5KWcYZSEJ/wIc
   skip_symbols: true
   on:
-    branch: master
+    branch: dev
 - provider: NuGet
   name: production
   api_key:
