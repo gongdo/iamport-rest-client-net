@@ -10,11 +10,29 @@
 
 ## Quick start
 
+### Installation
+
+(패키지 매니저 콘솔에서)
+```
+Install-Package Iamport.RestApi
+```
+
+(project.json에 추가 - .NET Core xproj 프로젝트)
+```
+{
+    "dependencies": {
+        "Iamport.RestApi": "1.0.0"
+    }
+}
+```
+
+### Usage
+
 ```CSharp
 using Iamport.RestApi;
 using Iamport.RestApi.Apis;
 using Iamport.RestApi.Models;
-//... .../
+//...
 
 var options = new IamportHttpClientOptions
 {
@@ -59,10 +77,6 @@ Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
 아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.
 아임포트RESTAPI닷넷의 버전 규칙은 [Semantic Versioning](http://semver.org/)을 따릅니다.
 
-* [1.0-preview1]
- * 샘플 프로젝트 제공
- * .NET 4.5 지원
- * .NET Core 1.0 지원
 * [1.0](https://github.com/gongdo/iamport-rest-client-net/milestones/1.0)
  * 마이너 버그 수정
  * 최초 릴리스!
