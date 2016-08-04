@@ -17,7 +17,7 @@
 Install-Package Iamport.RestApi
 ```
 
-(project.json에 추가 - .NET Core xproj 프로젝트)
+(또는 project.json에 추가 - .NET Core xproj 프로젝트)
 ```
 {
     "dependencies": {
