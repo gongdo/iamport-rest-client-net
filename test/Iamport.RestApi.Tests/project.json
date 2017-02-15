@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
   "testRunner": "xunit",
   "dependencies": {
-    "Iamport.RestApi": "1.0.0-*",
+    "Iamport.RestApi": "*",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "xunit": "2.2.0-beta1-build3239",
     "Moq": "4.6.25-alpha",

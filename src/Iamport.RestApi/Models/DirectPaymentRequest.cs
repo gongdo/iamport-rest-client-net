@@ -11,14 +11,14 @@ namespace Iamport.RestApi.Models
     public class DirectPaymentRequest
     {
         /// <summary>
-        /// 이 결제를 거래할 때 사용할 고유 ID(OrderId 등)
+        /// (required)이 결제를 거래할 때 사용할 고유 ID(OrderId 등)
         /// </summary>
         [JsonProperty("merchant_uid")]
         [Required]
         [MaxLength(80)]
         public string TransactionId { get; set; }
         /// <summary>
-        /// 결제 총액
+        /// (required)결제 총액
         /// </summary>
         [JsonProperty("amount")]
         [Required]
@@ -33,7 +33,6 @@ namespace Iamport.RestApi.Models
         /// (required)카드번호(dddd-dddd-dddd-dddd)
         /// </summary>
         [JsonProperty("card_number")]
-        [JsonRequired]
         [Required]
         [RegularExpression(@"^\d{4}-\d{4}-\d{4}-\d{4}$")]
         public string CardNumber { get; set; }
@@ -41,7 +40,6 @@ namespace Iamport.RestApi.Models
         /// (required)카드 유효기간(YYYY-MM)
         /// </summary>
         [JsonProperty("expiry")]
-        [JsonRequired]
         [Required]
         [RegularExpression(@"^\d{4}-\d{2}$")]
         public string Expiry { get; set; }
@@ -49,7 +47,6 @@ namespace Iamport.RestApi.Models
         /// (required)생년월일6자리(법인카드의 경우 사업자등록번호10자리)
         /// </summary>
         [JsonProperty("birth")]
-        [JsonRequired]
         [Required]
         [RegularExpression(@"^\d{6}$|^\d{10}$")]
         public string AuthenticationNumber { get; set; }

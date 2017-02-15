@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.1.0-*",
   "description": "Iamport.RestApi .NET Client",
   "dependencies": {
     "Newtonsoft.Json": "9.0.1"
@@ -25,10 +25,10 @@
     "tags": [ "I'mport", "아임포트", "iamport" ],
     "repository": {
       "type": "git",
-      "url": "https://github.com/gongdo/iamport-rest-client-net"
+      "url": "https://github.com/openbapul/iamport-rest-client-net"
     },
-    "licenseUrl": "https://github.com/gongdo/iamport-rest-client-net/blob/master/LICENSE",
-    "owners": [ "gongdo" ]
+    "licenseUrl": "https://github.com/openbapul/iamport-rest-client-net/blob/master/LICENSE",
+    "owners": [ "gongdo", "openbapul" ]
   },
   "buildOptions": {
     "xmlDoc": true

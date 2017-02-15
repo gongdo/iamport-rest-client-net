@@ -27,7 +27,6 @@ namespace Iamport.RestApi.Models
         /// (required)고객 고유번호(빌링키에 대응하는 고객 식별 문자열)
         /// </summary>
         [JsonProperty("customer_uid ")]
-        [JsonRequired]
         [Required]
         [MaxLength(80)]
         public string CustomerId { get; set; }
@@ -65,6 +64,7 @@ namespace Iamport.RestApi.Models
         /// 결제예약 스케쥴의 목록
         /// </summary>
         [JsonProperty("schedules")]
+        [Required]
         public PaymentSchedule[] Schedules { get; set; }
     }
 }

@@ -12,20 +12,20 @@ namespace Iamport.RestApi.Models
     public class PaymentSchedule
     {
         /// <summary>
-        /// 이 결제를 거래할 때 사용할 고유 ID(OrderId 등)
+        /// (required)이 결제를 거래할 때 사용할 고유 ID(OrderId 등)
         /// </summary>
         [JsonProperty("merchant_uid")]
         [Required]
         [MaxLength(80)]
         public string TransactionId { get; set; }
         /// <summary>
-        /// 결제 총액
+        /// (required)결제 총액
         /// </summary>
         [JsonProperty("amount")]
         [Required]
         [Range(1000, 10000000)]
         public decimal Amount { get; set; }
-        
+
         // - 스케줄에 부가세 항목이 빠져 있음.
         // - iamport의 실수라고 생각되지만 일단 사용하지 않음.
         ///// <summary>
@@ -35,10 +35,11 @@ namespace Iamport.RestApi.Models
         //public decimal Vat { get; set; }
 
         /// <summary>
-        /// 결제요청 예약시각 UNIX timestamp(UTC)
+        /// (required)결제요청 예약시각 UNIX timestamp(UTC)
         /// </summary>
         [JsonProperty("schedule_at")]
         [JsonConverter(typeof(UnixDateTimeJsonConverter))]
+        [Required]
         public DateTime ScheduleAt { get; set; }
         /// <summary>
         /// 주문이름
