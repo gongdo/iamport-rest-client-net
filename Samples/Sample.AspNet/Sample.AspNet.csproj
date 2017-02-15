@@ -143,6 +143,9 @@
     <Compile Include="..\Sample.AspNetCore\Repositories\PaymentRepository.cs">
       <Link>Repositories\PaymentRepository.cs</Link>
     </Compile>
+    <Compile Include="..\Sample.AspNetCore\ViewModels\DirectPaymentViewModel.cs">
+      <Link>ViewModels\DirectPaymentViewModel.cs</Link>
+    </Compile>
     <Compile Include="..\Sample.AspNetCore\ViewModels\IamportRequestViewModel.cs">
       <Link>ViewModels\IamportRequestViewModel.cs</Link>
     </Compile>
@@ -155,6 +158,9 @@
     <Compile Include="..\Sample.AspNetCore\ViewModels\RegisterPaymentModel.cs">
       <Link>ViewModels\RegisterPaymentModel.cs</Link>
     </Compile>
+    <Compile Include="..\Sample.AspNetCore\ViewModels\RequestDirectPaymentModel.cs">
+      <Link>ViewModels\RequestDirectPaymentModel.cs</Link>
+    </Compile>
     <Compile Include="..\Sample.AspNetCore\ViewModels\RequestPaymentViewModel.cs">
       <Link>ViewModels\RequestPaymentViewModel.cs</Link>
     </Compile>
@@ -162,6 +168,7 @@
     <Compile Include="App_Start\DependencyConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\DirectPaymentController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -218,6 +225,9 @@
     <Content Include="Views\Payment\PageNotFound.cshtml" />
     <Content Include="Views\Checkout\Gateway.cshtml" />
     <Content Include="Views\Checkout\PageNotFound.cshtml" />
+    <Content Include="Views\DirectPayment\Index.cshtml" />
+    <Content Include="Views\DirectPayment\PageNotFound.cshtml" />
+    <Content Include="Views\DirectPayment\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -24,6 +24,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="@Url.Action("Index", "Home")">아임포트 데모</a></li>
                     <li><a href="@Url.Action("Index", "Checkout")">구매-결제 시나리오</a></li>
+                    <li><a href="@Url.Action("Index", "DirectPayment")">비인증-결제 시나리오</a></li>
                 </ul>
             </div>
         </div>
@@ -38,7 +39,6 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.3.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

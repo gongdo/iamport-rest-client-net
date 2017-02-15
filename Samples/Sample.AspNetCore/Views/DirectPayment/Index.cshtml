@@ -1,0 +1,117 @@
+﻿@model Sample.AspNetCore.ViewModels.RequestDirectPaymentModel
+@using Iamport.RestApi.Models
+@{
+    ViewData["Title"] = "비인증 결제 데모: 구매하기";
+}
+<div class="row">
+    <h1>@ViewData["Title"]</h1>
+
+    <div>
+        <p>이 샘플 애플리케이션은 고객에게 카드 번호 및 기타 정보를 입력받아 공인인증서 없이 직접 RestAPI로 결제하는 프로세스를 모사합니다.</p>
+        <p>지원하는 결제사는 KG이니시스, 나이스정보통신, JTnet 입니다.</p>
+        <p>이 샘플 애플리케이션에서 이루어지는 모든 내용은 애플리케이션의 로컬 메모리에만 유지되므로 애플리케이션이 호스팅된 서버를 종료하면 진행했던 모든 상태가 유실됩니다.</p>
+    </div>
+    <hr />
+    <form id="directpayment" class="form-horizontal" asp-antiforgery="true" asp-controller="DirectPayment" asp-action="Index">
+        <div asp-validation-summary="All" class="form-group text-danger">
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label">구매 상품 이름</label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Amount" class="col-md-2 control-label">금액</label>
+            <div class="col-md-10">
+                <input asp-for="Amount" class="form-control" type="number" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Vat" class="col-md-2 control-label">VAT(optional)</label>
+            <div class="col-md-10">
+                <input asp-for="Vat" class="form-control" type="number" />
+                <span asp-validation-for="Vat" class="text-danger"></span>
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label asp-for="PaymentGateway" class="col-md-2 control-label">결제 게이트웨이사</label>
+            <div class="col-md-10">
+                <select asp-for="PaymentGateway" asp-items="@Html.GetEnumSelectList<PaymentGateway>()" class="form-control"></select>
+                <span asp-validation-for="PaymentGateway" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CardNumber" class="col-md-2 control-label">카드번호(dddd-dddd-dddd-dddd)</label>
+            <div class="col-md-10">
+                <input asp-for="CardNumber" class="form-control" />
+                <span asp-validation-for="CardNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Expiry" class="col-md-2 control-label">유효기간(YYYY-MM)</label>
+            <div class="col-md-10">
+                <input asp-for="Expiry" class="form-control" />
+                <span asp-validation-for="Expiry" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="AuthenticationNumber" class="col-md-2 control-label">주민번호 앞 6자리(법인카드는 법인번호 10자리)</label>
+            <div class="col-md-10">
+                <input asp-for="AuthenticationNumber" class="form-control" />
+                <span asp-validation-for="AuthenticationNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PartialPassword" class="col-md-2 control-label">패스워드 앞 2자리(법인카드는 공백)</label>
+            <div class="col-md-10">
+                <input asp-for="PartialPassword" class="form-control" />
+                <span asp-validation-for="PartialPassword" class="text-danger"></span>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <label asp-for="CustomerName" class="col-md-2 control-label">(optional)구매자 이름</label>
+            <div class="col-md-10">
+                <input asp-for="CustomerName" class="form-control" />
+                <span asp-validation-for="CustomerName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CustomerPhoneNumber" class="col-md-2 control-label">(optional)구매자 전화번호</label>
+            <div class="col-md-10">
+                <input asp-for="CustomerPhoneNumber" class="form-control" />
+                <span asp-validation-for="CustomerPhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CustomerEmail" class="col-md-2 control-label">(optional)구매자 이메일</label>
+            <div class="col-md-10">
+                <input asp-for="CustomerEmail" class="form-control" />
+                <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CustomerAddress" class="col-md-2 control-label">(optional)구매자 주소</label>
+            <div class="col-md-10">
+                <input asp-for="CustomerAddress" class="form-control" />
+                <span asp-validation-for="CustomerAddress" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CustomerPostCode" class="col-md-2 control-label">(optional)구매자 우편번호</label>
+            <div class="col-md-10">
+                <input asp-for="CustomerPostCode" class="form-control" />
+                <span asp-validation-for="CustomerPostCode" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-2">
+                <button type="submit" class="btn btn-primary form-control">구매하기</button>
+            </div>
+        </div>
+    </form>
+</div>

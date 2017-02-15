@@ -69,7 +69,7 @@ namespace Iamport.RestApi.Models
         /// (optional)카드할부개월수. 2 이상의 integer 할부개월수 적용(결제금액 50,000원 이상 한정)
         /// </summary>
         [JsonProperty("card_quota")]
-        public string InstallmentMonths { get; set; }
+        public int InstallmentMonths { get; set; }
         /// <summary>
         /// 주문이름
         /// </summary>

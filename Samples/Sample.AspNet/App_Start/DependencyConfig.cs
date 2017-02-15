@@ -35,6 +35,11 @@ namespace Sample.AspNet
                 .As<IPaymentsApi>()
                 .SingleInstance();
 
+            builder
+                .RegisterType<SubscribeApi>()
+                .As<ISubscribeApi>()
+                .SingleInstance();
+
             // Register your MVC controllers.
             builder.RegisterControllers(typeof(DependencyConfig).Assembly);
 
