@@ -128,6 +128,7 @@ Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
 
 - 이니시스(구버전)
 - 이니시스(웹표준버전)
+- 나이스(subscribe-api)
 
 ### 이슈 제기
 이 프로젝트에 관한 문제점, 문의, 개선 사항 건의 등은 [Issues](https://github.com/gongdo/iamport-rest-client-net/issues)에 등록해주세요. 단, 이슈를 등록할 때에는 충분히 검색하여 같은 이슈가 없었는지 확인을 바랍니다.
