@@ -18,14 +18,14 @@
 
 (패키지 매니저 콘솔에서)
 ```
-Install-Package Iamport.RestApi -Version 1.1.0-33
+Install-Package Iamport.RestApi -Version 1.1.0-34
 ```
 
 (또는 project.json에 추가 - .NET Core xproj 프로젝트)
 ```
 {
     "dependencies": {
-        "Iamport.RestApi": "1.1.0-33"
+        "Iamport.RestApi": "1.1.0-34"
     }
 }
 ```
