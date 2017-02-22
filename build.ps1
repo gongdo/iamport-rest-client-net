@@ -26,7 +26,7 @@ function Exec
 $buildDirectory = Get-Location
 $revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
 $branch = @{ $true = $env:APPVEYOR_REPO_BRANCH; $false = "dev" }[$env:APPVEYOR_REPO_BRANCH -eq "master"];
-$suffix = $branch-$revision
+$suffix = "$($branch)-$($revision)"
 
 Write-Host "clean artifacts folder"
 if(Test-Path ./artifacts) { Remove-Item ./artifacts -Force -Recurse }
