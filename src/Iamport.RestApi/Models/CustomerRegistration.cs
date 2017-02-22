@@ -12,7 +12,7 @@ namespace Iamport.RestApi.Models
         /// <summary>
         /// (required)고객 고유번호(빌링키에 대응하는 고객 식별 문자열)
         /// </summary>
-        [JsonProperty("customer_uid ")]
+        [JsonProperty("customer_uid")]
         [Required]
         public string Id { get; set; }
         /// <summary>

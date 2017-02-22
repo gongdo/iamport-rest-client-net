@@ -65,7 +65,7 @@ namespace Iamport.RestApi.Models
         /// string 타입의 고객 고유번호.
         /// (결제에 사용된 카드정보를 빌링키 형태로 저장해두고 재결제에 사용하시려면 customer_uid를 지정해주세요. /subscribe/payments/again, /subscribe/payments/schedule로 재결제를 진행하실 수 있습니다.)
         /// </summary>
-        [JsonProperty("customer_uid ")]
+        [JsonProperty("customer_uid")]
         [MaxLength(80)]
         public string CustomerId { get; set; }
         /// <summary>
