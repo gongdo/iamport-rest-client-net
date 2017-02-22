@@ -40,36 +40,5 @@ namespace Iamport.RestApi.Models
         /// </summary>
         [JsonProperty("card_quota")]
         public string InstallmentMonths { get; set; }
-        /// <summary>
-        /// 주문이름
-        /// </summary>
-        [JsonProperty("name")]
-        [MaxLength(80)]
-        public string Title { get; set; }
-        /// <summary>
-        /// (optional)주문자 이름
-        /// </summary>
-        [JsonProperty("buyer_name")]
-        public string BuyerName { get; set; }
-        /// <summary>
-        /// (optional)주문자 전화번호
-        /// </summary>
-        [JsonProperty("buyer_tel")]
-        public string PhoneNumber { get; set; }
-        /// <summary>
-        /// (optional)주문자 이메일
-        /// </summary>
-        [JsonProperty("buyer_email")]
-        public string Email { get; set; }
-        /// <summary>
-        /// (optional)주문자 주소
-        /// </summary>
-        [JsonProperty("buyer_addr")]
-        public string Address { get; set; }
-        /// <summary>
-        /// (optional)주문자 우편번호
-        /// </summary>
-        [JsonProperty("buyer_postcode")]
-        public string PostCode { get; set; }
     }
 }

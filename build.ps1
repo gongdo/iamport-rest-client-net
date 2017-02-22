@@ -26,6 +26,7 @@ function Exec
 $buildDirectory = Get-Location
 $revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
 $branch = @{ $true = $env:APPVEYOR_REPO_BRANCH; $false = "dev" }[$env:APPVEYOR_REPO_BRANCH -eq "master"];
+$suffix = $branch-$revision
 
 Write-Host "clean artifacts folder"
 if(Test-Path ./artifacts) { Remove-Item ./artifacts -Force -Recurse }
@@ -45,5 +46,5 @@ Write-Host "pack nuget"
 if ("master" -eq $branch) {
 	exec { & dotnet pack ./src/Iamport.RestApi -c Release -o ./artifacts }
 } else {
-	exec { & dotnet pack ./src/Iamport.RestApi -c Release -o ./artifacts --version-suffix $revision }
+	exec { & dotnet pack ./src/Iamport.RestApi -c Release -o ./artifacts --version-suffix $suffix }
 }
