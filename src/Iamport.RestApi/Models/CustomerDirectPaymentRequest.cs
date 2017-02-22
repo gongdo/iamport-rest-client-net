@@ -5,6 +5,9 @@ namespace Iamport.RestApi.Models
 {
     /// <summary>
     /// 아임포트의 subscribe-api에 again 결제를 요청할 때 입력할 정보
+    /// Name, BuyerName, PhoneNumber, Email, Address, PostCode을 입력하지 않아도 결제는 되지만
+    /// 실제 결제 기록에 제목이나 이름이 남지 않습니다.
+    /// 특히 Name, BuyerName, (PhoneNumber 또는 Email)은 가능한 입력하는 것이 좋습니다.
     /// </summary>
     /// <seealso href="http://api.iamport.kr/#!/subscribe"/>
     public class CustomerDirectPaymentRequest
@@ -40,5 +43,36 @@ namespace Iamport.RestApi.Models
         /// </summary>
         [JsonProperty("card_quota")]
         public string InstallmentMonths { get; set; }
+        /// <summary>
+        /// 주문이름
+        /// </summary>
+        [JsonProperty("name")]
+        [MaxLength(80)]
+        public string Title { get; set; }
+        /// <summary>
+        /// (optional)주문자 이름
+        /// </summary>
+        [JsonProperty("buyer_name")]
+        public string BuyerName { get; set; }
+        /// <summary>
+        /// (optional)주문자 전화번호
+        /// </summary>
+        [JsonProperty("buyer_tel")]
+        public string PhoneNumber { get; set; }
+        /// <summary>
+        /// (optional)주문자 이메일
+        /// </summary>
+        [JsonProperty("buyer_email")]
+        public string Email { get; set; }
+        /// <summary>
+        /// (optional)주문자 주소
+        /// </summary>
+        [JsonProperty("buyer_addr")]
+        public string Address { get; set; }
+        /// <summary>
+        /// (optional)주문자 우편번호
+        /// </summary>
+        [JsonProperty("buyer_postcode")]
+        public string PostCode { get; set; }
     }
 }

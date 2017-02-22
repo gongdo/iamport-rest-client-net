@@ -6,6 +6,9 @@ namespace Iamport.RestApi.Models
 {
     /// <summary>
     /// 아임포트의 subscribe-api에 onetime 결제를 요청할 때 입력할 정보
+    /// Name, BuyerName, PhoneNumber, Email, Address, PostCode을 입력하지 않아도 결제는 되지만
+    /// 실제 결제 기록에 제목이나 이름이 남지 않습니다.
+    /// 특히 Name, BuyerName, (PhoneNumber 또는 Email)은 가능한 입력하는 것이 좋습니다.
     /// </summary>
     /// <seealso href="http://api.iamport.kr/#!/subscribe"/>
     public class DirectPaymentRequest
