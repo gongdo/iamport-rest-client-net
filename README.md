@@ -10,12 +10,6 @@
 
 ### Installation
 
-> **Note**
-
-> 2017-02-15 현재, `subscribe-api` 기능을 테스트중입니다.
-
-> `subscribe-api`를 사용하지 않을 경우 `1.0.0` 버전을 사용하면 됩니다.
-
 (패키지 매니저 콘솔에서)
 ```
 Install-Package Iamport.RestApi
@@ -117,6 +111,8 @@ Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
 
 * [1.1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.1.0)
  * Subscription API 추가
+* 1.1.1
+ * VS 2017 마이그레이션
 * 1.2
  * SMS 본인 인증 추가
 
