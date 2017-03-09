@@ -45,6 +45,7 @@ namespace Sample.AspNetCore
             });
             services.AddSingleton<IIamportClient, IamportHttpClient>();
             services.AddSingleton<IPaymentsApi, PaymentsApi>();
+            services.AddSingleton<ISubscribeApi, SubscribeApi>();
             services.Configure<IamportHttpClientOptions>(
                 Configuration.GetSection("iamport"));
 

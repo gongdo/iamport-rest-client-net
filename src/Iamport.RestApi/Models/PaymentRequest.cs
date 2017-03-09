@@ -76,7 +76,7 @@ namespace Iamport.RestApi.Models
         [Range(1000, 10000000)]
         public decimal Amount { get; set; }
         /// <summary>
-        /// 결제 총액의 통화(KRW와 USD만 지원)
+        /// 결제 총액의 통화(2017-02-16현재 지원 통화: KRW, USD, EUR)
         /// </summary>
         [JsonProperty("currency")]
         public string Currency { get; set; } = "KRW";

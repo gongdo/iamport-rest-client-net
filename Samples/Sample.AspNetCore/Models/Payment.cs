@@ -1,5 +1,4 @@
-﻿using Iamport.RestApi.Models;
-using System;
+﻿using System;
 
 namespace Sample.AspNetCore.Models
 {

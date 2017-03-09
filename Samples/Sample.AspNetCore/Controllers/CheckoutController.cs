@@ -46,6 +46,7 @@ namespace Sample.AspNetCore.Controllers
         /// <param name="model">구매 정보</param>
         /// <returns></returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(RegisterCheckoutModel model)
         {
             if (!ModelState.IsValid)

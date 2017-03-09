@@ -1,0 +1,34 @@
+﻿@model Sample.AspNetCore.ViewModels.PaymentViewModel
+@{
+    ViewData["Title"] = "비인증-결제 데모: 결제 진행상태";
+}
+<div class="row">
+    <h1>@ViewData["Title"]</h1>
+
+    <div>
+        <p>이 페이지는 현재 결제 결과를 표시합니다.</p>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">결제 내용</div>
+        <div class="panel-body">
+            <ul>
+                <li>상품: @Model.Name</li>
+                <li>금액: @Model.Amount.ToString("#,##0.##") 원</li>
+                <li>진행 상태: @Html.DisplayFor(model => model.State)</li>
+            </ul>
+            <a id="refresh" class="btn btn-primary">결과 새로고침</a>
+            <a href="@Url.Action("Index", "DirectPayment")" class="btn btn-default">처음부터 다시하기</a>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+    (function () {
+        $('#refresh').click(function () {
+            location.reload();
+        });
+    })();
+    </script>
+}
