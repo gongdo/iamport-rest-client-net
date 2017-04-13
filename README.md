@@ -15,15 +15,6 @@
 Install-Package Iamport.RestApi
 ```
 
-(또는 project.json에 추가 - .NET Core xproj 프로젝트)
-```
-{
-    "dependencies": {
-        "Iamport.RestApi": "1.1.1"
-    }
-}
-```
-
 ### Usage - 결제 플러그인 방식
 
 ```CSharp
