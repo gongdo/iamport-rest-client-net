@@ -248,5 +248,5 @@ ModelManifest.xml
 .fake/
 
 # ignore files for security
-/Samples/Sample.AspNetCore/appsettings.development.json
+/Samples/Sample.AspNetCore/appsettings.local.json
 /Samples/Sample.AspNet/Web.Debug.config
