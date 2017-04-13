@@ -19,7 +19,7 @@ Install-Package Iamport.RestApi
 ```
 {
     "dependencies": {
-        "Iamport.RestApi": "1.1.0"
+        "Iamport.RestApi": "1.1.1"
     }
 }
 ```
@@ -109,10 +109,6 @@ Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
 아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.
 아임포트RESTAPI닷넷의 버전 규칙은 [Semantic Versioning](http://semver.org/)을 따릅니다.
 
-* [1.1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.1.0)
- * Subscription API 추가
-* 1.1.1
- * VS 2017 마이그레이션
 * 1.2
  * SMS 본인 인증 추가
 
