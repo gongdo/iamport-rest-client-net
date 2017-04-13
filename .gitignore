@@ -249,4 +249,3 @@ ModelManifest.xml
 
 # ignore files for security
 /Samples/Sample.AspNetCore/appsettings.local.json
-/Samples/Sample.AspNet/Web.Debug.config

@@ -54,6 +54,8 @@ namespace Sample.AspNet
         /// <returns>아임포트 설정</returns>
         private static IamportHttpClientOptions GetHttpClientOptions()
         {
+            // 다음은 설정의 예입니다.
+            // 반드시 web.config 설정에 API 항목을 설정해야 합니다.
             var apiKey = ConfigurationManager.AppSettings["iamport:ApiKey"];
             var apiSecret = ConfigurationManager.AppSettings["iamport:ApiSecret"];
             var iamportId = ConfigurationManager.AppSettings["iamport:IamportId"];
