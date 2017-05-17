@@ -1,6 +1,7 @@
 ﻿using Iamport.RestApi.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -205,7 +206,7 @@ namespace Iamport.RestApi.Apis
         }
         private string GetCustomersPath(string customerId)
         {
-            return ApiPathUtility.Build(CustomersPath, customerId);
+            return ApiPathUtility.Build(CustomersPath, WebUtility.UrlEncode(customerId));
         }
 
         private async Task<TResult> SendRequestAsync<TRequest, TResult>(IamportRequest<TRequest> request)

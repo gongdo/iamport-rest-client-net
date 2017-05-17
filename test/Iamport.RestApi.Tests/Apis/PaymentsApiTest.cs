@@ -232,21 +232,25 @@ namespace Iamport.RestApi.Tests.Apis
                 () => sut.GetByIamportIdAsync(expectedRequest));
         }
 
-        [Fact]
-        public async Task GetByTransactionIdAsync_requests_proper_uri()
+        [Theory]
+        [InlineData("abcd")]
+        [InlineData("abcd:가나다라")]
+        [InlineData("1234-가나다라-1234")]
+        [InlineData("1234/가나다라/1234")]
+        [InlineData("1234?가나다라#1234")]
+        public async Task GetByTransactionIdAsync_requests_proper_uri(string transactionId)
         {
             // arrange
-            var expectedRequest = Guid.NewGuid().ToString();
             var expectedResult = new IamportResponse<Payment>
             {
                 HttpStatusCode = HttpStatusCode.OK,
             };
-            var expectedPath = $"payments/find/{expectedRequest}";
+            var expectedPath = $"payments/find/{WebUtility.UrlEncode(transactionId)}";
             var client = GetMockClient(expectedResult);
             var sut = new PaymentsApi(client);
 
             // act
-            var result = await sut.GetByTransactionIdAsync(expectedRequest);
+            var result = await sut.GetByTransactionIdAsync(transactionId);
 
             // assert
             Mock.Get(client)

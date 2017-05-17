@@ -47,15 +47,5 @@ namespace Iamport.RestApi.Tests
             var actual = ApiPathUtility.Build(basePath, secondPath);
             Assert.Equal("base/api/second", actual);
         }
-        [Theory]
-        [InlineData("base/api/", "/가나다/あいう#?test테스트")]
-        [InlineData("base/api", "가나다/あいう#?test테스트")]
-        [InlineData("base/api/", "가나다/あいう#?test테스트")]
-        [InlineData("base/api", "/가나다/あいう#?test테스트")]
-        public void Returns_url_encoded_path(string basePath, string secondPath)
-        {
-            var actual = ApiPathUtility.Build(basePath, secondPath);
-            Assert.Equal($"base/api/{WebUtility.UrlEncode("가나다/あいう#?test테스트")}", actual);
-        }
     }
 }

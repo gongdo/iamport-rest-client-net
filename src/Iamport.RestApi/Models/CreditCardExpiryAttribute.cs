@@ -26,7 +26,7 @@ namespace Iamport.RestApi.Models
                 }
                 int.TryParse((value.ToString()).Substring(0, 4), out int year);
                 int.TryParse((value.ToString()).Substring(5, 2), out int month);
-                var expiry = new DateTimeOffset(year, month + 1, 1,0, 0, 0, TimeSpan.Zero);
+                var expiry = new DateTimeOffset(year, month, 1, 0, 0, 0, TimeSpan.Zero).AddMonths(1).AddSeconds(-1);
                 return expiry > DateTimeOffset.Now;
             }
             return false;
