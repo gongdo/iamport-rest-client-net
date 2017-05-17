@@ -30,7 +30,7 @@ namespace Sample.AspNetCore.ViewModels
         /// (required)카드번호(dddd-dddd-dddd-dddd)
         /// </summary>
         [Required]
-        [RegularExpression(@"^(\d{4})-(\d{4})-(\d{4})-(\d{4})$")]
+        [Iamport.RestApi.Models.CreditCardNumber]
         [Display(Name = "카드번호(dddd-dddd-dddd-dddd)")]
         public string CardNumber { get; set; }
         /// <summary>
@@ -44,7 +44,7 @@ namespace Sample.AspNetCore.ViewModels
         /// (required)생년월일6자리(법인카드의 경우 사업자등록번호10자리)
         /// </summary>
         [Required]
-        [RegularExpression(@"^\d{6}$|^\d{10}$")]
+        [CreditCardAuthenticationNumber]
         [Display(Name = "생년월일6자리(법인카드의 경우 사업자등록번호10자리)")]
         public string AuthenticationNumber { get; set; }
         /// <summary>

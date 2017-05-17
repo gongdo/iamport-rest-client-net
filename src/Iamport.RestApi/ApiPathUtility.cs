@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Net;
 
 namespace Iamport.RestApi
 {
@@ -36,7 +38,7 @@ namespace Iamport.RestApi
             {
                 return baseUrlOrPath
                     .Split(PathSeparators, StringSplitOptions.RemoveEmptyEntries)[0]
-                    + addedUrlOrPath.Substring(1);
+                    + "/" + addedUrlOrPath.Substring(2);
             }
             return baseUrlOrPath.Trim('/') + "/" + addedUrlOrPath.TrimStart('/');
         }

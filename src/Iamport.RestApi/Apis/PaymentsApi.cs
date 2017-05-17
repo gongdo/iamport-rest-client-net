@@ -4,6 +4,7 @@ using Iamport.RestApi.Models;
 using System.Net.Http;
 using Iamport.RestApi.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace Iamport.RestApi.Apis
 {
@@ -116,7 +117,7 @@ namespace Iamport.RestApi.Apis
             }
             var request = new IamportRequest
             {
-                ApiPathAndQueryString = GetPathAndQuerystring($"find/{transactionId}"),
+                ApiPathAndQueryString = GetPathAndQuerystring($"find/{WebUtility.UrlEncode(transactionId)}"),
                 Method = HttpMethod.Get,
             };
             return await SendRequestAsync<object, Payment>(request);
@@ -137,7 +138,7 @@ namespace Iamport.RestApi.Apis
             }
             var request = new IamportRequest
             {
-                ApiPathAndQueryString = GetPathAndQuerystring($"prepare/{transactionId}"),
+                ApiPathAndQueryString = GetPathAndQuerystring($"prepare/{WebUtility.UrlEncode(transactionId)}"),
                 Method = HttpMethod.Get,
             };
             return await SendRequestAsync<object, PaymentPreparation>(request);

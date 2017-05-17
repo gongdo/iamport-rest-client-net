@@ -20,21 +20,21 @@ namespace Iamport.RestApi.Models
         /// </summary>
         [JsonProperty("card_number")]
         [Required]
-        [RegularExpression(@"^\d{4}-\d{4}-\d{4}-\d{4}$")]
+        [CreditCardNumber]
         public string CardNumber { get; set; }
         /// <summary>
         /// (required)카드 유효기간(YYYY-MM)
         /// </summary>
         [JsonProperty("expiry")]
         [Required]
-        [RegularExpression(@"^\d{4}-\d{2}$")]
+        [CreditCardExpiry]
         public string Expiry { get; set; }
         /// <summary>
         /// (required)생년월일6자리(법인카드의 경우 사업자등록번호10자리)
         /// </summary>
         [JsonProperty("birth")]
         [Required]
-        [RegularExpression(@"^\d{6}$|^\d{10}$")]
+        [CreditCardAuthenticationNumber]
         public string AuthenticationNumber { get; set; }
         /// <summary>
         /// 카드 비밀번호 앞 두자리(법인카드의 경우 생략)

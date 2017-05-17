@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Net;
+using Xunit;
 
 namespace Iamport.RestApi.Tests
 {

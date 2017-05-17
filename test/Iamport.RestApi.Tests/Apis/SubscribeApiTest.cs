@@ -87,7 +87,7 @@ namespace Iamport.RestApi.Tests.Apis
             {
                 AuthenticationNumber = "123456",
                 CardNumber = "1234-1234-1234-1234",
-                Expiry = "1234-12",
+                Expiry = "2200-12",
                 Id = Guid.NewGuid().ToString(),
                 PartialPassword = "12",
             };
@@ -146,11 +146,15 @@ namespace Iamport.RestApi.Tests.Apis
                 () => sut.RegisterCustomerAsync(aRequest));
         }
 
-        [Fact]
-        public async Task GetCustomerAsync_requests_proper_api()
+        [Theory]
+        [InlineData("customer")]
+        [InlineData("홍길동")]
+        [InlineData("abcd:홍길동")]
+        [InlineData("abcd/홍길동")]
+        [InlineData("abcd?홍길동")]
+        public async Task GetCustomerAsync_requests_proper_api(string customerId)
         {
             // arrange
-            var customerId = Guid.NewGuid().ToString();
             var expectedResult = new IamportResponse<Customer>
             {
                 HttpStatusCode = HttpStatusCode.OK,
@@ -173,7 +177,7 @@ namespace Iamport.RestApi.Tests.Apis
                         It.Is<IamportRequest>(req =>
                             req.Method == HttpMethod.Get
                             && req.Content == null
-                            && req.ApiPathAndQueryString.EndsWith($"subscribe/customers/{customerId}"))));
+                            && req.ApiPathAndQueryString.EndsWith($"subscribe/customers/{WebUtility.UrlEncode(customerId)}"))));
         }
 
         [Fact]
@@ -216,7 +220,7 @@ namespace Iamport.RestApi.Tests.Apis
                 TransactionId = Guid.NewGuid().ToString(),
                 AuthenticationNumber = "123456",
                 CardNumber = "1234-1234-1234-1234",
-                Expiry = "1234-12",
+                Expiry = "2200-12",
                 PartialPassword = "12",
             };
             var expectedResult = new IamportResponse<Payment>
