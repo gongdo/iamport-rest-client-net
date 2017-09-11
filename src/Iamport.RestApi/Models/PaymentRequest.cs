@@ -26,19 +26,19 @@ namespace Iamport.RestApi.Models
         {
             get
             {
-                return PaymentGateway.HasValue
-                    ? PaymentGateway.Value.GetMemberValue()
+                return string.IsNullOrEmpty(PaymentGateway)
+                    ? null
+                    : PaymentGateway
                         + (string.IsNullOrEmpty(MerchantId)
                         ? ""
-                        : "." + MerchantId)
-                    : null;
+                        : "." + MerchantId);
             }
         }
         /// <summary>
         /// 알려진 PG사 명
         /// </summary>
         [JsonIgnore]
-        public PaymentGateway? PaymentGateway { get; set; }
+        public string PaymentGateway { get; set; }
         /// <summary>
         /// 여러 상점을 관리할 때 사용할 상점 ID 구분자
         /// </summary>
@@ -48,7 +48,7 @@ namespace Iamport.RestApi.Models
         /// 결제 수단
         /// </summary>
         [JsonProperty("pay_method")]
-        public PaymentMethod Method { get; set; }
+        public string Method { get; set; }
         /// <summary>
         /// 에스크로 사용 여부
         /// </summary>

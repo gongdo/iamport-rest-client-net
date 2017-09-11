@@ -24,30 +24,14 @@ namespace Sample.AspNetCore.Controllers
             PaymentRepository paymentRepository,
             IamportHttpClientOptions clientOptions)
         {
-            if (paymentsApi == null)
-            {
-                throw new ArgumentNullException(nameof(paymentsApi));
-            }
-            if (subscribeApi == null)
-            {
-                throw new ArgumentNullException(nameof(subscribeApi));
-            }
-            if (checkoutRepository == null)
-            {
-                throw new ArgumentNullException(nameof(checkoutRepository));
-            }
-            if (paymentRepository == null)
-            {
-                throw new ArgumentNullException(nameof(paymentRepository));
-            }
+            this.paymentsApi = paymentsApi ?? throw new ArgumentNullException(nameof(paymentsApi));
+            this.subscribeApi = subscribeApi ?? throw new ArgumentNullException(nameof(subscribeApi));
+            this.checkoutRepository = checkoutRepository ?? throw new ArgumentNullException(nameof(checkoutRepository));
+            this.paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
             if (clientOptions == null)
             {
                 throw new ArgumentNullException(nameof(clientOptions));
             }
-            this.paymentsApi = paymentsApi;
-            this.subscribeApi = subscribeApi;
-            this.checkoutRepository = checkoutRepository;
-            this.paymentRepository = paymentRepository;
             iamportId = clientOptions.IamportId;
         }
 

@@ -235,41 +235,6 @@ namespace Iamport.RestApi.Tests
             Assert.False(sut.IsAuthorized);
         }
         
-        //[Fact]
-        public async Task IamportRequest_has_token_header()
-        {
-            // arrange
-            var options = GetMockOptions();
-            var mock = new Mock<HttpClient>();
-            mock.Setup(client => client.SendAsync(
-                    It.Is<HttpRequestMessage>(
-                        message => message.Headers.GetValues(DefaultTokenHeaderName).Any()),
-                    It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new HttpResponseMessage
-            {
-                Content = new JsonContent(JsonConvert.SerializeObject(FailedTokenResponse))
-            });
-            var sut = new IamportHttpClient(options, mock.Object);
-
-            var request = new IamportRequest<object>
-            {
-                ApiPathAndQueryString = "/self",
-                RequireAuthorization = true
-            };
-
-            // act
-            var result = await sut.RequestAsync<object, object>(request);
-
-            // assert
-            mock.Verify(client => client.SendAsync(
-                It.Is<HttpRequestMessage>(
-                    message => message
-                    .Headers
-                    .GetValues(DefaultTokenHeaderName)
-                    .Any()),
-                    It.IsAny<CancellationToken>()), Times.Once);
-        }
-
         [Fact]
         public async Task Throws_HttpRequestException_for_http_exception()
         {

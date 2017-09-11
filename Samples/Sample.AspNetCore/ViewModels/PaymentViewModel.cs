@@ -22,7 +22,7 @@ namespace Sample.AspNetCore.ViewModels
 
         public string Name { get; private set; }
         public decimal Amount { get; private set; }
-        public PaymentMethod PaymentMethod { get; private set; }
+        public string PaymentMethod { get; private set; }
         public DateTimeOffset? VirtualBankExpirationTime { get; private set; }
         public string VirtualBankName { get; private set; }
         public string VirtualBankAccount { get; private set; }
