@@ -20,7 +20,7 @@ namespace Sample.AspNetCore.ViewModels
 
         [Required]
         [Display(Name = "결제 게이트웨이사")]
-        public PaymentGateway PaymentGateway { get; set; } = PaymentGateway.Nice;
+        public string PaymentGateway { get; set; } = Iamport.RestApi.Models.PaymentGateway.Nice;
         /// <summary>
         /// 결제금액 중 부가세 금액(파라메터가 누락되면 10%로 자동 계산됨)
         /// </summary>

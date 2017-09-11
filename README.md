@@ -3,7 +3,7 @@
 
 이 프로젝트는 [아임포트(I'mport) REST API](https://api.iamport.kr/) 클라이언트의 닷넷 구현입니다. 프로젝트 이름을 표기할 때에는 `아임포트RESTAPI닷넷`이라고 합니다.
 
-아임포트RESTAPI닷넷은 모던한 닷넷 플랫폼을 지향하며 닷넷 4.5 이상을 대상으로 합니다. 네트워크를 통한 모든 호출은 `async` 비동기로 이루어집니다.
+아임포트RESTAPI닷넷은 모던한 닷넷 플랫폼을 지향하며 닷넷 프레임워크 4.5, 닷넷 스탠다드 2.0이상을 대상으로 합니다. 네트워크를 통한 모든 호출은 `async` 비동기로 이루어집니다.
 
 
 ## Quick start
@@ -15,13 +15,11 @@
 Install-Package Iamport.RestApi
 ```
 
-(또는 project.json에 추가 - .NET Core xproj 프로젝트)
+(또는 .csproj에 추가)
 ```
-{
-    "dependencies": {
-        "Iamport.RestApi": "1.1.0"
-    }
-}
+<ItemGroup>
+	<PackageReference Include="Iamport.RestApi" Version="2.0.0" />
+</ItemGroup>
 ```
 
 ### Usage - 결제 플러그인 방식
@@ -113,8 +111,9 @@ Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
  * Subscription API 추가
 * 1.1.1
  * VS 2017 마이그레이션
-* 1.2
- * SMS 본인 인증 추가
+* 2.0
+ * .NET Standard 2.0 지원
+* 이후 미정
 
 ## Contribution
 이 프로젝트는 누구나 참여할 수 있는 오픈소스 프로젝트입니다. 참여와 기여는 다음과 같이 할 수 있습니다.

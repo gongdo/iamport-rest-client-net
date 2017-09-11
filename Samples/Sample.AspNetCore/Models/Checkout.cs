@@ -11,8 +11,8 @@ namespace Sample.AspNetCore.Models
         public static Checkout Create(
             string name,
             decimal amount,
-            PaymentGateway paymentGateway,
-            PaymentMethod paymentMethod,
+            string paymentGateway,
+            string paymentMethod,
             bool useEscrow,
             string customerName,
             string customerPhoneNumber,
@@ -66,11 +66,11 @@ namespace Sample.AspNetCore.Models
         /// <summary>
         /// 결제에 사용할 PG사
         /// </summary>
-        public PaymentGateway PaymentGateway { get; private set; }
+        public string PaymentGateway { get; private set; }
         /// <summary>
         /// 결제 수단
         /// </summary>
-        public PaymentMethod PaymentMethod { get; private set; }
+        public string PaymentMethod { get; private set; }
         /// <summary>
         /// 에스크로 사용 여부
         /// </summary>

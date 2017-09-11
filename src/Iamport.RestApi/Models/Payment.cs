@@ -21,16 +21,16 @@ namespace Iamport.RestApi.Models
         [JsonProperty("merchant_uid")]
         public string TransactionId { get; set; }
         /// <summary>
-        /// 결제 수단
+        /// 결제 수단. <see cref="PaymentMethod"/>
         /// </summary>
         [JsonProperty("pay_method")]
-        public PaymentMethod Method { get; set; }
+        public string Method { get; set; } = PaymentMethod.CreditCard;
         /// <summary>
-        /// 알려진 PG사 명칭. Enum타입으로 알려진 PG사의 명칭입니다.
+        /// 알려진 PG사 명칭. <see cref="PaymentGateway"/>
         /// </summary>
         /// <seealso></seealso>
         [JsonProperty("pg_provider")]
-        public PaymentGateway PaymentGateway { get; set; }
+        public string PaymentGateway { get; set; } = Models.PaymentGateway.Inicis;
         /// <summary>
         /// PG사 승인정보
         /// </summary>
