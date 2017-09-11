@@ -30,7 +30,7 @@ namespace Sample.AspNetCore.ViewModels
         /// (required)카드번호(dddd-dddd-dddd-dddd)
         /// </summary>
         [Required]
-        [Iamport.RestApi.Models.CreditCardNumber]
+        [CreditCardNumber]
         [Display(Name = "카드번호(dddd-dddd-dddd-dddd)")]
         public string CardNumber { get; set; }
         /// <summary>
