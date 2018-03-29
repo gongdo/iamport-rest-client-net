@@ -15,6 +15,7 @@ namespace Iamport.RestApi.Tests.Models
         [Theory]
         [InlineData("1234-1234-1234-1234")]
         [InlineData("1234-1234-1234-123")]
+        [InlineData("1234-1234-1234-12")]
         public void Valid_credit_card_number(string number)
         {
             var foo = new Foo { Number = number };
