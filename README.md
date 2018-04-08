@@ -18,7 +18,7 @@ Install-Package Iamport.RestApi
 (또는 .csproj에 추가)
 ```
 <ItemGroup>
-	<PackageReference Include="Iamport.RestApi" Version="2.0.0" />
+	<PackageReference Include="Iamport.RestApi" Version="2.0.1" />
 </ItemGroup>
 ```
 
@@ -131,7 +131,7 @@ Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
 ### Development Environment Requirement
 현재 아임포트RESTAPI닷넷은 다음과 같은 환경에서 개발됩니다.
 - [Visual Studio 2017](https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx) - IDE
-- [.NET Core 2.1](https://www.microsoft.com/net/core#windows) - Runtime
+- [.NET Core 2.0](https://www.microsoft.com/net/core#windows) - Runtime
 - [xunit](https://xunit.github.io) - 단위 테스트 및 기능 테스트.
  
 .NET Core 프로젝트이므로 MAC OSX와 Linux에서도 개발 및 테스트가 가능합니다.
