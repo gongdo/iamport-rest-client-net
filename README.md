@@ -3,7 +3,7 @@
 
 이 프로젝트는 [아임포트(I'mport) REST API](https://api.iamport.kr/) 클라이언트의 닷넷 구현입니다. 프로젝트 이름을 표기할 때에는 `아임포트RESTAPI닷넷`이라고 합니다.
 
-아임포트RESTAPI닷넷은 모던한 닷넷 플랫폼을 지향하며 닷넷 4.5 이상을 대상으로 합니다. 네트워크를 통한 모든 호출은 `async` 비동기로 이루어집니다.
+아임포트RESTAPI닷넷은 모던한 닷넷 플랫폼을 지향하며 닷넷 프레임워크 4.5, 닷넷 스탠다드 2.0이상을 대상으로 합니다. 네트워크를 통한 모든 호출은 `async` 비동기로 이루어집니다.
 
 
 ## Quick start
@@ -13,6 +13,13 @@
 (패키지 매니저 콘솔에서)
 ```
 Install-Package Iamport.RestApi
+```
+
+(또는 .csproj에 추가)
+```
+<ItemGroup>
+	<PackageReference Include="Iamport.RestApi" Version="2.0.0" />
+</ItemGroup>
 ```
 
 ### Usage - 결제 플러그인 방식
@@ -100,8 +107,13 @@ Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
 아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.
 아임포트RESTAPI닷넷의 버전 규칙은 [Semantic Versioning](http://semver.org/)을 따릅니다.
 
-* 1.2
- * SMS 본인 인증 추가
+- [1.1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.1.0)
+  - Subscription API 추가
+- 1.1.1
+  - VS 2017 마이그레이션
+- 2.0
+  - .NET Standard 2.0 지원
+- 이후 미정
 
 ## Contribution
 이 프로젝트는 누구나 참여할 수 있는 오픈소스 프로젝트입니다. 참여와 기여는 다음과 같이 할 수 있습니다.
@@ -119,7 +131,7 @@ Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
 ### Development Environment Requirement
 현재 아임포트RESTAPI닷넷은 다음과 같은 환경에서 개발됩니다.
 - [Visual Studio 2017](https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx) - IDE
-- [.NET Core 1.1](https://www.microsoft.com/net/core#windows) - Runtime
+- [.NET Core 2.1](https://www.microsoft.com/net/core#windows) - Runtime
 - [xunit](https://xunit.github.io) - 단위 테스트 및 기능 테스트.
  
 .NET Core 프로젝트이므로 MAC OSX와 Linux에서도 개발 및 테스트가 가능합니다.

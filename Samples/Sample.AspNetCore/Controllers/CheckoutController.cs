@@ -18,16 +18,8 @@ namespace Sample.AspNetCore.Controllers
             CheckoutRepository checkoutRepository,
             IamportHttpClientOptions clientOptions)
         {
-            if (checkoutRepository == null)
-            {
-                throw new ArgumentNullException(nameof(checkoutRepository));
-            }
-            if (clientOptions == null)
-            {
-                throw new ArgumentNullException(nameof(clientOptions));
-            }
-            this.checkoutRepository = checkoutRepository;
-            this.clientOptions = clientOptions;
+            this.checkoutRepository = checkoutRepository ?? throw new ArgumentNullException(nameof(checkoutRepository));
+            this.clientOptions = clientOptions ?? throw new ArgumentNullException(nameof(clientOptions));
         }
 
         /// <summary>

@@ -29,11 +29,7 @@ namespace Iamport.RestApi.Apis
         /// <param name="client">아임포트 클라이언트</param>
         public SubscribeApi(IIamportClient client)
         {
-            if (client == null)
-            {
-                throw new ArgumentNullException(nameof(client));
-            }
-            this.client = client;
+            this.client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         /// <summary>

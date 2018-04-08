@@ -40,7 +40,7 @@
         <div class="form-group">
             <label asp-for="PaymentGateway" class="col-md-2 control-label">결제 게이트웨이사</label>
             <div class="col-md-10">
-                <select asp-for="PaymentGateway" asp-items="@Html.GetEnumSelectList<PaymentGateway>()" class="form-control"></select>
+                <select asp-for="PaymentGateway" asp-items="@Html.GetSelectListFromStaticMembers<PaymentGateway>()" class="form-control"></select>
                 <span asp-validation-for="PaymentGateway" class="text-danger"></span>
             </div>
         </div>

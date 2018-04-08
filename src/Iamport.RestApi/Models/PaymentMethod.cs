@@ -1,57 +1,46 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Iamport.RestApi.Models
 {
     /// <summary>
     /// 지불수단
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum PaymentMethod
+    public class PaymentMethod
     {
         /// <summary>
-        /// 신용카드(ISP, 안심클릭, 국민앱카드, 케이페이 등)
+        /// 신용카드(ISP; 안심클릭; 국민앱카드; 케이페이 등)
         /// </summary>
-        [EnumMember(Value = "card")]
         [Display(Name = "신용카드")]
-        CreditCard,
+        public const string CreditCard = "card";
         /// <summary>
         /// 실시간 계좌이체
         /// </summary>
-        [EnumMember(Value = "trans")]
         [Display(Name = "실시간 계좌이체")]
-        Transfer,
+        public const string Transfer = "trans";
         /// <summary>
         /// 가상 계좌
         /// </summary>
-        [EnumMember(Value = "vbank")]
         [Display(Name = "가상계좌")]
-        VirtualBank,
+        public const string VirtualBank = "vbank";
         /// <summary>
         /// 모바일폰
         /// </summary>
-        [EnumMember(Value = "phone")]
         [Display(Name = "모바일")]
-        Mobile,
+        public const string Mobile = "phone";
         /// <summary>
         /// 컬처랜드 문화상품권
         /// </summary>
-        [EnumMember(Value = "cultureland")]
         [Display(Name = "문화상품권")]
-        CultureLand,
+        public const string CultureLand = "cultureland";
         /// <summary>
         /// 스마트문상
         /// </summary>
-        [EnumMember(Value = "smartculture")]
         [Display(Name = "스마트문상")]
-        SmartCulture,
+        public const string SmartCulture = "smartculture";
         /// <summary>
         /// 해피머니
         /// </summary>
-        [EnumMember(Value = "happymoney")]
         [Display(Name = "해피머니")]
-        HappyMoney,
+        public const string HappyMoney = "happymoney";
     }
 }

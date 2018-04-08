@@ -1,5 +1,4 @@
-﻿using Iamport.RestApi.Models;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sample.AspNetCore.ViewModels
@@ -23,10 +22,10 @@ namespace Sample.AspNetCore.ViewModels
 
         [Required]
         [Display(Name = "결제 게이트웨이사")]
-        public PaymentGateway PaymentGateway { get; set; } = PaymentGateway.InicisHtml5;
+        public string PaymentGateway { get; set; } = Iamport.RestApi.Models.PaymentGateway.InicisHtml5;
         [Required]
         [Display(Name = "결제 수단")]
-        public PaymentMethod PaymentMethod { get; set; } = PaymentMethod.CreditCard;
+        public string PaymentMethod { get; set; } = Iamport.RestApi.Models.PaymentMethod.CreditCard;
         [Display(Name = "에스크로 사용 여부")]
         public bool UseEscrow { get; set; } = false;
         [Required]
