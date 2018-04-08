@@ -10,7 +10,7 @@ namespace Iamport.RestApi.Models
         /// <summary>
         /// 기본 아임포트 신용카드 번호 형식으로 초기화합니다.
         /// </summary>
-        public CreditCardNumberAttribute() : base(@"^\d{4}-\d{4}-\d{4}-\d{3,4}$")
+        public CreditCardNumberAttribute() : base(@"^\d{4}-\d{4}-\d{4}-\d{2,4}$")
         {
         }
     }
