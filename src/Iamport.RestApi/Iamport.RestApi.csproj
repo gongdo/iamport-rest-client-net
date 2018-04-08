@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Iamport.RestApi .NET Client</Description>
-    <VersionPrefix>2.0.0</VersionPrefix>
+    <VersionPrefix>2.0.1</VersionPrefix>
     <TargetFrameworks>netstandard2.0;netstandard1.3;net45</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>Iamport.RestApi</AssemblyName>
