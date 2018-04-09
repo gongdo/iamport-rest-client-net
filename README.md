@@ -94,8 +94,8 @@ catch (IamportResponseException ex)
 |Type|Status|
 |---|---|
 | CI Build | [![Build status](https://ci.appveyor.com/api/projects/status/icygwugodo4jalcs?svg=true)](https://ci.appveyor.com/project/gongdo/iamport-rest-client-net)
-| MyGet Pre-release | [![MyGet](https://img.shields.io/myget/bapul/dt/Iamport.RestApi.svg)](https://www.myget.org/feed/bapul/package/nuget/Iamport.RestApi)
-| NuGet Release | [![NuGet](https://img.shields.io/nuget/dt/Iamport.RestApi.svg)](https://www.nuget.org/packages/Iamport.RestApi/)
+| MyGet Pre-release | [![MyGet](https://img.shields.io/myget/bapul/v/Iamport.RestApi.svg)](https://www.myget.org/feed/bapul/package/nuget/Iamport.RestApi)
+| NuGet Release | [![NuGet](https://img.shields.io/nuget/v/Iamport.RestApi.svg)](https://www.nuget.org/packages/Iamport.RestApi/)
 
 ### Pre-release
 Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
