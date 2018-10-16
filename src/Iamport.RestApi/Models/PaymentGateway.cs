@@ -33,10 +33,15 @@ namespace Iamport.RestApi.Models
         [Display(Name = "JTNet")]
         public const string JTNet = "jtnet";
         /// <summary>
-        /// 카카오페이
+        /// (주)LGCNS가 제공하던 카카오페이(현재 서비스 종료 됨)
         /// </summary>
         [Display(Name = "카카오페이")]
         public const string Kakao = "kakao";
+        /// <summary>
+        /// (주)카카오페이가 제공하는 카카오페이(since 2018)
+        /// </summary>
+        [Display(Name = "카카오페이")]
+        public const string KakaoPay = "kakaopay";
         /// <summary>
         /// 다날(휴대폰 소액결제)
         /// </summary>
@@ -63,10 +68,15 @@ namespace Iamport.RestApi.Models
         [Display(Name = "페이코")]
         public const string Payco = "payco";
         /// <summary>
-        /// 네이버페이
+        /// 네이버페이(주문형)
         /// </summary>
-        [Display(Name = "네이버페이")]
+        [Display(Name = "네이버페이(주문형)")]
         public const string NaverPay = "naverco";
+        /// <summary>
+        /// 네이버페이(결제형)
+        /// </summary>
+        [Display(Name = "네이버페이(결제형)")]
+        public const string NewNaverPay = "naverpay";
         /// <summary>
         /// 한국정보통신
         /// </summary>
