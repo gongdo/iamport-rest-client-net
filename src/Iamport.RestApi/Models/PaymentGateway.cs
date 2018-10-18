@@ -35,7 +35,7 @@ namespace Iamport.RestApi.Models
         /// <summary>
         /// (주)LGCNS가 제공하던 카카오페이(현재 서비스 종료 됨)
         /// </summary>
-        [Display(Name = "카카오페이")]
+        [Display(Name = "카카오페이(LGCNS)")]
         public const string Kakao = "kakao";
         /// <summary>
         /// (주)카카오페이가 제공하는 카카오페이(since 2018)
@@ -70,13 +70,19 @@ namespace Iamport.RestApi.Models
         /// <summary>
         /// 네이버페이(주문형)
         /// </summary>
-        [Display(Name = "네이버페이(주문형)")]
+        [Display(Name = "네이버페이")]
+        [Obsolete("기존 네이버페이는 네이버페이(주문형)으로 변경되었습니다. 'NaverPayCheckout'을 사용해야 합니다.")]
         public const string NaverPay = "naverco";
+        /// <summary>
+        /// 네이버페이(주문형)
+        /// </summary>
+        [Display(Name = "네이버페이(주문형)")]
+        public const string NaverPayCheckout = "naverco";
         /// <summary>
         /// 네이버페이(결제형)
         /// </summary>
         [Display(Name = "네이버페이(결제형)")]
-        public const string NewNaverPay = "naverpay";
+        public const string NaverPayDirect = "naverpay";
         /// <summary>
         /// 한국정보통신
         /// </summary>
