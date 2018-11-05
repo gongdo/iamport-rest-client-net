@@ -5,7 +5,6 @@
 
 아임포트RESTAPI닷넷은 모던한 닷넷 플랫폼을 지향하며 닷넷 프레임워크 4.5, 닷넷 스탠다드 2.0이상을 대상으로 합니다. 네트워크를 통한 모든 호출은 `async` 비동기로 이루어집니다.
 
-
 ## Quick start
 
 ### Installation
@@ -94,26 +93,7 @@ catch (IamportResponseException ex)
 |Type|Status|
 |---|---|
 | CI Build | [![Build status](https://ci.appveyor.com/api/projects/status/icygwugodo4jalcs?svg=true)](https://ci.appveyor.com/project/gongdo/iamport-rest-client-net)
-| MyGet Pre-release | [![MyGet](https://img.shields.io/myget/bapul/v/Iamport.RestApi.svg)](https://www.myget.org/feed/bapul/package/nuget/Iamport.RestApi)
 | NuGet Release | [![NuGet](https://img.shields.io/nuget/v/Iamport.RestApi.svg)](https://www.nuget.org/packages/Iamport.RestApi/)
-
-### Pre-release
-Pre-release 버전은 [MyGet](https://www.myget.org)으로 배포합니다.
-
-- NuGet V3 Feed: https://www.myget.org/F/bapul/api/v3/index.json
-- NuGet V2 Feed: https://www.myget.org/F/bapul/api/v2
-
-## Roadmap
-아임포트RESTAPI닷넷은 다음과 같이 진행됩니다. 각 마일스톤의 일정은 아직 미정입니다.
-아임포트RESTAPI닷넷의 버전 규칙은 [Semantic Versioning](http://semver.org/)을 따릅니다.
-
-- [1.1](https://github.com/gongdo/iamport-rest-client-net/milestones/1.1.0)
-  - Subscription API 추가
-- 1.1.1
-  - VS 2017 마이그레이션
-- 2.0
-  - .NET Standard 2.0 지원
-- 이후 미정
 
 ## Contribution
 이 프로젝트는 누구나 참여할 수 있는 오픈소스 프로젝트입니다. 참여와 기여는 다음과 같이 할 수 있습니다.

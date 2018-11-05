@@ -1,54 +1,29 @@
 image: Visual Studio 2017
 version: build{build}
-pull_requests:  
-  do_not_increment_build_number: true
+
 build_script:
-- cmd: 'ECHO Configuration: %CONFIGURATION%'
-- cmd: 'ECHO Branch: %APPVEYOR_REPO_BRANCH%'
-- cmd: 'ECHO HasTag: %APPVEYOR_REPO_TAG%'
-- cmd: 'ECHO PR Number: %APPVEYOR_PULL_REQUEST_NUMBER%'
+- cmd: "ECHO TAG: %APPVEYOR_REPO_TAG_NAME%"
+- cmd: "ECHO PR: %APPVEYOR_PULL_REQUEST_NUMBER%"
+- cmd: "ECHO BUILD: %APPVEYOR_BUILD_NUMBER%"
 - ps: >-
-    if ($env:APPVEYOR_REPO_BRANCH -eq "master") {
-      $env:CONFIGURATION="RELEASE"
-    } else {
-      $env:CONFIGURATION="DEBUG"
-    }
-    Write-Host "Configuration: $($env:CONFIGURATION)"
-- cmd: 'dotnet restore'
-- cmd: 'dotnet build -c %CONFIGURATION%'
+    . ./build.ps1
+
+    Invoke-Build -ProjectPath "$env:APPVEYOR_BUILD_FOLDER/src/Iamport.RestApi" -Tag "$env:APPVEYOR_REPO_TAG_NAME" -PRNumber "$env:APPVEYOR_PULL_REQUEST_NUMBER" -BuildNumber "$env:APPVEYOR_BUILD_NUMBER"
 test_script:
-- cmd: cd test\Iamport.RestApi.Tests
+- cmd: cd test/Iamport.RestApi.Tests
 - cmd: dotnet test
-- cmd: cd ..\..
-after_test:
-- ps: >-
-    if ([string]::IsNullOrEmpty($env:APPVEYOR_PULL_REQUEST_NUMBER)) {
-      if ($env:APPVEYOR_REPO_BRANCH -eq "master") {
-        dotnet pack src\Iamport.RestApi -c $env:CONFIGURATION --no-build
-      } elseif ($env:APPVEYOR_REPO_BRANCH -eq "dev") {
-        dotnet pack src\Iamport.RestApi -c $env:CONFIGURATION --version-suffix dev$env:APPVEYOR_BUILD_NUMBER --no-build
-      } else {
-          Write-Host "Skip pack"
-      }
-    }
-    else
-    {
-      Write-Host "Skip pack - pull request"
-    }
+- cmd: cd ../..
+
 artifacts:
 - path: '**\*.nupkg'
   name: NuGet
+
 deploy:
 - provider: NuGet
   api_key:
     secure: OdlepcT+ry0jb8FB3n6AQV23YA5/TtBC572OTrE/oLiKuMu807Re9Pqo78fYXbNI
   on:
-    branch: master
-- provider: NuGet
-  server: https://www.myget.org/F/bapul/api/v2/package
-  api_key:
-    secure: X8/Cm8f2M7FVtOuQftWgMlQv8XNMXJ8RbtVkeQkTgoaLb5Bv6Vf5KWcYZSEJ/wIc
-  on:
-    branch: dev
+    appveyor_repo_tag: true
+
 skip_commits:
-  message: /((Update|Create) .*\.(md|png|jpg|jpeg|bmp|gif))|Create appveyor.yml/
+  message: /((Update|Create) .*\.(md|png|jpg|jpeg|bmp|gif))|(Create|Update) appveyor.yml/

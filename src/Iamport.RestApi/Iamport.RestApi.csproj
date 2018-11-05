@@ -2,15 +2,16 @@
 
   <PropertyGroup>
     <Description>Iamport.RestApi .NET Client</Description>
-    <VersionPrefix>2.0.1</VersionPrefix>
     <TargetFrameworks>netstandard2.0;netstandard1.3;net45</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>Iamport.RestApi</AssemblyName>
     <PackageId>Iamport.RestApi</PackageId>
     <PackageTags>I'mport;아임포트;iamport</PackageTags>
-    <PackageLicenseUrl>https://github.com/openbapul/iamport-rest-client-net/blob/master/LICENSE</PackageLicenseUrl>
+    <Authors>gongdo</Authors>
+    <Owners>gongdo</Owners>
+    <PackageLicenseUrl>https://github.com/gongdo/iamport-rest-client-net/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/openbapul/iamport-rest-client-net</RepositoryUrl>
+    <RepositoryUrl>https://github.com/gongdo/iamport-rest-client-net</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
