@@ -1,5 +1,8 @@
 image: Visual Studio 2017
 version: build{build}
+branches:
+  only:
+    - master
 
 build_script:
 - cmd: "ECHO TAG: %APPVEYOR_REPO_TAG_NAME%"
