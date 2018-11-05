@@ -139,6 +139,59 @@ namespace Iamport.RestApi.Tests.Apis
                 () => sut.CancelAsync(expectedRequest));
         }
 
+        [Fact]
+        public async Task CancelAsync_accepts_maximum_4characters_of_RefundAccountBank()
+        {
+            // arrange
+            var expectedRequest = new PaymentCancellation
+            {
+                IamportId = Guid.NewGuid().ToString(),
+                RefundAccountBank = "ABCD",
+            };
+            var expectedResult = new IamportResponse<Payment>
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                Content = new Payment
+                {
+                    IamportId = expectedRequest.IamportId,
+                }
+            };
+            var client = GetMockClient(expectedRequest, expectedResult);
+            var sut = new PaymentsApi(client);
+
+            // act
+            var result = await sut.CancelAsync(expectedRequest);
+
+            // assert
+            Mock.Get(client)
+                .Verify(mocked =>
+                    mocked.RequestAsync<PaymentCancellation, Payment>(
+                        It.Is<IamportRequest<PaymentCancellation>>(req =>
+                            req.ApiPathAndQueryString.EndsWith("payments/cancel"))));
+        }
+
+        [Fact]
+        public async Task CancelAsync_doesnt_accept_longer_than_4characters_of_RefundAccountBank()
+        {
+            // arrange
+            var expectedRequest = new PaymentCancellation
+            {
+                IamportId = Guid.NewGuid().ToString(),
+                RefundAccountBank = "ABCDE",
+            };
+            var expectedResult = new IamportResponse<Payment>
+            {
+                Code = -1,
+                HttpStatusCode = HttpStatusCode.InternalServerError,
+            };
+            var client = GetMockClient(expectedRequest, expectedResult);
+            var sut = new PaymentsApi(client);
+            
+            // act/assert
+            await Assert.ThrowsAsync<ValidationException>(
+                () => sut.CancelAsync(expectedRequest));
+        }
+
         [Theory]
         [InlineData(PaymentQueryState.All, 0, "payments/status/all")]
         [InlineData(PaymentQueryState.All, 1, "payments/status/all?page=1")]

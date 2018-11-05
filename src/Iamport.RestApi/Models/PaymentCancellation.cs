@@ -41,7 +41,7 @@ namespace Iamport.RestApi.Models
         /// </summary>
         /// <seealso cref="FinancialCompanies"/>
         [JsonProperty("refund_bank")]
-        [MaxLength(2)]
+        [StringLength(4, MinimumLength = 2)]
         public string RefundAccountBank { get; set; }
         /// <summary>
         /// 환불계좌 계좌번호(가상계좌취소시 필수)
