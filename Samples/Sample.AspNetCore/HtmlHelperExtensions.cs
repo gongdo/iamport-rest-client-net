@@ -13,15 +13,16 @@ namespace Sample.AspNetCore
             = new Dictionary<Type, IEnumerable<SelectListItem>>();
 
         /// <summary>
-        /// Returns a select list for the given metadataType.
+        /// Returns a select list of static members for the given metadataType.
         /// </summary>
-        /// <param name="metadataType">Type to generate a select list for.</param>
         /// <param name="html">The source Html Helper instance.</param>
-        /// <returns>A sequence containing the select list for the given metadataType.</returns>
+        /// <param name="metadataType">Type to generate a select list for.</param>
+        /// <param name="includeObsolete">Include obsolete fields when true.</param>
+        /// <returns>A sequence containing the select list of static members for the given metadataType.</returns>
         /// <exception cref="ArgumentException">
         /// Thrown if metadataType has no public static members.
         /// </exception>
-        public static IEnumerable<SelectListItem> GetSelectListFromStaticMembers(this IHtmlHelper html, Type metadataType)
+        public static IEnumerable<SelectListItem> GetSelectListFromStaticMembers(this IHtmlHelper html, Type metadataType, bool includeObsolete)
         {
             string getDisplayText(MemberInfo member)
             {
@@ -29,6 +30,11 @@ namespace Sample.AspNetCore
                     .GetCustomAttribute<DisplayAttribute>()
                     ?.Name
                     ?? member.Name;
+            };
+            bool canList(MemberInfo member)
+            {
+                return includeObsolete
+                    || member.GetCustomAttribute<ObsoleteAttribute>(false) == null;
             };
 
             // !! 임시구현.
@@ -38,6 +44,7 @@ namespace Sample.AspNetCore
             {
                 value = metadataType
                     .GetFields(BindingFlags.Public | BindingFlags.Static)
+                    .Where(f => canList(f))
                     .Select(f => new SelectListItem
                     {
                         Text = getDisplayText(f),
@@ -46,6 +53,7 @@ namespace Sample.AspNetCore
                     .Concat(metadataType
                         .GetProperties(BindingFlags.Public | BindingFlags.Static)
                         .Where(p => p.CanRead)
+                        .Where(p => canList(p))
                         .Select(p => new SelectListItem
                         {
                             Text = getDisplayText(p),
@@ -58,11 +66,25 @@ namespace Sample.AspNetCore
         }
 
         /// <summary>
-        /// Returns a select list for the given metadataType.
+        /// Returns a select list of static members for the given metadataType without obsolete fields.
+        /// </summary>
+        /// <param name="metadataType">Type to generate a select list for.</param>
+        /// <param name="html">The source Html Helper instance.</param>
+        /// <returns>A sequence containing the select list of static members for the given metadataType.</returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if metadataType has no public static members.
+        /// </exception>
+        public static IEnumerable<SelectListItem> GetSelectListFromStaticMembers(this IHtmlHelper html, Type metadataType)
+        {
+            return GetSelectListFromStaticMembers(html, metadataType, false);
+        }
+
+        /// <summary>
+        /// Returns a select list of static members for the given metadataType without obsolete fields.
         /// </summary>
         /// <typeparam name="TMetadata">Type to generate a select list for.</typeparam>
         /// <param name="html">The source Html Helper instance.</param>
-        /// <returns>A sequence containing the select list for the given metadataType.</returns>
+        /// <returns>A sequence containing the select list of static members for the given metadataType.</returns>
         /// <exception cref="ArgumentException">
         /// Thrown if metadataType has no public static members.
         /// </exception>
@@ -70,6 +92,22 @@ namespace Sample.AspNetCore
             where TMetadata : class
         {
             return GetSelectListFromStaticMembers(html, typeof(TMetadata));
+        }
+
+        /// <summary>
+        /// Returns a select list of static members for the given metadataType.
+        /// </summary>
+        /// <typeparam name="TMetadata">Type to generate a select list for.</typeparam>
+        /// <param name="html">The source Html Helper instance.</param>
+        /// <param name="includeObsolete">Include obsolete fields when true.</param>
+        /// <returns>A sequence containing the select list of static members for the given metadataType.</returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if metadataType has no public static members.
+        /// </exception>
+        public static IEnumerable<SelectListItem> GetSelectListFromStaticMembers<TMetadata>(this IHtmlHelper html, bool includeObsolete)
+            where TMetadata : class
+        {
+            return GetSelectListFromStaticMembers(html, typeof(TMetadata), includeObsolete);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Iamport.RestApi.Models
 {
@@ -72,7 +73,7 @@ namespace Iamport.RestApi.Models
         /// </summary>
         [Display(Name = "네이버페이")]
         [Obsolete("기존 네이버페이는 네이버페이(주문형)으로 변경되었습니다. 'NaverPayCheckout'을 사용해야 합니다.")]
-        public const string NaverPay = "naverco";
+        public const string NaverPay = NaverPayCheckout;
         /// <summary>
         /// 네이버페이(주문형)
         /// </summary>

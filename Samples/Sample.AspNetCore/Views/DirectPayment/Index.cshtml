@@ -40,6 +40,10 @@
         <div class="form-group">
             <label asp-for="PaymentGateway" class="col-md-2 control-label">결제 게이트웨이사</label>
             <div class="col-md-10">
+                @{/*
+                   * Html.GetSelectListFromStaticMembers<PaymentGateway>(true)
+                   * 를 사용하면 Obsolete된 PG 목록도 볼 수 있습니다.
+                   */}
                 <select asp-for="PaymentGateway" asp-items="@Html.GetSelectListFromStaticMembers<PaymentGateway>()" class="form-control"></select>
                 <span asp-validation-for="PaymentGateway" class="text-danger"></span>
             </div>
