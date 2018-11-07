@@ -31,22 +31,26 @@ Function Invoke-Build {
         exit 1
     }
 
-    if (![string]::IsNullOrEmpty($Tag)) {
+    if (![string]::IsNullOrWhiteSpace($Tag)) {
         $m = [regex]::Match($Tag, "^(?:v)?([0-9]).([0-9]).([0-9])(?:-((?:[0-9a-zA-Z]+)(?:-[0-9a-zA-Z]+)*))?$")
         if ($m.Success) {
             $c = $m.captures
-            $Version = "$($c.groups[1]).$($c.groups[2]).$($c.groups[3])-$($c.groups[4])"
+            $Version = "$($c.groups[1]).$($c.groups[2]).$($c.groups[3])"
+            $prerelease = $c.groups[4]
+            if (![string]::IsNullOrWhiteSpace($prerelease)) {
+                $Version = "$($Version)-$($prerelease)"
+            }
         } else {
             Write-Error "Tag should be a sem-ver with optional leading 'v'"
             exit 1
         }
-    } elseif (![string]::IsNullOrEmpty($PRNumber)) {
+    } elseif (![string]::IsNullOrWhiteSpace($PRNumber)) {
         $Version = "0.0.0-pr$($PRNumber)-$($BuildNumber)"
     } else {
         $Version = "0.0.0-direct-commit-$($BuildNumber)"
     }
 
-    if ([string]::IsNullOrEmpty($PRNumber)) {
+    if ([string]::IsNullOrWhiteSpace($PRNumber)) {
         Write-Host "Build and pack with version '$($Version)'"
         dotnet pack $ProjectPath -c Release /p:Version=$Version
     } else {
